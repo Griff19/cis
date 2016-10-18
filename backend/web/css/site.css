@@ -1,0 +1,196 @@
+html,
+body {
+    height: 100%;
+}
+
+.form-control {
+    padding: 0px;
+}
+
+.wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto -60px;
+    padding: 0 0 60px;
+}
+
+.wrap > .container {
+    padding: 70px 15px 20px;
+}
+
+@media (min-width: 1200px) {
+    .container {
+        width: 1200px;
+    }
+}
+
+@media (min-width: 1500px) {
+    .container {
+        width: 1500px;
+    }
+}
+
+@media (min-width: 1800px){
+    .container {
+        width: 1800px;
+    }
+}
+
+.footer {
+    height: 60px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+
+.jumbotron {
+    text-align: center;
+    background-color: transparent;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+.not-set {
+    color: #c55;
+    font-style: italic;
+}
+
+/* чтобы сделать выпадающее меню более компактным */
+.navmini > li > a {
+    position: relative;
+    display: block;
+    padding: 0px;
+}
+
+/* add sorting icons to gridview sort links */
+a.asc:after, a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    padding-left: 5px;
+}
+
+a.asc:after {
+    content: /*"\e113"*/ "\e151";
+}
+
+a.desc:after {
+    content: /*"\e114"*/ "\e152";
+}
+
+.sort-numerical a.asc:after {
+    content: "\e153";
+}
+
+.sort-numerical a.desc:after {
+    content: "\e154";
+}
+
+.sort-ordinal a.asc:after {
+    content: "\e155";
+}
+
+.sort-ordinal a.desc:after {
+    content: "\e156";
+}
+
+.grid-view th {
+    white-space: nowrap;
+}
+
+.hint-block {
+    display: block;
+    margin-top: 5px;
+    color: #999;
+}
+
+.error-summary {
+    color: #a94442;
+    background: #fdf7f7;
+    border-left: 3px solid #eed3d7;
+    padding: 10px 20px;
+    margin: 0 0 15px 0;
+}
+
+.table {
+    margin-bottom: 1px;
+}
+
+thead>tr:first-child {
+     background-color: #eee;
+}
+
+a.delete {
+    color: #777;
+    font-size: large;
+}
+
+a.delete:hover {}
+.glyphicon-eye-close:hover,
+.glyphicon-trash:hover {
+    background: linear-gradient(to left, #e80c19, #800514);
+    width: 18px;
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.glyphicon-trash,
+.glyphicon-pencil,
+.glyphicon-eye-close,
+.glyphicon-eye-open,
+.glyphicon-ok {
+    color: #777;
+    font-size: large;
+    line-height: normal;
+}
+
+.glyphicon-pencil:hover,
+.glyphicon-eye-open:hover,
+.glyphicon-ok:hover {
+    background: linear-gradient(to left, #25e825, green);
+    width: 18px;
+    color: transparent;
+    -webkit-background-clip: text;
+}
+
+.cbx-icon {
+    margin: -1px;
+}
+
+a.cross {
+    background: url(../img/cross_grey.png);
+    background-size: cover;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+a.cross:hover {
+    background: url(../img/cross.png);
+    background-size: cover;
+}
+
+a.ok {
+    background: url(../img/ok_grey.png);
+    background-size: cover;
+    display: block;
+    width: 24px;
+    height: 24px;
+}
+
+a.ok:hover {
+    background: url(../img/ok.png);
+    background-size: cover;
+}
+
+.img-block {
+    /*height: 200px;*/
+    overflow: hidden;
+}

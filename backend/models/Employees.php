@@ -1,0 +1,141 @@
+<?php
+
+namespace backend\models;
+
+use Yii;
+use yii\data\ActiveDataProvider;
+use yii\db\Query;
+
+/**
+ * This is the model class for table "employees".
+ *
+ * @property integer $id
+ * @property string $surname
+ * @property string $name
+ * @property string $patronymic
+ * @property string $job_title
+ * @property string $employee_number
+ * @property string $unique_1c_number
+ * @property integer $branch_id
+ * @property string $snp
+ */
+class Employees extends \yii\db\ActiveRecord
+{
+    public $file;
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'employees';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['branch_id'], 'required' , 'on' => 'create'],
+            [['branch_id'], 'integer'],
+            [['file'], 'file'],
+            [['employee_number', 'unique_1c_number'], 'string', 'max' => 10],
+            [['surname', 'name', 'patronymic', 'snp', 'job_title'], 'string', 'max' => 255]
+        ];
+    }
+
+     /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'surname' => 'Фамилия',
+            'name' => 'Имя',
+            'patronymic' => 'Отчество',
+            'job_title' => 'Профессия/Должность',
+            'employee_number' => 'Табельный номер',
+            'unique_1c_number' => 'Код 1С',
+            'branch_id' => 'Подразделение',
+            'snp'=> 'Ф.И.О.',
+            'file' => 'файл'
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBranch(){
+        return $this->hasOne(Branches::className(), ['id' => 'branch_id']);
+    }
+
+    /**
+     * @return $this
+     */
+    public function getWorkplace(){
+        return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])->viaTable('wp_owners', ['employee_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCellNumbers() {
+        return $this->hasMany(CellNumbers::className(), ['employee_id' => 'id']);
+    }
+
+    /**
+     * @param $id
+     * @return ActiveDataProvider
+     */
+    public function getVoipProvider($id) {
+        $query = (new Query())
+            ->select("snp, voip_number, workplaces.workplaces_title AS workplaces_title, voip_numbers.workplace_id AS workplace_id")
+            ->from("employees")
+            ->leftJoin('wp_owners', 'employees.id = wp_owners.employee_id')
+            ->leftJoin('workplaces', 'workplaces.id = wp_owners.workplace_id')
+            //->leftJoin('devices', 'devices.workplace_id = workplaces.id AND devices.type_id = 3')
+            ->leftJoin('voip_numbers', 'voip_numbers.workplace_id = workplaces.id')
+            ->where(['employees.id' => $id])
+            ->andWhere("voip_number > 0")
+        ;
+
+        $provider = new ActiveDataProvider(['query' => $query]);
+        //var_dump($provider);
+        //die;
+        return $provider;
+    }
+
+    public function getUser(){
+        return $this->hasOne(User::className(), ['employee_id' => 'id']);
+    }
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function arraySnp(){
+        return Employees::find()->select("('[' || id || '] ' || snp) as value, snp || ' (' || job_title || ') ' as label")
+            ->where("snp > ''")->orderBy('snp')->asArray()->all();
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function arraySnpId(){
+        return Employees::find()->select("snp as value, snp as label, id as id")
+            ->where("snp > ''")->orderBy('snp')->asArray()->all();
+    }
+
+    public function getEmails(){
+        return $this->hasMany(Emails::className(), ['employee_id' => 'id'])->where(['status' => 1]);
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function arraySnpIdMail(){
+        return Employees::find()->select("snp as value, snp as label, employees.id as id, email_address as email")
+            ->joinWith('emails')
+            ->where("snp > ''")
+            ->orderBy('snp')->asArray()->all();
+    }
+}
