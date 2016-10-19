@@ -25,8 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'id',
             'username',
-            ['attribute' => 'employee_id',
+            [
+                'attribute' => 'employee_id',
                 'value' => 'employee.snp',
+                'label' => 'Ф.И.О.'
             ],
             'email',
             'created_at:date',

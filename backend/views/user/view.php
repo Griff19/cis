@@ -46,9 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             //'id',
             'username',
-            ['attribute' => 'employee_id',
+            [
+                'attribute' => 'employee_id',
                 'value' => $snp,
-                'format' => 'raw'
+                'format' => 'raw',
+                'label' => 'Ф.И.О.'
             ],
             //'auth_key',
             //'password_hash',
@@ -65,9 +67,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'username',
-            ['attribute' => 'employee_id',
+            [
+                'attribute' => 'employee_id',
                 'value' => $snp,
-                'format' => 'raw'
+                'format' => 'raw',
+                'label' => 'Ф.И.О.'
             ],
             //'auth_key',
             //'password_hash',
