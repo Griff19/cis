@@ -182,7 +182,7 @@ class Main
      * @return \yii\web\Response
      */
     public function ReadfileEmployees(){
-        echo 'execute Employees';
+        echo "execute Employees\n\r";
         $db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
         $readfile = fopen($filename, 'r');
@@ -196,7 +196,7 @@ class Main
         $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number WHERE id = :id");
         while ($str = fgets($readfile, 1024)){
 
-            $items = explode(chr(9), $str);
+            $items = explode(";", $str);
             //$items[0] - ФИО
             //$items[1] - Должность
             //$items[2] - Подразделение
@@ -205,7 +205,7 @@ class Main
             //$items[5] - Дата
             //$items[6] - Дата
             //$items[7] - Код УИД
-            if (count($items) != 8) {echo 'another file format'; break;}
+            if (count($items) != 8) {echo "another file format\n\r"; break;}
             if ($items[1] == 'Код') continue;
             
             //$emp = Employees::findOne(['snp' => $items[0]]);
