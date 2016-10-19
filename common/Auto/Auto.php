@@ -69,6 +69,7 @@ class Main
         $this->dsn = $params['components']['db']['dsn'];
         $this->user = $params['components']['db']['username'];
         $this->pass = $params['components']['db']['password'];
+
     }
 
     public function DwnFtp()
@@ -182,6 +183,7 @@ class Main
      * @return \yii\web\Response
      */
     public function ReadfileEmployees(){
+        echo "". $this->dsn . "; " . $this->user . "; ". $this->pass . "\n\r";
         echo "execute Employees\n\r";
         $db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
@@ -209,18 +211,18 @@ class Main
             if ($items[1] == 'Код') continue;
             
             //$emp = Employees::findOne(['snp' => $items[0]]);
-            $employees = $employees->execute($items[0]);
+            $employees->execute([$items[0]]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
 
             if($emp) {
                 // обновляем уникальный номер сотрудника
-                echo 'update Employee ' . $emp->id;
+                echo 'update Employee ' . $emp->id . ' ';
                 $update_employee->execute([
                     'unique_1c_number' => $items[7],
                     'id' => $emp->id,
                 ]);
             } else {
-                echo 'new Employee ' . $items[7];
+                echo "\n\r new Employee " . $items[7];
                 //получаем ФИО
                 $_snp = $items[0];
                 //Разбираем ФИО на части    
@@ -231,7 +233,7 @@ class Main
                 $_patronymic = $snp[2];
 
                 $_employee_number = $items[1];
-                $branches = $branches->execute([$items[2]]);
+                $branches->execute([$items[2]]);
                 $branch = $branches->fetch(PDO::FETCH_LAZY);
                 if ($branch) {
                     $_branch_id = $branch->id;
