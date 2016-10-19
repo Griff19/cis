@@ -209,7 +209,7 @@ class Main
             if ($items[1] == 'Код') continue;
             
             //$emp = Employees::findOne(['snp' => $items[0]]);
-            $employees = $employees->execute([$items[0]]);
+            $employees = $employees->execute($items[0]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
 
             if($emp) {
