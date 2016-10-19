@@ -195,6 +195,7 @@ class Main
         //запрос на обновление данных о пользователе
         $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number WHERE id = :id");
         while ($str = fgets($readfile, 1024)){
+
             $items = explode(chr(9), $str);
             //$items[0] - ФИО
             //$items[1] - Должность
@@ -204,7 +205,7 @@ class Main
             //$items[5] - Дата
             //$items[6] - Дата
             //$items[7] - Код УИД
-            if (count($items) != 8) {break;}
+            if (count($items) != 8) {echo 'another file format'; break;}
             if ($items[1] == 'Код') continue;
             
             //$emp = Employees::findOne(['snp' => $items[0]]);
