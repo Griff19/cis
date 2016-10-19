@@ -188,6 +188,8 @@ class Main
         $db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
         $readfile = fopen($filename, 'r');
+        //отмечаем всех сотрудников "уволенными"
+        $db->exec("UPDATE employees SET status = 0, employee_number = '', unique_1c_number = ''");
         //запрос на получение идентификатор польоватебя по ФИО
         $employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
         //запрос на добавление нового пользователя
@@ -195,7 +197,9 @@ class Main
         //запрос на получение идентификатора подразделения по его наименованию
         $branches = $db->prepare("SELECT id FROM branches WHERE branch_title = ?");
         //запрос на обновление данных о пользователе
-        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number WHERE id = :id");
+        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number, employee_number = :employee_number, status = 1 WHERE id = :id");
+        //запрос на "увольнение" сотрудника
+        //$del_employee = $db->prepare("UPDATE employees SET status = 0 WHERE id = ?");
         while ($str = fgets($readfile, 1024)){
 
             $items = explode(";", $str);
@@ -213,14 +217,16 @@ class Main
             //$emp = Employees::findOne(['snp' => $items[0]]);
             $employees->execute([$items[0]]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
-
+            //var_dump($emp);
+            //echo "\n\r";
             if($emp) {
                 // обновляем уникальный номер сотрудника
                 echo 'update Employee ' . $emp->id . ' ';
-                $update_employee->execute([
-                    'unique_1c_number' => $items[7],
-                    'id' => $emp->id,
-                ]);
+                if ($update_employee->execute([
+                    'unique_1c_number' => str_replace(chr(13).chr(10), "", $items[7]),
+                    'employee_number' => $items[3],
+                    'id' => (int)$emp->id,
+                ])) {} else echo "NOT UPDATE! ";
             } else {
                 echo "\n\r new Employee " . $items[7];
                 //получаем ФИО
@@ -232,7 +238,7 @@ class Main
                 $_name = $snp[1];
                 $_patronymic = $snp[2];
 
-                $_employee_number = $items[1];
+                $_employee_number = $items[3];
                 $branches->execute([$items[2]]);
                 $branch = $branches->fetch(PDO::FETCH_LAZY);
                 if ($branch) {
@@ -241,18 +247,19 @@ class Main
                     $_branch_id = 0; 
                 }
                 $_job_title = $items[1];
-                $_unique_1c_number = $items[7];
+                $_unique_1c_number = str_replace(chr(13).chr(10), "", $items[7]);
                 
-                $new_employee->execute([
+                if ($new_employee->execute([
                     'snp' => $_snp,
                     'surname' => $_surname,
                     'name' => $_name,
                     'patronymic' => $_patronymic,
-                    'employee_number' => $_patronymic,
+                    'employee_number' => $_employee_number,
                     'branch_id' => $_branch_id,
                     'job_title' => $_job_title,
-                    'unique_1c_number' => $_unique_1c_number
-                ]);
+                    'unique_1c_number' => $_unique_1c_number,
+
+                ])) {} else echo "NOT INSERT! ";
             }
         }
         fclose($readfile);
@@ -262,4 +269,4 @@ class Main
 $main = new Main();
 $main->DwnFtp();
 $main->ReadfileEmployees();
-//$main->ReadFileCells();
+$main->ReadFileCells();
