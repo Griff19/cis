@@ -76,7 +76,8 @@ class Main
         $fileloc = __DIR__ . '/../../backend/web/in/cellnumbers.txt';
         $fileftp = 'itbase/MobilNum.txt';
 
-        if (FtpWork::download($fileftp, $fileloc)) {
+        $ftp = new FtpWork();
+        if ($ftp->download($fileftp, $fileloc)) {
             echo "download file\n\r";
         } else {
             echo "file isnt downloaded\n\r";
@@ -85,7 +86,7 @@ class Main
         $fileloc = __DIR__ . '/../../backend/web/in/employees.txt';
         $fileftp = 'itbase/employees.txt';
 
-        if (FtpWork::download($fileftp, $fileloc)) {
+        if ($ftp->download($fileftp, $fileloc)) {
             echo "download file\n\r";
         } else {
             echo "file isnt downloaded\n\r";
