@@ -78,7 +78,7 @@ class Main
 
         $ftp = new FtpWork();
         if ($ftp->download($fileftp, $fileloc)) {
-            echo "download file\n\r";
+            echo "download file Cellnumbers.txt\n\r";
         } else {
             echo "file isnt downloaded\n\r";
         }
@@ -87,7 +87,7 @@ class Main
         $fileftp = 'itbase/employees.txt';
 
         if ($ftp->download($fileftp, $fileloc)) {
-            echo "download file\n\r";
+            echo "download file Employees.txt\n\r";
         } else {
             echo "file isnt downloaded\n\r";
         }
@@ -182,6 +182,7 @@ class Main
      * @return \yii\web\Response
      */
     public function ReadfileEmployees(){
+        echo 'execute Employees';
         $db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
         $readfile = fopen($filename, 'r');
@@ -192,7 +193,7 @@ class Main
         //запрос на получение идентификатора подразделения по его наименованию
         $branches = $db->prepare("SELECT id FROM branches WHERE branch_title = ?");
         //запрос на обновление данных о пользователе
-        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = ?");
+        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number WHERE id = :id");
         while ($str = fgets($readfile, 1024)){
             $items = explode(chr(9), $str);
             //$items[0] - ФИО
@@ -212,8 +213,13 @@ class Main
 
             if($emp) {
                 // обновляем уникальный номер сотрудника
-                $update_employee->execute([$items[7]]);
+                echo 'update Employee ' . $emp->id;
+                $update_employee->execute([
+                    'unique_1c_number' => $items[7],
+                    'id' => $emp->id,
+                ]);
             } else {
+                echo 'new Employee ' . $items[7];
                 //получаем ФИО
                 $_snp = $items[0];
                 //Разбираем ФИО на части    
