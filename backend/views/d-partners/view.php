@@ -36,8 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-    <?= $this->render('..\d-partner-contacts\index', ['mainModel' => $model, 'dataProvider' => $dp_cont_provider, 'searchModel' => $dp_cont_search]) ?>
-    <?= $this->render('..\d-partner-contracts\index', ['mainModel' => $model, 'dataProvider' => $dp_contr_provider, 'searchModel' => $dp_contr_search]) ?>
+    <?= $this->render('../d-partner-contacts/index', ['mainModel' => $model, 'dataProvider' => $dp_cont_provider, 'searchModel' => $dp_cont_search]) ?>
+    <?= $this->render('../d-partner-contracts/index', ['mainModel' => $model, 'dataProvider' => $dp_contr_provider, 'searchModel' => $dp_contr_search]) ?>
 
 
 </div>

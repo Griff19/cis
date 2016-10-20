@@ -26,13 +26,13 @@ use yii\bootstrap\Tabs;
             'items' => [
                 [
                     'label' => 'Поиск по рабочему месту',
-                    'content' => $this->render('..\workplaces\_search', ['model' => $workplaceSearch]),
+                    'content' => $this->render('../workplaces/_search', ['model' => $workplaceSearch]),
                     'active' =>  $tab == 1 ? true : false
 
                 ],
                 [
                     'label' => 'Поиск по сотруднику',
-                    'content' => $this->render('..\employees\_search', ['model' => $employeeSearch]),
+                    'content' => $this->render('../employees/_search', ['model' => $employeeSearch]),
                     'active' =>  $tab == 2 ? true : false
 
                     //'headerOptions' => [...],
@@ -42,7 +42,7 @@ use yii\bootstrap\Tabs;
         ]);
         ?>
 
-        <?php //echo $this->render('..\workplaces\_search', ['model' => $workplaceSearch]); ?>
+        <?php //echo $this->render('../workplaces/_search', ['model' => $workplaceSearch]); ?>
         <?php
 
         ?>

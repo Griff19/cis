@@ -91,7 +91,7 @@ Modal::end();
 
 	<h3>Список рабочих мест:</h3>
 	<!--    Список рабочих мест-->
-	<?= $this->render('..\dt-enquiry-workplaces\index', ['modelDoc' => $model, 'dataProvider' => $wpProvider]) ?>
+	<?= $this->render('../dt-enquiry-workplaces/index', ['modelDoc' => $model, 'dataProvider' => $wpProvider]) ?>
 
 	<h3>Список устройств списанных с указанных рабочих мест:</h3>
 	<!--    Список списаных с рабочих мест устройств-->
@@ -102,7 +102,7 @@ Modal::end();
 		$arr_ids_wp[] = $wpModel->workplace_id;
 		//var_dump($arr_ids_wp);
 	}
-	echo $this->render('..\dt-defsheet-devices\to_enquire', [
+	echo $this->render('../dt-defsheet-devices/to_enquire', [
 		'modelDoc' => $model,
 		'dataProvider' => \backend\models\DtDefsheetDevices::Devices127($arr_ids_wp),
 	]);
@@ -110,7 +110,7 @@ Modal::end();
 
 	<h3>Список устройств в заявке:</h3>
 	<!--    Список запрашиваемых устройств-->
-	<?= $this->render('..\dt-enquiry-devices\index', ['modelDoc' => $model, 'dataProvider' => $dedProvider, 'searchModel' => $dedSearch, 'ids_wp' => $arr_ids_wp]) ?>
+	<?= $this->render('../dt-enquiry-devices/index', ['modelDoc' => $model, 'dataProvider' => $dedProvider, 'searchModel' => $dedSearch, 'ids_wp' => $arr_ids_wp]) ?>
 	<?php
 	if ($model->status == 0)
 		echo Html::a('Сохранить заявку', ['save', 'id' => $model->id], ['class' => 'btn btn-success']);
