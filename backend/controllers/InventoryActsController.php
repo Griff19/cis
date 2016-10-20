@@ -394,7 +394,7 @@ class InventoryActsController extends Controller
             'pagination' => false
         ]);
 
-        $this->layout = '\pdf';
+        $this->layout = 'pdf';
         /** @var Pdf $pdf */
         $pdf = Yii::$app->pdf;
         $pdf->options = ['title' => 'Акт инвентаризации №' . $model->id];

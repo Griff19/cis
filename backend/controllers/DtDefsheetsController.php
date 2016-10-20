@@ -188,7 +188,7 @@ class DtDefsheetsController extends Controller
             'sort' => false
         ]);
 
-        $this->layout = '\pdf';
+        $this->layout = 'pdf';
         /** @var Pdf $pdf */
         $pdf = Yii::$app->pdf;
         $pdf->options = ['title' => 'Акт списания №' . $model->id];
