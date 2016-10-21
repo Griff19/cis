@@ -34,7 +34,7 @@ class AdminEmployeesSearch extends AdminEmployees
     }
 
     /**
-     * Creates data provider instance with search query applied
+     *
      * @param array $params
      * @return ActiveDataProvider
      */
@@ -49,6 +49,7 @@ class AdminEmployeesSearch extends AdminEmployees
                 'job_title' => 'employees.job_title'
             ])
             ->from('employees')
+            ->where('employees.status > 0')
             //->leftJoin('cell_numbers', 'cell_numbers.employee_id = employees.id')
             ->leftJoin('cell_numbers', 'cell_numbers.employee_id = employees.id AND cell_numbers.status = 1')
             ->leftJoin('emails', 'emails.employee_id = employees.id AND emails.status = 1')

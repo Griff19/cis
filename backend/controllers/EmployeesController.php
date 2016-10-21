@@ -117,6 +117,7 @@ class EmployeesController extends Controller
     /**
      * Загружаем данные по сотрудникам из файла.
      * Поле snp используется для заполнения полей name, surname и patronymic
+     * сейчас не используется, вместо этого работает скрипт Auto.php
      * @return \yii\web\Response
      */
     public function actionReadfile(){
@@ -242,7 +243,7 @@ class EmployeesController extends Controller
         if (($model = Employees::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница недоступна.');
         }
     }
 }

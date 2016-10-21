@@ -41,7 +41,7 @@ class EmployeesSearch extends Employees
      */
     public function search($params)
     {
-        $query = Employees::find();
+        $query = Employees::find()->where('status > 0');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

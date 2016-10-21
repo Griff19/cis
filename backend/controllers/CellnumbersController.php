@@ -130,8 +130,10 @@ class CellnumbersController extends Controller
         return $this->redirect(['index']);
     }
 
-     /**
-     * Обрабатываем загруженный файл
+    /**
+     * Обработка загруженного файла
+     * сейчас не используется, вместо этого работает скрипт Auto.php
+     * @throws \yii\db\Exception
      */
     public function actionReadFile(){
         $filename = 'in/cellnumbers.txt';

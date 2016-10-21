@@ -110,19 +110,21 @@ class Employees extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['employee_id' => 'id']);
     }
     /**
+     * Формируем массив с данными по сотруднику для выпадающего списка
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arraySnp(){
         return Employees::find()->select("('[' || id || '] ' || snp) as value, snp || ' (' || job_title || ') ' as label")
-            ->where("snp > ''")->orderBy('snp')->asArray()->all();
+            ->where("snp > ''")->andWhere('status > 0')->orderBy('snp')->asArray()->all();
     }
 
     /**
+     * Формируем массив с ФИО и ИД сотрудника для автоподстановки
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arraySnpId(){
         return Employees::find()->select("snp as value, snp as label, id as id")
-            ->where("snp > ''")->orderBy('snp')->asArray()->all();
+            ->where("snp > ''")->andWhere('status > 0')->orderBy('snp')->asArray()->all();
     }
 
     public function getEmails(){
@@ -130,12 +132,13 @@ class Employees extends \yii\db\ActiveRecord
     }
 
     /**
+     * Формируем массив с ФИО, ИД и Email сотрудника
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arraySnpIdMail(){
         return Employees::find()->select("snp as value, snp as label, employees.id as id, email_address as email")
             ->joinWith('emails')
-            ->where("snp > ''")
+            ->where("snp > ''")->andWhere('employees.status > 0')
             ->orderBy('snp')->asArray()->all();
     }
 }

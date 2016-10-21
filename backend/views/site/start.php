@@ -60,6 +60,9 @@ echo GridView::widget([
         'nextPageLabel' => 'Далее',
         'maxButtonCount' => 20
     ],
+    'rowOptions' => function ($model){
+        return $model->status == 0 ? ['class' => 'danger'] : '';
+    },
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],
         [

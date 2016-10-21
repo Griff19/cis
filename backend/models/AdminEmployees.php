@@ -56,11 +56,12 @@ class AdminEmployees extends \yii\db\ActiveRecord
     }
 
     /**
+     * Готовим массив состоящий из ФИО сотрудников
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arrayFios(){
         return Employees::find()->select('snp as value, snp as label')
-            ->where("snp > ''")->orderBy('snp')->asArray()->all();
+            ->where("snp > ''")->andWhere('status > 0')->orderBy('snp')->asArray()->all();
     }
     /**
      * @return array|\yii\db\ActiveRecord[]

@@ -74,7 +74,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $searchModel = new StartEmployeesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
 
         return $this->render('start', [
             'searchModel' => $searchModel,
