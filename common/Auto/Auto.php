@@ -54,30 +54,38 @@ class FtpWork
 }
 
 /**
- * @property  string dsn
- * @property  string user
- * @property  string pass
+ * @property string dsn
+ * @property string user
+ * @property string pass
+ * @property string table
  */
 class Main
 {
     private static $dsn;
     private static $user;
     private static $pass;
+    private static $table;
 
     function __construct(){
         $params = require(__DIR__ . '/../config/main-local.php');
         $this->dsn = $params['components']['db']['dsn'];
         $this->user = $params['components']['db']['username'];
         $this->pass = $params['components']['db']['password'];
+        $this->table = "cell_numbers";
     }
 
+    /**
+     * Скачиваем файлы с ФТП
+     * @return bool
+     */
     public function DwnFtp()
     {
         $fileloc = __DIR__ . '/../../backend/web/in/cellnumbers.txt';
         $fileftp = 'itbase/MobilNum.txt';
 
-        if (FtpWork::download($fileftp, $fileloc)) {
-            echo "download file\n\r";
+        $ftp = new FtpWork();
+        if ($ftp->download($fileftp, $fileloc)) {
+            echo "download file Cellnumbers.txt\n\r";
         } else {
             echo "file isnt downloaded\n\r";
         }
@@ -85,8 +93,8 @@ class Main
         $fileloc = __DIR__ . '/../../backend/web/in/employees.txt';
         $fileftp = 'itbase/employees.txt';
 
-        if (FtpWork::download($fileftp, $fileloc)) {
-            echo "download file\n\r";
+        if ($ftp->download($fileftp, $fileloc)) {
+            echo "download file Employees.txt\n\r";
         } else {
             echo "file isnt downloaded\n\r";
         }
@@ -109,19 +117,19 @@ class Main
 
         $db = new PDO($this->dsn, $this->user, $this->pass);
         //инвертируем статус. номера, не прошедшие обработку, останутся с отрицательным статусом
-        $db->exec("UPDATE cell_numbers SET status = status*(-1)");
+        $db->exec("UPDATE ".$this->table." SET status = status*(-1)");
 
-        $cells = $db->prepare("SELECT employee_id, status FROM cell_numbers WHERE cell_number = ?");
+        $cells = $db->prepare("SELECT employee_id, status FROM ".$this->table." WHERE cell_number = :cell_number");
         //запрос получения идентификатора пользователя по УИД
-        $employees = $db->prepare("SELECT id FROM employees WHERE unique_1c_number = ?");
+        $employees = $db->prepare("SELECT id FROM employees WHERE unique_1c_number = :unique_1c_number");
         //запрос наличия телефонных номеров у сотрудника
-        $count_pre = $db->prepare("SELECT COUNT(*) FROM cell_numbers WHERE employee_id = ? ");
+        $count_pre = $db->prepare("SELECT COUNT(*) FROM ".$this->table." WHERE employee_id = :employee_id ");
         //запрос на обновление пользователя телефонного номера
-        $update_cells = $db->prepare("UPDATE cell_numbers SET employee_id = :emp_id, status = :status WHERE cell_number = :cell");
+        $update_cells = $db->prepare("UPDATE ".$this->table." SET employee_id = :emp_id, status = :status WHERE cell_number = :cell");
         //запрос на обновление статуса телефонного номера
-        $update_cells_status = $db->prepare("UPDATE cell_numbers SET status = :status WHERE cell_number = :cell");
+        $update_cells_status = $db->prepare("UPDATE ".$this->table." SET status = :status WHERE cell_number = :cell");
         //добавляем новый номер телефона
-        $insert_cells = $db->prepare("INSERT INTO cell_numbers (employee_id, cell_number, status) VALUES (:employee_id, :cell, :status)");
+        $insert_cells = $db->prepare("INSERT INTO ".$this->table." (employee_id, cell_number, status) VALUES (:employee_id, :cell, :status)");
         while ($str = fgets($readfile, 1024)) {
             //$items = explode(chr(9), $str);
             $items = explode(";", $str);
@@ -130,49 +138,58 @@ class Main
             //$items[2] - Номер телефона
 
             if (count($items) != 3) {
-                $db->exec("UPDATE cell_numbers SET status = status*(-1)"); //возвращаем статусы
-                //echo 'file is not in the correct format';
+                $db->exec("UPDATE ".$this->table." SET status = status*(-1)"); //возвращаем статусы
+                echo "file is not in the correct format\n\r";
                 break;
             }
             if (stristr($str, 'Абонент') > '') continue;
 
             $str_cell = str_replace('-', '', $items[2]);
+            $str_cell = str_replace(chr(13).chr(10), '', $str_cell);
             
-            $cells->execute([$str_cell]);
-            $employees->execute([$items[1]]);
+            $cells->execute(['cell_number' => $str_cell]);
+            $employees->execute(['unique_1c_number' => $items[1]]);
 
             $cell = $cells->fetch(PDO::FETCH_LAZY);                
             $emp = $employees->fetch(PDO::FETCH_LAZY);
 
             if ($cell){ //если номер есть в базе
-                if (!$emp) continue; //если нет сотрудника - продолжаем
+                if (!$emp) {echo $emp->id . " employee not found\n\r"; continue;} //если нет сотрудника - продолжаем
                 //если сотрудник есть
                 if ($cell->employee_id != $emp->id) { //и номер не соответствует сотруднику
-                    $count_pre->execute([$emp->id]); //выясняем сколько уже номеров у сотрудника
+                    echo $str_cell . " add cell to employee ". $emp->id ."\n\r";
+                    $count_pre->execute(['employee_id' => $emp->id]); //выясняем сколько уже номеров у сотрудника
                     $cell_count = $count_pre->fetch(PDO::FETCH_LAZY);
                     $status = $cell_count[0]+1; //готовим статус для номера и назначаем его соответствующему сотруднику
                     $update_cells->execute(['emp_id' => (int)$emp->id, 'status' => $status, 'cell' => $str_cell]);
                 } else { //если номер соответствует сотруднику
+                    echo $str_cell . "update employees cells" . $emp->id ."\n\r";
                     $status = (int)$cell->status * (-1); //готовим статус, записываем
                     $update_cells_status->execute(['status' => $status, 'cell' => $str_cell]);
                 }
-
             } else { //если номера в базе нет
-                $status = '';
-                $employee_id = '';
+                echo $str_cell . " add new cell ";
+                $status = NULL;
+                $employee_id = NULL;
                 if ($emp) { //если сотрудник найден
                     //готовим данные по сотруднику
-                    $count_pre->execute([$emp->id]);
+                    $count_pre->execute(['employee_id' => $emp->id]);
                     $cell_count = $count_pre->fetch(PDO::FETCH_LAZY);
                     $status = $cell_count[0] + 1;
-                    $employee_id = $emp->id;
+                    $employee_id = (int)$emp->id;
+                    echo "to employee ". $emp->id;
                 }
+                echo "\n\r";
                 //записываем
-                $insert_cells->execute(['employee_id' => $employee_id, 'cell' => $str_cell, 'status' => $status]);
+                if ($insert_cells->execute([
+                    'employee_id' => $employee_id,
+                    'cell' => $str_cell,
+                    'status' => $status
+                ])) {} else echo "NOT INSERT cell\n\r";
             }
         }
         //номерам, не попавшим в обработку (статус < 0), удаляем владельцев и сбрасываем статус на 1
-        $db->exec("UPDATE cell_numbers SET employee_id = NULL, status = 1 WHERE status < 0");
+        $db->exec("UPDATE ".$this->table." SET employee_id = NULL, status = 1 WHERE status < 0");
     } //ReadFileCells()
 
     /**
@@ -181,9 +198,13 @@ class Main
      * @return \yii\web\Response
      */
     public function ReadfileEmployees(){
+        echo "". $this->dsn . "; " . $this->user . "; ". $this->pass . "\n\r";
+        echo "execute Employees\n\r";
         $db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
         $readfile = fopen($filename, 'r');
+        //отмечаем всех сотрудников "уволенными"
+        $db->exec("UPDATE employees SET status = 0, employee_number = '', unique_1c_number = ''");
         //запрос на получение идентификатор польоватебя по ФИО
         $employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
         //запрос на добавление нового пользователя
@@ -191,9 +212,12 @@ class Main
         //запрос на получение идентификатора подразделения по его наименованию
         $branches = $db->prepare("SELECT id FROM branches WHERE branch_title = ?");
         //запрос на обновление данных о пользователе
-        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = ?");
+        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number, employee_number = :employee_number, status = 1 WHERE id = :id");
+        //запрос на "увольнение" сотрудника
+        //$del_employee = $db->prepare("UPDATE employees SET status = 0 WHERE id = ?");
         while ($str = fgets($readfile, 1024)){
-            $items = explode(chr(9), $str);
+
+            $items = explode(";", $str);
             //$items[0] - ФИО
             //$items[1] - Должность
             //$items[2] - Подразделение
@@ -202,17 +226,26 @@ class Main
             //$items[5] - Дата
             //$items[6] - Дата
             //$items[7] - Код УИД
-            if (count($items) != 8) {break;}
+            if (count($items) != 8) {echo "another file format\n\r"; break;}
             if ($items[1] == 'Код') continue;
             
             //$emp = Employees::findOne(['snp' => $items[0]]);
-            $employees = $employees->execute([$items[0]]);
+            //echo iconv_strlen($items[0]) . " ";
+            $employees->execute([$items[0]]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
-
+            //var_dump($emp);
+            //echo "\n\r";
             if($emp) {
                 // обновляем уникальный номер сотрудника
-                $update_employee->execute([$items[7]]);
+                if ($emp->id == 4205)
+                    echo 'update Employee ' . $emp->id . "\n\r";
+                if ($update_employee->execute([
+                    'unique_1c_number' => str_replace(chr(13).chr(10), "", $items[7]),
+                    'employee_number' => $items[3],
+                    'id' => (int)$emp->id,
+                ])) {} else echo "NOT UPDATE! ";
             } else {
+                echo "\n\r new Employee " . $items[7];
                 //получаем ФИО
                 $_snp = $items[0];
                 //Разбираем ФИО на части    
@@ -222,8 +255,8 @@ class Main
                 $_name = $snp[1];
                 $_patronymic = $snp[2];
 
-                $_employee_number = $items[1];
-                $branches = $branches->execute([$items[2]]);
+                $_employee_number = $items[3];
+                $branches->execute([$items[2]]);
                 $branch = $branches->fetch(PDO::FETCH_LAZY);
                 if ($branch) {
                     $_branch_id = $branch->id;
@@ -231,18 +264,18 @@ class Main
                     $_branch_id = 0; 
                 }
                 $_job_title = $items[1];
-                $_unique_1c_number = $items[7];
+                $_unique_1c_number = str_replace(chr(13).chr(10), "", $items[7]);
                 
-                $new_employee->execute([
+                if ($new_employee->execute([
                     'snp' => $_snp,
                     'surname' => $_surname,
                     'name' => $_name,
                     'patronymic' => $_patronymic,
-                    'employee_number' => $_patronymic,
+                    'employee_number' => $_employee_number,
                     'branch_id' => $_branch_id,
                     'job_title' => $_job_title,
                     'unique_1c_number' => $_unique_1c_number
-                ]);
+                ])) {} else echo "NOT INSERT! ";
             }
         }
         fclose($readfile);
@@ -252,4 +285,4 @@ class Main
 $main = new Main();
 $main->DwnFtp();
 $main->ReadfileEmployees();
-//$main->ReadFileCells();
+$main->ReadFileCells();
