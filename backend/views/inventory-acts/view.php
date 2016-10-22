@@ -110,7 +110,7 @@ if ($model->status == InventoryActs::DOC_PRINTED) {
     <?= $this->render('devices', ['modelDoc' => $model, 'dataProvider' => $devProvider, 'id_wp' => $model->workplace_id])?>
     <?php
     if ($model->status == 0) {
-        echo $this->render('..\inventory-acts-tb\index', [
+        echo $this->render('../inventory-acts-tb/index', [
             'modelDoc' => $model, 'dataProvider' => $iatProvider, 'searchModel' => $iatSearch]);
 
         echo Html::a('<span class="glyphicon glyphicon-floppy-disk" style="font-size: large"></span> Все готово! Сохранить.', [

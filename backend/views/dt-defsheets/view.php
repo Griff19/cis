@@ -99,7 +99,7 @@ Modal::end();
             </div>
         </div>
     </div>
-    <?= $this->render('..\dt-defsheet-devices\index', ['modelDoc' => $model, 'dataProvider' => $ddsDeviceProvider, 'searchModel' => $ddsDeviceSearch]) ?>
+    <?= $this->render('../dt-defsheet-devices/index', ['modelDoc' => $model, 'dataProvider' => $ddsDeviceProvider, 'searchModel' => $ddsDeviceSearch]) ?>
 
     <br>
     <?php

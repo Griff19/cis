@@ -74,11 +74,11 @@ Modal::end();
 
 	<?= Html::a('Выбрать устройства', '#', ['class' => 'btn btn-primary',
 		'id' => 'linkModal',
-		'data-target' => '\admin\dt-enquiry-devices\index-invoices?id=' . $model->id,
+		'data-target' => '/admin/dt-enquiry-devices/index-invoices?id=' . $model->id,
 		'data-header' => 'Выбор устройства'
 	]) ?>
-	<?php //echo $this->render('..\dt-enquiry-devices\index_invoices', ['dt_invoice_id' => $model->id, 'dataProvider' => $dt_ed_provider, 'searchModel' => $dt_ed_search]) ?>
-	<?= $this->render('..\dt-invoice-devices\index', ['dataProvider' => $dt_id_provider, 'searchModel' => $dt_id_search]) ?>
-	<?= $this->render('..\dt-invoices-payment\index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
+	<?php //echo $this->render('../dt-enquiry-devices/index_invoices', ['dt_invoice_id' => $model->id, 'dataProvider' => $dt_ed_provider, 'searchModel' => $dt_ed_search]) ?>
+	<?= $this->render('../dt-invoice-devices/index', ['dataProvider' => $dt_id_provider, 'searchModel' => $dt_id_search]) ?>
+	<?= $this->render('../dt-invoices-payment/index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
 
 </div>
