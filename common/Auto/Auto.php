@@ -58,12 +58,14 @@ class FtpWork
  * @property string user
  * @property string pass
  * @property string table
+ * @property PDO db
  */
 class Main
 {
     private static $dsn;
     private static $user;
     private static $pass;
+    private static $db;
     private static $table;
 
     function __construct(){
@@ -106,6 +108,14 @@ class Main
     }
 
     /**
+     * @return PDO
+     */
+    public function Connect(){
+        $this->db = new PDO($this->dsn, $this->user, $this->pass);
+        return $this->db;
+    }
+
+    /**
      * Обрабатываем загруженный файл
      */
     public function ReadFileCells()
@@ -114,8 +124,8 @@ class Main
         $filename = __DIR__ . '/../../backend/web/in/cellnumbers.txt';
 
         $readfile = fopen($filename, 'r');
-
-        $db = new PDO($this->dsn, $this->user, $this->pass);
+        $db = $this->db;
+        //$db = new PDO($this->dsn, $this->user, $this->pass);
         //инвертируем статус. номера, не прошедшие обработку, останутся с отрицательным статусом
         $db->exec("UPDATE ".$this->table." SET status = status*(-1)");
 
@@ -200,10 +210,12 @@ class Main
     public function ReadfileEmployees(){
         echo "". $this->dsn . "; " . $this->user . "; ". $this->pass . "\n\r";
         echo "execute Employees\n\r";
-        $db = new PDO($this->dsn, $this->user, $this->pass);
+        $db = $this->db;
+        //$db = new PDO($this->dsn, $this->user, $this->pass);
         $filename = __DIR__ . '/../../backend/web/in/employees.txt';
         $readfile = fopen($filename, 'r');
-        //отмечаем всех сотрудников "уволенными"
+        //отмечаем всех сотрудников "уволенными" после обработки они останутся таковыми
+        //если не будут обнаружены в файле загрузки
         $db->exec("UPDATE employees SET status = 0, employee_number = '', unique_1c_number = ''");
         //запрос на получение идентификатор польоватебя по ФИО
         $employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
@@ -280,9 +292,45 @@ class Main
         }
         fclose($readfile);
     } //ReadfileEmployees()
+
+    /**
+     * Функция ищет уволенных сотрудников и проверяет закреплены ли они за рабочим местом
+     * если закреплены, то формирует сообщение для администратора с просьбой принять меры
+     */
+    public function EmployeesDelete(){
+        $db = $this->db;
+        //запрос на получение всех ИД сотрудников со стасусом 0 (уволенные)
+        $emp_status0 = $db->prepare("
+            SELECT e.id id, snp, workplace_id, w.status status FROM employees e
+            LEFT JOIN wp_owners w ON w.employee_id = e.id
+            WHERE e.status = 0 AND workplace_id > 0 ORDER BY e.id
+          ");
+
+        //запрос для создания сообщения администратору
+        $message = $db->prepare("
+            INSERT INTO tasks (user_id, subject, content, target, target_id)
+            VALUES (5, 'Уволенный сотрудник', :content, :target, :target_id)
+        ");
+
+        $emp_status0->execute();
+        while ($emp = $emp_status0->fetch(PDO::FETCH_LAZY)){
+            echo $emp->id ." ". iconv('utf-8', 'cp866', $emp->snp) ." ". $emp->workplace_id ." ". $emp->status ."\n\r";
+            //echo $emp_id->id ." ". $emp_id->snp ." ". $emp_id->workplace_id ." ". $emp_id->status ."\n\r";
+            $message->execute([
+                'target' => 'workplaces/view',
+                'target_id' => $emp->workplace_id,
+                'content' => 'Уволенный сотрудник <b><a href="/admin/employees/view?id='. $emp->id .'">'.$emp->snp.'</a></b> '
+                    . 'закреплен за рабочим местом: <b><a href="/admin/workplaces/view?id='. $emp->workplace_id.'">№'. $emp->workplace_id.'</a></b> '
+                    . 'со статусом: <b>'. $emp->status .'</b> (1 - основной, 2 - второстепенный).<br />'
+                    . 'Примите меры для устранения конфликта.',
+            ]);
+        }
+    } //EmployeesDelete()
 }
 
 $main = new Main();
-$main->DwnFtp();
-$main->ReadfileEmployees();
-$main->ReadFileCells();
+$main->DwnFtp(); //качаем исходные файлы
+$main->Connect(); //цепляеся к базе
+$main->ReadfileEmployees(); //заполняем таблицу сотрудников
+$main->ReadFileCells(); //заполняем таблицу телефонов
+$main->EmployeesDelete(); //проверяем уволенных

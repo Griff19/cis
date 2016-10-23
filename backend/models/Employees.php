@@ -18,9 +18,14 @@ use yii\db\Query;
  * @property string $unique_1c_number
  * @property integer $branch_id
  * @property string $snp
+ * @property mixed status
+ * @property string statusStr
  */
 class Employees extends \yii\db\ActiveRecord
 {
+    const DISMISSED = 0;
+    const ACTIVE = 1;
+
     public $file;
     /**
      * @inheritdoc
@@ -37,7 +42,7 @@ class Employees extends \yii\db\ActiveRecord
     {
         return [
             [['branch_id'], 'required' , 'on' => 'create'],
-            [['branch_id'], 'integer'],
+            [['branch_id', 'status'], 'integer'],
             [['file'], 'file'],
             [['employee_number', 'unique_1c_number'], 'string', 'max' => 10],
             [['surname', 'name', 'patronymic', 'snp', 'job_title'], 'string', 'max' => 255]
@@ -59,7 +64,9 @@ class Employees extends \yii\db\ActiveRecord
             'unique_1c_number' => 'Код 1С',
             'branch_id' => 'Подразделение',
             'snp'=> 'Ф.И.О.',
-            'file' => 'файл'
+            'file' => 'файл',
+            'status' => 'Статус',
+            'statusStr' => 'Статус'
         ];
     }
 
@@ -129,6 +136,18 @@ class Employees extends \yii\db\ActiveRecord
 
     public function getEmails(){
         return $this->hasMany(Emails::className(), ['employee_id' => 'id'])->where(['status' => 1]);
+    }
+
+    /**
+     * Возвращает текстовое представление статуса
+     * @return mixed
+     */
+    public function getStatusStr(){
+        $arr = [
+            self::DISMISSED => 'Уволен',
+            self::ACTIVE => 'Работает'
+        ];
+        return $arr[$this->status];
     }
 
     /**

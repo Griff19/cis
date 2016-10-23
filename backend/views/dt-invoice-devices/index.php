@@ -15,7 +15,7 @@ use yii\grid\GridView;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить в счет', ['dt_invoice_devices\create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить в счет', ['dt-invoice-devices/create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

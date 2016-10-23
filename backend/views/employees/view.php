@@ -43,6 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'employee_number',
             'unique_1c_number',
             'branch.branch_title',
+            'statusStr'
         ],
     ]) ?>
 
