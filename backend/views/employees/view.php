@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'voip_number',
             [
                 'attribute' => 'workplaces_title',
-                'header' => 'Описание Рабочего места',
+                'header' => 'Описание рабочего места',
                 'value' => function ($arr) {
                     return Html::a($arr['workplaces_title'], ['workplaces/view', 'id' => $arr['workplace_id']]);
                 },
