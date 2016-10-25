@@ -19,7 +19,8 @@ class EmployeesSearch extends Employees
     {
         return [
             [['id'], 'integer'],
-            [['employee_number', 'unique_1c_number'], 'string', 'max' => 10],
+            ['employee_number', 'string', 'max' => 10],
+            ['unique_1c_number', 'string', 'max' => 36],
             [['branch_id', 'snp'], 'string', 'max' => 255],
             [['surname', 'name', 'patronymic', 'job_title'], 'safe']
         ];

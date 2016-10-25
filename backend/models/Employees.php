@@ -44,7 +44,8 @@ class Employees extends \yii\db\ActiveRecord
             [['branch_id'], 'required' , 'on' => 'create'],
             [['branch_id', 'status'], 'integer'],
             [['file'], 'file'],
-            [['employee_number', 'unique_1c_number'], 'string', 'max' => 10],
+            ['employee_number', 'string', 'max' => 10],
+            ['unique_1c_number', 'string', 'max' => 36],
             [['surname', 'name', 'patronymic', 'snp', 'job_title'], 'string', 'max' => 255]
         ];
     }
