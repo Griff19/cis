@@ -72,7 +72,7 @@ class WorkplacesController extends Controller
     }
 
     /**
-     * Displays a single Workplaces model.
+     * Выводим подробности по рабочему месту.
      * @param integer $id
      * @return mixed
      */
@@ -82,8 +82,8 @@ class WorkplacesController extends Controller
         $employeeProvider = $searchEmployeeModel->search(Yii::$app->request->queryParams, $id);
 
         $searchDeviceModel = new DevicesSearch();
-        //$deviceProvider = $searchDeviceModel->search(Yii::$app->request->queryParams, $id);
-        $deviceProvider = $searchDeviceModel->searchInventoryData(Yii::$app->request->queryParams, $id);
+        $deviceProvider = $searchDeviceModel->searchDeviceOnWp(Yii::$app->request->queryParams, $id);
+        //$deviceProvider = $searchDeviceModel->searchInventoryData(Yii::$app->request->queryParams, $id);
         $searchVoip = new VoipnumbersSearch();
         $voipProvider = $searchVoip->search(Yii::$app->request->queryParams, 0, $id);
 

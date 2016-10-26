@@ -40,6 +40,7 @@ class DevicesController extends Controller
                             'index-to-enquiry',
                             'index-comp',
                             'view',
+                            'view-table-comp',
                             'update',
                             'create',
                             'validation',
@@ -126,6 +127,21 @@ class DevicesController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'target' => $target
+        ]);
+    }
+
+    /**
+     * Экшн используется для развертывания списка комплектующих устройств
+     * в таблице устройств на странице рабочего места
+     * @param $id
+     * @return string
+     */
+    public function actionViewTableComp($id) {
+        $searchModel = new DevicesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0, $id);
+        return $this->renderAjax('view_table_comp', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider
         ]);
     }
 

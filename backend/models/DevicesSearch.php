@@ -141,7 +141,6 @@ class DevicesSearch extends Devices
      * @param $params
      * @param null $id_wp
      * @return ActiveDataProvider
-     * @internal param $id
      */
     public function searchInventoryData($params, $id_wp = null){
 
@@ -198,6 +197,7 @@ class DevicesSearch extends Devices
     }
 
     /**
+     * Используется для генерации таблицы для выбора комплектующих
      * @param $params
      * @return ActiveDataProvider
      */
@@ -217,8 +217,6 @@ class DevicesSearch extends Devices
             return $dataProvider;
         }
 
-
-
         $query->andFilterWhere([
             'devices.id' => $this->id,
             'workplace_id' => $this->workplace_id,
@@ -233,6 +231,63 @@ class DevicesSearch extends Devices
             ->andFilterWhere(['like', 'LOWER(specification)', mb_strtolower($this->specification)])
             ->andFilterWhere(['like', 'LOWER(imei1)', mb_strtolower($this->imei1)])
         ;
+        return $dataProvider;
+    }
+
+    /**
+     * Отбираем устройства на рабочем месте без комплектующих
+     * @param $params
+     * @param $id_wp
+     * @return ActiveDataProvider
+     */
+    public function searchDeviceOnWp($params, $id_wp) {
+        $query = Devices::find()->where(['workplace_id' => $id_wp])
+            ->andWhere("parent_device_id IS NULL OR parent_device_id = 0");
+        $query->joinWith('deviceType');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' => [
+                'id',
+                'type_id' => [
+                    'asc' => ['device_type.title' => SORT_ASC],
+                    'desc' => ['device_type.title' => SORT_DESC]
+                ],
+                'device_note',
+                'workplace_id',
+                'brand',
+                'model',
+                'sn',
+                'specification',
+                'parent_device_id'
+            ],
+            'defaultOrder' => ['type_id' => SORT_ASC]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'workplace_id' => $this->workplace_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'LOWER(device_type.title)', mb_strtolower($this->type_id)])
+            ->andFilterWhere(['like', 'LOWER(device_note)', mb_strtolower($this->device_note)])
+            ->andFilterWhere(['like', 'LOWER(brand)', mb_strtolower($this->brand)])
+            ->andFilterWhere(['like', 'LOWER(model)', mb_strtolower($this->model)])
+            ->andFilterWhere(['like', 'LOWER(sn)', mb_strtolower($this->sn)])
+            ->andFilterWhere(['like', 'LOWER(specification)', mb_strtolower($this->specification)])
+            ;
+
         return $dataProvider;
     }
 }
