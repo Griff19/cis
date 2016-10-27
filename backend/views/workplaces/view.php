@@ -14,7 +14,7 @@ use backend\models\DeviceType;
  * @var $model backend\models\Workplaces
  *
  **/
-$this->registerJs("CollapseTable()");
+
 $this->title = $model->workplaces_title;
 $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -224,58 +224,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php
         //формируем массив с идентификаторами родителей
         $arrParent = [];
-//        foreach ($deviceProvider->models as $device){
-//            if (!in_array($device['parent_device_id'], $arrParent))
-//                $arrParent[] = $device['parent_device_id'];
-//        };
-//        $col = [
-//            'dataProvider' => $deviceProvider,
-//            //'filterModel' => $searchDeviceModel,
-//            'tableOptions' => ['class' => 'table table-bordered table-hover'],
-//            'rowOptions' => function ($model) use ($arrParent){
-//                if ($model['parent_device_id'] > 0){ //если есть родитель то делаем свернутую строку
-//                    return ['class' => 'collapse row' . $model['parent_device_id']];
-//                } elseif (in_array($model['id'], $arrParent)) //если сам родитель то делаем управляющую строку
-//                    return ['class' => 'success', 'data-toggle' => 'collapse', 'data-target' => '.row' . $model['id']];
-//                else
-//                    return ['class' => 'info'];
-//            },
-//            'layout' => "{items}",
-//            'columns' => [
-//                ['class' => 'yii\grid\SerialColumn'],
-//                //'sort',
-//                'id',
-//                ['attribute' => 'type_id',
-//                    'value' => function ($model){
-//                        return '<b>'. Html::a(DeviceType::getTitle($model['type_id']), ['devices/view', 'id'=> $model['id']]) .'</b>';
-//                    },
-//                    'format' => 'raw'
-//                ],
-//                //'type_id',
-//                'device_note',
-//                'workplace_id',
-//                ['class' => Column::className(),
-//                    'header' => 'Рабочее место',
-//                    'content' => function ($model){
-//                        return Workplaces::getTitle($model['workplace_id']);
-//                    }
-//                ],
-//
-//                'brand',
-//                'model',
-//                'sn',
-//                'specification',
-//                'parent_device_id',
-//                ['class' => Column::className(),
-//                    'content' => function ($moddev) use ($model){
-//                        if (Yii::$app->user->can('admin'))
-//                            return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $model->id],['class' => 'cross']);
-//                        else
-//                            return '';
-//                    }
-//                ]
-//            ],
-//        ];
 
         $col1 = [
             'dataProvider' => $deviceProvider,
@@ -327,6 +275,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ];
         \yii\widgets\Pjax::begin();
+        $this->registerJs("CollapseTable()");
         echo GridView::widget($col1);
         \yii\widgets\Pjax::end();
         ?>

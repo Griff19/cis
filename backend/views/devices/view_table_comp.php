@@ -7,7 +7,6 @@
  */
 
 use backend\models\DeviceType;
-use backend\models\Workplaces;
 use yii\grid\GridView;
 use yii\grid\Column;
 use yii\helpers\Html;
@@ -30,14 +29,6 @@ $col1 = [
 		],
 		//'type_id',
 		'device_note',
-		'workplace_id',
-		['class' => Column::className(),
-			'header' => 'Рабочее место',
-			'content' => function ($model){
-				return Workplaces::getTitle($model['workplace_id']);
-			}
-		],
-
 		'brand',
 		'model',
 		'sn',

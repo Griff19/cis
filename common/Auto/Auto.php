@@ -216,9 +216,10 @@ class Main
         $readfile = fopen($filename, 'r');
         //отмечаем всех сотрудников "уволенными" после обработки они останутся таковыми
         //если не будут обнаружены в файле загрузки
-        $db->exec("UPDATE employees SET status = 0, employee_number = '', unique_1c_number = ''");
+        $db->exec("UPDATE employees SET status = 0, employee_number = ''");
         //запрос на получение идентификатор польоватебя по ФИО
-        $employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
+        $employees = $db->prepare("SELECT id FROM employees WHERE unique_1c_number = ?");
+        //$employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
         //запрос на добавление нового пользователя
         $new_employee = $db->prepare("INSERT INTO employees (snp, surname, name, patronymic, employee_number, branch_id, job_title, unique_1c_number) VALUES (:snp, :surname, :name, :patronymic, :employee_number, :branch_id, :job_title, :unique_1c_number)");
         //запрос на получение идентификатора подразделения по его наименованию
@@ -240,10 +241,10 @@ class Main
             //$items[7] - Код УИД
             if (count($items) != 8) {echo "another file format\n\r"; break;}
             if ($items[1] == 'Код') continue;
-            
-            //$emp = Employees::findOne(['snp' => $items[0]]);
+
             //echo iconv_strlen($items[0]) . " ";
-            $employees->execute([$items[0]]);
+            $employees->execute([str_replace(chr(13).chr(10), "", $items[7])]);
+            //$employees->execute([$items[0]]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
             //var_dump($emp);
             //echo "\n\r";
@@ -309,7 +310,7 @@ class Main
         //запрос для создания сообщения администратору
         $message = $db->prepare("
             INSERT INTO tasks (user_id, subject, content, target, target_id)
-            VALUES (5, 'Уволенный сотрудник', :content, :target, :target_id)
+            VALUES (1, 'Отсутствует сотрудник', :content, :target, :target_id)
         ");
 
         $emp_status0->execute();
@@ -319,10 +320,10 @@ class Main
             $message->execute([
                 'target' => 'workplaces/view',
                 'target_id' => $emp->workplace_id,
-                'content' => 'Уволенный сотрудник <b><a href="/admin/employees/view?id='. $emp->id .'">'.$emp->snp.'</a></b> '
-                    . 'закреплен за рабочим местом: <b><a href="/admin/workplaces/view?id='. $emp->workplace_id.'">№'. $emp->workplace_id.'</a></b> '
-                    . 'со статусом: <b>'. $emp->status .'</b> (1 - основной, 2 - второстепенный).<br />'
-                    . 'Примите меры для устранения конфликта.',
+                'content' => 'Cотрудник <b><a href="/admin/employees/view?id='. $emp->id .'">'.$emp->snp.'</a></b> '
+                    . 'закрепленый за рабочим местом: <b><a href="/admin/workplaces/view?id='. $emp->workplace_id.'">№'. $emp->workplace_id.'</a></b> '
+                    . 'со статусом: <b>'. $emp->status .'</b> (1 - основной, 2 - второстепенный)<br />'
+                    . 'Отсутствует в свежем списке згрузки сотрудников.',
             ]);
         }
     } //EmployeesDelete()
