@@ -164,7 +164,7 @@ class Main
             $emp = $employees->fetch(PDO::FETCH_LAZY);
 
             if ($cell){ //если номер есть в базе
-                if (!$emp) {echo $emp->id . " employee not found\n\r"; continue;} //если нет сотрудника - продолжаем
+                if (!$emp) {echo $items[0] . " employee not found\n\r"; continue;} //если нет сотрудника - продолжаем
                 //если сотрудник есть
                 if ($cell->employee_id != $emp->id) { //и номер не соответствует сотруднику
                     echo $str_cell . " add cell to employee ". $emp->id ."\n\r";
