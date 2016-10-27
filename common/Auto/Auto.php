@@ -330,7 +330,7 @@ class Main
 }
 
 $main = new Main();
-$main->DwnFtp(); //качаем исходные файлы
+//$main->DwnFtp(); //качаем исходные файлы
 $main->Connect(); //цепляеся к базе
 $main->ReadfileEmployees(); //заполняем таблицу сотрудников
 $main->ReadFileCells(); //заполняем таблицу телефонов
