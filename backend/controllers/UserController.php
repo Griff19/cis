@@ -111,9 +111,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-//        if($id == 13){
-//            throw new ForbiddenHttpException('Пока нельзя редактировать этого пользователя');
-//        }
+
         $model = $this->findModel($id);
         //$oldpass = $model->password_hash;
         

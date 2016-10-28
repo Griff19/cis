@@ -70,14 +70,9 @@ function Modal(){
             .load($(this).attr('data-target'))
         $('#modalHeader').text($(this).attr('data-header'));
     });
-    //$('#linkModal2').click(function () {
-    //    $('#modal2').modal('show')
-    //        .find('#modalContent2')
-    //        .load($(this).attr('data-target'));
-    //});
+
 }
 
-//
 function CollapseTable(){
     $('[id ^= row]').click(function () {
         if ($("tr").is("#newtr")) {

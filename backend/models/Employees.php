@@ -135,8 +135,12 @@ class Employees extends \yii\db\ActiveRecord
             ->where("snp > ''")->andWhere('status > 0')->orderBy('snp')->asArray()->all();
     }
 
+    /**
+     * Привязываем модель "почтовых адресов"
+     * @return $this
+     */
     public function getEmails(){
-        return $this->hasMany(Emails::className(), ['employee_id' => 'id'])->where(['status' => 1]);
+        return $this->hasMany(Emails::className(), ['employee_id' => 'id'])->where(['emails.status' => 1]);
     }
 
     /**
