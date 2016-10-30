@@ -6,6 +6,7 @@ use Yii;
 
 /**
  * Модель для таблицы "dt_invoices".
+ * Документ "Счет"
  *
  * @property integer $id
  * @property string $doc_number
@@ -14,6 +15,7 @@ use Yii;
  * @property integer $delivery_type
  * @property string $summ
  * @property string $d_partners_name
+ * @property integer summPay
  */
 class DtInvoices extends \yii\db\ActiveRecord
 {
@@ -54,10 +56,18 @@ class DtInvoices extends \yii\db\ActiveRecord
             'd_partners_name' => 'Контрагент',
             'delivery_type' => 'Доставка',
             'summ' => 'Сумма',
+            'summPay' => 'Сумма оплаты'
         ];
     }
 
     public function getPartner(){
         return $this->hasOne(DPartners::className(), ['id' => 'd_partners_id']);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSummPay(){
+        return DtInvoicesPayment::find()->where(['dt_invoices_id' => $this->id])->sum('summ');
     }
 }

@@ -10,6 +10,7 @@ use Yii;
 
 /**
  * Модель для таблицы "dt_enquiry_devices".
+ * Документ "Заявка на оборудование"
  *
  * @property integer $dt_enquiries_id
  * @property integer $type_id
@@ -31,16 +32,23 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
     const PAID = 5; //куплено
 
     /**
+     * @return array
+     */
+    public static function arrStatusString(){
+        return [
+            self::RESERVED => 'Зарезервировано',
+            self::NEED_BUY => 'Требуется покупка',
+            self::REQUEST_INVOICE => 'Запросить счет',
+            self::AWAITING_PAYMENT => 'Ожидает оплаты',
+            self::PAID => 'Куплено',
+        ];
+    }
+
+    /**
      * @return mixed
      */
     public function getStatusString(){
-        $arr = [
-            1 => 'Зарезервировано',
-            2 => 'Требуется покупка',
-            3 => 'Запросить счет',
-            4 => 'Ожидает оплаты',
-            5 => 'Куплено',
-        ];
+        $arr = self::arrStatusString();
         return $arr[$this->status];
     }
 

@@ -52,6 +52,7 @@ Modal::end();
 					'partner.brand',
 					'delivery_type',
 					'summ',
+					'summPay'
 				],
 			]) ?>
 		</div>

@@ -164,16 +164,16 @@ class Main
             $emp = $employees->fetch(PDO::FETCH_LAZY);
 
             if ($cell){ //если номер есть в базе
-                if (!$emp) {echo $items[0] . " employee not found\n\r"; continue;} //если нет сотрудника - продолжаем
+                if (!$emp) {echo $items[1] . " " .iconv('utf-8', 'cp866', $items[0]) ." not found\n\r"; continue;} //если нет сотрудника - продолжаем
                 //если сотрудник есть
                 if ($cell->employee_id != $emp->id) { //и номер не соответствует сотруднику
-                    echo $str_cell . " add cell to employee ". $emp->id ."\n\r";
+                    //echo $str_cell . " add cell to employee ". $emp->id ."\n\r";
                     $count_pre->execute(['employee_id' => $emp->id]); //выясняем сколько уже номеров у сотрудника
                     $cell_count = $count_pre->fetch(PDO::FETCH_LAZY);
                     $status = $cell_count[0]+1; //готовим статус для номера и назначаем его соответствующему сотруднику
                     $update_cells->execute(['emp_id' => (int)$emp->id, 'status' => $status, 'cell' => $str_cell]);
                 } else { //если номер соответствует сотруднику
-                    echo $str_cell . "update employees cells" . $emp->id ."\n\r";
+                    //echo $str_cell . "update employees cells" . $emp->id ."\n\r";
                     $status = (int)$cell->status * (-1); //готовим статус, записываем
                     $update_cells_status->execute(['status' => $status, 'cell' => $str_cell]);
                 }

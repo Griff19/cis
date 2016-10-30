@@ -1,6 +1,8 @@
 <?php
 
 use backend\models\DeviceType;
+use backend\models\DtEnquiryDevices;
+use yii\web\JsExpression;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -17,6 +19,7 @@ use yii\grid\GridView;
     <p>
         <?= Html::a('Добавить в счет', ['dt-invoice-devices/create'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php \yii\widgets\Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -37,12 +40,26 @@ use yii\grid\GridView;
                 }
             ],
             'price',
-            'status',
+            //'status',
+            ['attribute' => 'status',
+                'value' => function ($model) {
+                    $arr = DtEnquiryDevices::arrStatusString();
+                    $str = $arr[$model->status];
+                    return Html::a($str, '', [
+                        'class' => 'stat',
+                        'title' => 'Сменить статус',
+                        'onclick' => '$.post("/admin/dt-invoice-devices/set-status?id=' . $model->id. '")'
+                    ]);
+                },
+                'format' => 'raw',
+            ],
             'note',
 
             ['class' => 'yii\grid\ActionColumn',
-                'controller' => 'dt-invoice-devices'
+                'controller' => 'dt-invoice-devices',
+                'template' => '{delete}'
             ],
         ],
     ]); ?>
+    <?php \yii\widgets\Pjax::end(); ?>
 </div>

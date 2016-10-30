@@ -41,7 +41,8 @@ use backend\models\DtEnquiryWorkplaces;
                     return Html::a('<span class = "glyphicon glyphicon-ok"></span>', ['dt-invoice-devices/create',
                         'dt_invoices_id' => $dt_invoice_id,
                         'dt_enquiries_id' => $model->dt_enquiries_id,
-                        'type_id' => $model->type_id
+                        'type_id' => $model->type_id,
+                        'id' => $model->id,
                     ]);
                 }
             ]

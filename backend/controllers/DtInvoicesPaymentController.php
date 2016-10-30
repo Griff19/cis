@@ -95,16 +95,17 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
-     * Deletes an existing DtInvoicesPayment model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * При удалении строки оплаты переходим обратно в документ
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $dt_invoices_id = $model->dt_invoices_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
     }
 
     /**

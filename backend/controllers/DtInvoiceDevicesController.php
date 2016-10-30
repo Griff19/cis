@@ -3,6 +3,11 @@
 namespace backend\controllers;
 
 use Yii;
+use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoices;
+use backend\models\DtInvoicesPaymentSearch;
+use backend\models\DtEnquiryDevicesSearch;
+
 use backend\models\DtInvoiceDevices;
 use app\models\DtInvoiceDevicesSearch;
 use yii\web\Controller;
@@ -60,13 +65,16 @@ class DtInvoiceDevicesController extends Controller
      * Добавляем новое устройство в табличную часть документа Счет
      * @return mixed
      */
-    public function actionCreate($dt_invoices_id, $dt_enquiries_id, $type_id)
+    public function actionCreate($dt_invoices_id, $dt_enquiries_id, $type_id, $id)
     {
-
+        $deviceEnquiry = DtEnquiryDevices::find()->where(['id' => $id])->one();
+        //var_dump($deviceEnquiry);
+        //die;
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
-        $model->type_id = $type_id;
-        $model->dt_enquiries_id = $dt_enquiries_id;
+        $model->type_id = $deviceEnquiry['type_id'];
+        $model->dt_enquiries_id = $deviceEnquiry['dt_enquiries_id'];
+        $model->status = $deviceEnquiry['status'];
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
@@ -78,24 +86,37 @@ class DtInvoiceDevicesController extends Controller
     }
 
     /**
-     * Updates an existing DtInvoiceDevices model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Редактировать устройство в документе счет. В данном контексте тебуется сменить только статус
      * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['dt-invoices/view', 'id' => $model->dt_invoices_id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
     }
 
+    public function actionSetStatus($id){
+        $model = $this->findModel($id);
+        /**
+         * @var $modelInvoices DtInvoices
+         * @var $modelEnquiry DtEnquiryDevices
+         */
+        $modelInvoices = DtInvoices::findOne($model->dt_invoices_id);
+        //$modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiries_id);
+
+        $summPay = $modelInvoices->summPay;
+        $summ = $modelInvoices->summ;
+
+        if ($summ > $summPay) {
+            $model->status = 4; //если счет еще не оплачен то статус: "Требует оплаты"
+            //$modelEnquiry->status = 4;
+        } else {
+            $model->status = 5; //если счет закрыт то статус: "Оплачен"
+            //$modelEnquiry->status = 5;
+        }
+        $model->save();
+        //$modelEnquiry->save();
+    }
     /**
      * Удаляем строку устройства из табличной части документа Счет
      * @param integer $id
