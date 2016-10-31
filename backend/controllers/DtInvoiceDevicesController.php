@@ -70,12 +70,13 @@ class DtInvoiceDevicesController extends Controller
         $deviceEnquiry = DtEnquiryDevices::find()->where(['id' => $id])->one();
         //var_dump($deviceEnquiry);
         //die;
+        /** @var $model DtInvoiceDevices */
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
         $model->type_id = $deviceEnquiry['type_id'];
         $model->dt_enquiries_id = $deviceEnquiry['dt_enquiries_id'];
         $model->status = $deviceEnquiry['status'];
-
+        $model->dt_enquiry_devices_id = $id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
         } else {
@@ -95,6 +96,10 @@ class DtInvoiceDevicesController extends Controller
 
     }
 
+    /**
+     * @param $id
+     * @throws NotFoundHttpException
+     */
     public function actionSetStatus($id){
         $model = $this->findModel($id);
         /**
@@ -102,20 +107,20 @@ class DtInvoiceDevicesController extends Controller
          * @var $modelEnquiry DtEnquiryDevices
          */
         $modelInvoices = DtInvoices::findOne($model->dt_invoices_id);
-        //$modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiries_id);
+        $modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiry_devices_id);
 
         $summPay = $modelInvoices->summPay;
         $summ = $modelInvoices->summ;
 
         if ($summ > $summPay) {
             $model->status = 4; //если счет еще не оплачен то статус: "Требует оплаты"
-            //$modelEnquiry->status = 4;
+            $modelEnquiry->status = 4;
         } else {
             $model->status = 5; //если счет закрыт то статус: "Оплачен"
-            //$modelEnquiry->status = 5;
+            $modelEnquiry->status = 5;
         }
         $model->save();
-        //$modelEnquiry->save();
+        $modelEnquiry->save();
     }
     /**
      * Удаляем строку устройства из табличной части документа Счет

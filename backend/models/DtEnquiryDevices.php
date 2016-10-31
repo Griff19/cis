@@ -88,7 +88,8 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
             'dt_def_dev_id' => 'Ид строки',
             'workplace_id' => 'РМ №',
             'status' => 'Статус',
-            'statusString' => 'Статус'
+            'statusString' => 'Статус',
+
         ];
     }
 }

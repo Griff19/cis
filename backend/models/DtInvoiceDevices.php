@@ -14,6 +14,7 @@ use Yii;
  * @property string $note
  * @property integer $type_id
  * @property integer $dt_enquiries_id
+ * @property integer dt_enquiry_devices_id
  */
 class DtInvoiceDevices extends \yii\db\ActiveRecord
 {
@@ -32,7 +33,7 @@ class DtInvoiceDevices extends \yii\db\ActiveRecord
     {
         return [
             [['dt_invoices_id'], 'required'],
-            [['dt_invoices_id', 'status', 'type_id', 'dt_enquiries_id'], 'integer'],
+            [['dt_invoices_id', 'status', 'type_id', 'dt_enquiries_id', 'dt_enquiry_devices_id'], 'integer'],
             [['price'], 'number'],
             [['note'], 'string', 'max' => 255],
         ];
