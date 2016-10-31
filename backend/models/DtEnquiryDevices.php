@@ -32,6 +32,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
     const PAID = 5; //куплено
 
     /**
+     * Готовим массив строк статуса
      * @return array
      */
     public static function arrStatusString(){
@@ -45,6 +46,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
     }
 
     /**
+     * Получаем строку статуса из массива
      * @return mixed
      */
     public function getStatusString(){
