@@ -1,7 +1,7 @@
 <?php
 /**
  * Это представление встраивается в представление dt-enquiries\view.php
- * и отображает список списанных устройств в документе Заявка на оборудование
+ * и отображает список списанных устройств в документе "Заявка на оборудование"
  * Из контроллера dt-defsheet-devices не доступно
  */
 
@@ -12,8 +12,11 @@ use backend\models\DeviceType;
 use yii\bootstrap\Modal;
 use backend\models\DtDefsheets;
 
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
+
 
 ?>
 <div class="dt-defsheet-devices-index">
@@ -52,8 +55,17 @@ use backend\models\DtDefsheets;
                     return $model->devices->sn;
                 }
             ],
+            ['class' => Column::className(),
+                'header' => 'Док',
+                'content' => function ($model) {
+                    /* @var $model \backend\models\DtDefsheetDevices */
+                    /* @var $modelDd DtDefsheets */
+                    $modelDd = DtDefsheets::findOne($model->dt_defsheets_id);
+                    return Html::a('Акт списания №' . $modelDd->id, ['dt-defsheets/view', 'id' => $modelDd->id]);
+                },
+            ],
             'reason',
-            'status',
+            'statusString',
             ['class' => Column::className(),
                 'content' => function ($model) use ($modelDoc){
                     if ($model->status > 1 || $modelDoc->status > 0)

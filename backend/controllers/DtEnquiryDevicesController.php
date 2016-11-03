@@ -52,6 +52,7 @@ class DtEnquiryDevicesController extends Controller
     }
 
     /**
+     * Формируем содержимое для модального окна с выбором устройств в Заявке
      * @return string
      */
     public function actionIndexInvoices($id){
@@ -115,7 +116,7 @@ class DtEnquiryDevicesController extends Controller
             $model->workplace_id = $arr[0]['workplace_id'];
         }
 
-        $model->note = 'Требуется покупка';
+        //$model->note = 'Требуется покупка';
         $model->status = DtEnquiryDevices::NEED_BUY;
 
         if ($type || $model->load(Yii::$app->request->post())){

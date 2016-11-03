@@ -5,7 +5,8 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "dt_enquiry_workplaces".
+ * Список рабочих мест в документе "Заявка на оборудование"
+ * соответствующая таблица "dt_enquiry_workplaces".
  *
  * @property integer $dt_enquiries_id
  * @property integer $workplace_id
@@ -37,8 +38,8 @@ class DtEnquiryWorkplaces extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'dt_enquiries_id' => 'Dt Enquiries ID',
-            'workplace_id' => 'Workplace ID',
+            'dt_enquiries_id' => 'Ид док',
+            'workplace_id' => 'РМ №',
         ];
     }
 

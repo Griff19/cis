@@ -67,6 +67,7 @@ class DtInvoiceDevicesController extends Controller
      */
     public function actionCreate($dt_invoices_id, $dt_enquiries_id, $type_id, $id)
     {
+        /* @var $deviceEnquiry DtEnquiryDevices */
         $deviceEnquiry = DtEnquiryDevices::find()->where(['id' => $id])->one();
         //var_dump($deviceEnquiry);
         //die;
@@ -75,9 +76,12 @@ class DtInvoiceDevicesController extends Controller
         $model->dt_invoices_id = $dt_invoices_id;
         $model->type_id = $deviceEnquiry['type_id'];
         $model->dt_enquiries_id = $deviceEnquiry['dt_enquiries_id'];
-        $model->status = $deviceEnquiry['status'];
+        $model->status = $deviceEnquiry->status + 1;
+
         $model->dt_enquiry_devices_id = $id;
+        $deviceEnquiry->status = $model->status;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $deviceEnquiry->save();
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
         } else {
             return $this->render('create', [

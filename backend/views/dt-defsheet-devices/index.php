@@ -91,7 +91,7 @@ use backend\models\DtDefsheets;
                 },
                 'format' => 'raw'
             ],
-            'status',
+            'statusString',
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{delete}',
                 'controller' => 'dt-defsheet-devices'

@@ -6,7 +6,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 
 /**
- * This is the model class for table "dt_defsheet_devices".
+ * Модель связана с таблицей "dt_defsheet_devices".
  * Модель описывыет табличную часть документа Акт Списания
  * @property integer $dt_defsheets_id
  * @property integer $devices_id
@@ -14,13 +14,14 @@ use yii\data\ActiveDataProvider;
  * @property integer $status
  * @property integer $workplace_id
  * @property integer id_def
+ * @property string statusString
  * @property Devices devices
  */
 class DtDefsheetDevices extends \yii\db\ActiveRecord
 {
     const STATUS_NEW = 0; //добавленное
     const STATUS_127 = 1; //перемещенное на склад неисправных
-
+    const STATUS_COMPLETE = 2; //Подобрана замена
     /**
      * @inheritdoc
      */
@@ -52,6 +53,7 @@ class DtDefsheetDevices extends \yii\db\ActiveRecord
             'devices_id' => 'ИД устройства',
             'reason' => 'Причина списания',
             'status' => 'Статус',
+            'statusString' => 'Статус',
             'id_def' => 'Ид стр.'
         ];
     }
@@ -75,5 +77,26 @@ class DtDefsheetDevices extends \yii\db\ActiveRecord
             'pagination' => false,
         ]);
         return $provider;
+    }
+
+    /**
+     * Готовим массив строк статуса
+     * @return array
+     */
+    public static function arrStatusString(){
+        return [
+            self::STATUS_NEW => 'На списание',
+            self::STATUS_127 => 'Списано',
+            self::STATUS_COMPLETE => 'Подобрана замена',
+        ];
+    }
+
+    /**
+     * Получаем статус текущей строки документа
+     * @return mixed
+     */
+    public function getStatusString(){
+        $arr = self::arrStatusString();
+        return $arr[$this->status];
     }
 }
