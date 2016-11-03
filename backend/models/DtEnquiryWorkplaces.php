@@ -10,6 +10,7 @@ use Yii;
  *
  * @property integer $dt_enquiries_id
  * @property integer $workplace_id
+ * @property Workplaces workplace
  */
 class DtEnquiryWorkplaces extends \yii\db\ActiveRecord
 {
@@ -51,6 +52,19 @@ class DtEnquiryWorkplaces extends \yii\db\ActiveRecord
             ->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
     }
 
+    /**
+     * Связываем с моделью Workplaces (Рабочие места)
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkplace(){
+        return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
+    }
+
+    /**
+     * Получаем массив идентификаторов рабочих мест
+     * @param $id_enq
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function arrWpIds($id_enq) {
         return DtEnquiryWorkplaces::find()->where(['dt_enquiries_id' => $id_enq])->asArray()->all();
     }

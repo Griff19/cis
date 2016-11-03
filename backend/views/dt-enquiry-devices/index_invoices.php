@@ -1,7 +1,8 @@
 <?php
 /**
  * Содержимое всплывающего/выпадающего окна
- * Используется в представлении документа "Счет" (dt-invoices/view) для выбора устройств, по которым формируется документ.
+ * Используется в представлении документа "Счет" (dt-invoices/view)
+ * для выбора устройств, по которым формируется документ.
  */
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -9,10 +10,13 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use backend\models\DtEnquiryWorkplaces;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\DtEnquiriyDevicesSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $dt_invoice_id integer идентификатор документа счет */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel backend\models\DtEnquiriyDevicesSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ * @var $dataProvider->models[] DtEnquiryDevices
+ * @var $dt_invoice_id integer идентификатор документа счет
+ */
 ?>
 <div class="dt-enquiry-devices-index">
     <p>Устройства в заявках требующие покупки:</p>
@@ -20,7 +24,9 @@ use backend\models\DtEnquiryWorkplaces;
         'options' => ['id' => 'ded1'],
         //'enablePushState' => false
     ]);
+    echo Yii::getVersion();
     ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -34,7 +40,8 @@ use backend\models\DtEnquiryWorkplaces;
                     return \backend\models\DeviceType::getTitle($model->type_id);
                 }
             ],
-            'status',
+            //'status',
+            'statusString',
             'note',
             ['class' => 'yii\grid\Column',
                 'content' => function ($model) use ($dt_invoice_id) {

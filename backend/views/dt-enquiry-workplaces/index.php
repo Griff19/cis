@@ -24,6 +24,7 @@ use yii\grid\GridView;
         ['class' => 'yii\grid\SerialColumn'],
         'dt_enquiries_id',
         'workplace_id',
+        'workplace.workplaces_title',
         ['class' => '\yii\grid\Column',
             'header' => 'Ответственный',
             'content' => function($model) {
@@ -47,7 +48,7 @@ use yii\grid\GridView;
         ],
     ];
     if ($modelDoc->status == 1)
-        unset($columns[4]);
+        unset($columns[5]);
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,

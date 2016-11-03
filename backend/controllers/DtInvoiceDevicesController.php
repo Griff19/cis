@@ -107,8 +107,8 @@ class DtInvoiceDevicesController extends Controller
     public function actionSetStatus($id){
         $model = $this->findModel($id);
         /**
-         * @var $modelInvoices DtInvoices
-         * @var $modelEnquiry DtEnquiryDevices
+         * @var $modelInvoices DtInvoices документ "Счет"
+         * @var $modelEnquiry DtEnquiryDevices строка устройства в документе "Заявка"
          */
         $modelInvoices = DtInvoices::findOne($model->dt_invoices_id);
         $modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiry_devices_id);
@@ -117,31 +117,37 @@ class DtInvoiceDevicesController extends Controller
         $summ = $modelInvoices->summ;
 
         if ($summ > $summPay) {
-            $model->status = 4; //если счет еще не оплачен то статус: "Требует оплаты"
-            $modelEnquiry->status = 4;
+            $model->status = DtEnquiryDevices::NEED_BUY; //если счет еще не оплачен то статус: "Требует оплаты"
+            $modelEnquiry->status = DtEnquiryDevices::NEED_BUY;;
         } else {
-            $model->status = 5; //если счет закрыт то статус: "Оплачен"
-            $modelEnquiry->status = 5;
+            $model->status = DtEnquiryDevices::PAID; //если счет закрыт то статус: "Оплачен"
+            $modelEnquiry->status = DtEnquiryDevices::PAID;
         }
         $model->save();
         $modelEnquiry->save();
     }
     /**
-     * Удаляем строку устройства из табличной части документа Счет
+     * Удаляем строку устройства из табличной части документа "Счет"
+     * При успешном удалении меняем статус в строке документа "Заявка"
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
+        /** @var DtEnquiryDevices $modelEnquiry */
+        $modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiry_devices_id);
+
         $dt_invoices_id = $model->dt_invoices_id;
-        $model->delete();
+        if ($model->delete()) {
+            $modelEnquiry->status = DtEnquiryDevices::REQUEST_INVOICE;
+            $modelEnquiry->save();
+        }
         return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
     }
 
     /**
-     * Finds the DtInvoiceDevices model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
      * @return DtInvoiceDevices the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -151,7 +157,7 @@ class DtInvoiceDevicesController extends Controller
         if (($model = DtInvoiceDevices::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена');
         }
     }
 }

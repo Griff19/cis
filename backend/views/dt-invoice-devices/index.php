@@ -43,9 +43,8 @@ use yii\grid\GridView;
             //'status',
             ['attribute' => 'status',
                 'value' => function ($model) {
-                    $arr = DtEnquiryDevices::arrStatusString();
-                    $str = $arr[$model->status];
-                    return Html::a($str, '', [
+                    $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status]: '-';
+                    return Html::a($stts, '', [
                         'class' => 'stat',
                         'title' => 'Сменить статус',
                         'onclick' => '$.post("/admin/dt-invoice-devices/set-status?id=' . $model->id. '")'
