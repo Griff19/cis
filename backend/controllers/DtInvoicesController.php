@@ -3,6 +3,8 @@
 namespace backend\controllers;
 
 use app\models\DtInvoiceDevicesSearch;
+use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoiceDevices;
 use Yii;
 use backend\models\DtInvoicesPaymentSearch;
 use backend\models\DtInvoices;
@@ -111,14 +113,21 @@ class DtInvoicesController extends Controller
     }
 
     /**
-     * Deletes an existing DtInvoices model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Удаление документа "Счет". За одно нужно удалить строки из связанной таблицы
      * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ($model->delete()) {
+            $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
+            foreach ($did_models as $did_model){
+                /** @var $did_model DtInvoiceDevices */
+                DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::REQUEST_INVOICE],['id' => $did_model->dt_enquiry_devices_id]);
+            }
+            DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
+        }
 
         return $this->redirect(['index']);
     }

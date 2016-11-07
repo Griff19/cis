@@ -28,8 +28,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'doc_number',
             'doc_date',
             'd_partners_id',
+            'summ',
             'delivery_type',
-            // 'summ',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
