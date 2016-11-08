@@ -80,6 +80,7 @@ class DtInvoiceDevicesController extends Controller
 
         $model->dt_enquiry_devices_id = $id;
         $deviceEnquiry->status = $model->status;
+        $deviceEnquiry->dt_inv_id = $model->dt_invoices_id;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $deviceEnquiry->save();
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);

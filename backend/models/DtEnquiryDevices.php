@@ -21,6 +21,7 @@ use Yii;
  * @property integer $dt_def_dev_id
  * @property integer $workplace_id
  * @property integer $status
+ * @property integer $dt_inv_id
  * @property string statusString
  */
 class DtEnquiryDevices extends \yii\db\ActiveRecord
@@ -70,7 +71,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
         return [
             [['dt_enquiries_id', 'type_id'], 'required'],
             [['dt_enquiries_id', 'type_id', 'parent_device_id',
-                'device_id', 'dt_def_dev_id', 'workplace_id', 'status'], 'integer'],
+                'device_id', 'dt_def_dev_id', 'workplace_id', 'dt_inv_id', 'status'], 'integer'],
             [['note'], 'string', 'max' => 255],
         ];
     }
@@ -91,7 +92,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
             'workplace_id' => 'РМ №',
             'status' => 'Статус',
             'statusString' => 'Статус',
-
+            'dt_inv_id' => 'Ид счета'
         ];
     }
 }

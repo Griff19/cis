@@ -61,6 +61,12 @@ use backend\models\DtEnquiryWorkplaces;
         ],
         'parent_device_id',
         'statusString',
+        ['attribute' => 'dt_inv_id',
+            'value' => function ($model){
+                return Html::a('Cчет ИД'. $model->dt_inv_id, ['dt-invoices/view', 'id' => $model->dt_inv_id]);
+            },
+            'format' => 'raw',
+        ],
         'note',
         ['class' => 'yii\grid\ActionColumn',
             'template' => '{delete}',
@@ -68,7 +74,7 @@ use backend\models\DtEnquiryWorkplaces;
         ],
     ];
     if ($modelDoc->status == 1)
-        unset($columns[9]);
+        unset($columns[10]);
     echo GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
