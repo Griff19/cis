@@ -14,7 +14,7 @@ use Yii;
  * @property integer $d_partners_id
  * @property integer $delivery_type
  * @property string $summ
- * @property string $d_partners_name
+ * @property string $d_partners_name переменная для подстановки имени контрагента и определени ИД
  * @property integer summPay
  */
 class DtInvoices extends \yii\db\ActiveRecord
@@ -39,7 +39,8 @@ class DtInvoices extends \yii\db\ActiveRecord
             [['d_partners_id', 'delivery_type'], 'integer'],
             [['summ'], 'number'],
             [['doc_number'], 'string', 'max' => 10],
-            ['d_partners_name', 'string', 'max' => 255]
+            ['d_partners_name', 'string', 'max' => 255],
+
         ];
     }
 
@@ -56,10 +57,15 @@ class DtInvoices extends \yii\db\ActiveRecord
             'd_partners_name' => 'Контрагент',
             'delivery_type' => 'Доставка',
             'summ' => 'Сумма',
-            'summPay' => 'Сумма оплаты'
+            'summPay' => 'Сумма оплаты',
+
         ];
     }
 
+    /**
+     * Связанная модель контрагентов
+     * @return \yii\db\ActiveQuery
+     */
     public function getPartner(){
         return $this->hasOne(DPartners::className(), ['id' => 'd_partners_id']);
     }

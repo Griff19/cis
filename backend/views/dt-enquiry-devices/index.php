@@ -63,7 +63,11 @@ use backend\models\DtEnquiryWorkplaces;
         'statusString',
         ['attribute' => 'dt_inv_id',
             'value' => function ($model){
-                return Html::a('Cчет ИД'. $model->dt_inv_id, ['dt-invoices/view', 'id' => $model->dt_inv_id]);
+                $res = null;
+                if ($model->dt_inv_id) {
+                    $res = Html::a('Cчет ИД ' . $model->dt_inv_id, ['dt-invoices/view', 'id' => $model->dt_inv_id]);
+                }
+                return $res;
             },
             'format' => 'raw',
         ],

@@ -27,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'doc_number',
             'doc_date',
-            'd_partners_id',
+            //'d_partners_id',
+            ['attribute' => 'partner.name_partner',
+                'header' => 'Контрагент'
+            ],
             'summ',
             'delivery_type',
 
