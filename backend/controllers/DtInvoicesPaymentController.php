@@ -109,8 +109,7 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
-     * Finds the DtInvoicesPayment model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
      * @return DtInvoicesPayment the loaded model
      * @throws NotFoundHttpException if the model cannot be found
@@ -120,7 +119,7 @@ class DtInvoicesPaymentController extends Controller
         if (($model = DtInvoicesPayment::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
         }
     }
 }

@@ -34,7 +34,7 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     {
         return [
             [['dt_invoices_id', 'employee_id'], 'integer'],
-            [['agreed_date'], 'safe'],
+            [['agreed_date'], 'date'],
             [['summ'], 'number'],
             ['employee_name', 'string', 'max' => 255]
         ];

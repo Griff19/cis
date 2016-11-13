@@ -18,10 +18,12 @@ use yii\web\JsExpression;
     <h4>Документ № <?= $model->dt_invoices_id ?></h4>
     <?php //echo $form->field($model, 'dt_invoices_id')->textInput() ?>
 
-    <?= $form->field($model, 'agreed_date')->widget(DatePicker::className(), [
+    <?=
+    $form->field($model, 'agreed_date')->widget(DatePicker::className(), [
         'dateFormat' => 'yyyy-MM-dd',
         'options' => ['class' => 'form-control']
-    ]) ?>
+    ])
+    ?>
 
     <?= $form->field($model, 'summ')->textInput() ?>
 

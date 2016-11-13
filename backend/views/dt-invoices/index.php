@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'Контрагент'
             ],
             'summ',
+            'summPay',
             'delivery_type',
 
             ['class' => 'yii\grid\ActionColumn'],

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use app\models\DtInvoiceDevicesSearch;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
+use backend\models\DtInvoicesPayment;
 use Yii;
 use backend\models\DtInvoicesPaymentSearch;
 use backend\models\DtInvoices;
@@ -127,6 +128,7 @@ class DtInvoicesController extends Controller
                 DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::REQUEST_INVOICE],['id' => $did_model->dt_enquiry_devices_id]);
             }
             DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
+            DtInvoicesPayment::deleteAll(['dt_invoices_id' => $model->id]);
         }
 
         return $this->redirect(['index']);
