@@ -85,8 +85,8 @@ $this->title = 'My Yii Application';
         </div>
         <div class="row">
             <div class="col-sm-3">
-                <?= Html::a('<b> Сисадминская страница</b>',['site/admin_workplace'],['class'=>'btn btn-default'])?>
-                <p>Страница сисадмина</p>
+                <?= Html::a('Основная страница поиска',['site/admin_workplace'],['class'=>'btn btn-default'])?>
+                <p>Страница поиска данных по РМ и Сотрудникам</p>
             </div>
             <div class="col-sm-3">
                 <?= Html::a('Поиск устройств',['devices/find-device'],['class'=>'btn btn-default'])?>
@@ -107,7 +107,7 @@ $this->title = 'My Yii Application';
                 <p>Список актов инвентаризации</p>
             </div>
             <div class="col-sm-3">
-                <?= Html::a('','',['class'=>'btn btn-default'])?>
+                <?= Html::a('Страница сотрудника IT',['site/employee-it'],['class'=>'btn btn-default'])?>
                 <p></p>
             </div>
         </div>

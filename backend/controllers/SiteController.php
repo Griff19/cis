@@ -1,8 +1,10 @@
 <?php
 namespace backend\controllers;
 
+use app\models\DtInvoiceDevicesSearch;
 use backend\models\AdminEmployeesSearch;
 use backend\models\AdminWorkplacesSearch;
+use backend\models\DtEnquiryDevicesSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -34,7 +36,7 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['admin', 'admin_workplace'],
+                        'actions' => ['admin', 'admin_workplace', 'employee-it'],
                         'allow' => true,
                         'roles' => ['it']
                     ],
@@ -62,10 +64,12 @@ class SiteController extends Controller
     }
 
     /**
+     * Стандартная главная страница
      * @return string
      */
     public function actionIndex()
     {
+
         $searchModel = new StartEmployeesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -76,6 +80,7 @@ class SiteController extends Controller
     }
 
     /**
+     * Открываем страницу с кнопками основных действий
      * @return string
      */
     public function actionAdmin()
@@ -83,6 +88,37 @@ class SiteController extends Controller
         return $this->render('index');
     }
 
+    /**
+     * Основная страница сотрудника отдела IT
+     * @return string
+     */
+    public function actionEmployeeIt(){
+        //собираем данные по устройствам в документах "Счет"
+        $search_did = new DtInvoiceDevicesSearch();
+        $provider_did = $search_did->search(Yii::$app->request->queryParams);
+        //собираем данные по устройствам в документах "Заявка на оборудование"
+        $search_ded = new DtEnquiryDevicesSearch();
+        $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);
+        return $this->render('it_index', [
+            'search_did' => $search_did,
+            'provider_did' => $provider_did,
+            'search_ded' => $search_ded,
+            'provider_ded' => $provider_ded
+        ]);
+    }
+
+    /**
+     * Генерируем страницу для сотрудника ит-отдела
+     */
+    public function actionIt(){
+        return $this->render('it_index');
+    }
+
+    /**
+     * Страница с формой поиска рабочих мест и сотрудников
+     * @param int $tab
+     * @return string
+     */
     public function actionAdmin_workplace($tab = 1){
         $workplaceSearch = new AdminWorkplacesSearch();
         $workplaceProvider = $workplaceSearch->search(Yii::$app->request->queryParams);
@@ -100,6 +136,7 @@ class SiteController extends Controller
     }
 
     /**
+     * Вход пользователя
      * @return string|\yii\web\Response
      */
     public function actionLogin()
@@ -119,6 +156,7 @@ class SiteController extends Controller
     }
 
     /**
+     * Выход пользователя
      * @return \yii\web\Response
      */
     public function actionLogout()

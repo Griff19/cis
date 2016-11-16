@@ -23,6 +23,7 @@ use Yii;
  * @property integer $status
  * @property integer $dt_inv_id
  * @property string statusString
+ * @property DtEnquiries dtEnquiry
  */
 class DtEnquiryDevices extends \yii\db\ActiveRecord
 {
@@ -94,5 +95,13 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
             'statusString' => 'Статус',
             'dt_inv_id' => 'Ид счета'
         ];
+    }
+
+    /**
+     * Связываем с моделью документа "Заявка на оборудование"
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDtEnquiry() {
+        return $this->hasOne(DtEnquiries::className(), ['id' => 'dt_enquiries_id']);
     }
 }

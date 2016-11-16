@@ -48,7 +48,11 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/inventory-acts']];
 
     } elseif (Yii::$app->user->can('it')) {
-        $menuItems[] = ['label' => 'Рабочие места', 'url' => ['/site/admin_workplace']];
+        $label = Html::tag('span', Tasks::CountNewMessage() ? : Tasks::CountMessage(),
+            ['class' => Tasks::CountNewMessage() ? 'label label-danger' : 'label label-default']);
+        $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/tasks']];
+        $menuItems[] = ['label' => 'Для сотруднков IT', 'url' => ['/site/employee-it']];
+        //$menuItems[] = ['label' => 'Рабочие места', 'url' => ['/site/admin_workplace']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/workplaces']];
     }
     if (Yii::$app->user->isGuest) {
