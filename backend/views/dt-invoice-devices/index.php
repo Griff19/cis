@@ -18,7 +18,11 @@ use yii\grid\GridView;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить в счет', ['dt-invoice-devices/create'], ['class' => 'btn btn-success']) : ''; ?>
+        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить в счет', [
+            'dt-invoice-devices/add',
+            'dt_invoices_id' => $modelDoc->id,
+
+        ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
     <?php \yii\widgets\Pjax::begin(); ?>
     <?= GridView::widget([

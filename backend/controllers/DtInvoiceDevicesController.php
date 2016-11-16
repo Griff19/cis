@@ -92,6 +92,20 @@ class DtInvoiceDevicesController extends Controller
     }
 
     /**
+     * Добавляем устройство в счет без заявки
+     * @param $dt_invoices_id
+     * @return string|\yii\web\Response
+     */
+    public function actionAdd($dt_invoices_id){
+        $model = new DtInvoiceDevices();
+        $model->dt_invoices_id = $dt_invoices_id;
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+            return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
+        else
+            return $this->render('create', ['model' => $model]);
+    }
+
+    /**
      * Редактировать устройство в документе счет. В данном контексте тебуется сменить только статус
      * @param integer $id
      * @return mixed

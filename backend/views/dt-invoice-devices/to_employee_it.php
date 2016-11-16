@@ -13,7 +13,7 @@ use yii\grid\GridView;
 <div class="dt-invoice-devices-index">
 
     <h3>Устройства, требующие оплаты</h3>
-    <?php \yii\widgets\Pjax::begin(); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -40,7 +40,8 @@ use yii\grid\GridView;
             'price',
             ['attribute' => 'status',
                 'value' => function ($model) {
-                    $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status]: '-';
+                    /** @var \backend\models\DtInvoiceDevices $model */
+                    $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
                     //return $stts;
                     return Html::a($stts, ['dt-invoices-payment/create', 'id' => $model->dt_invoices_id], ['title' => 'Внести оплату']);
                 },
@@ -49,5 +50,5 @@ use yii\grid\GridView;
             'note',
         ],
     ]); ?>
-    <?php \yii\widgets\Pjax::end(); ?>
+
 </div>

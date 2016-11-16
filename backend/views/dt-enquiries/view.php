@@ -93,7 +93,7 @@ Modal::end();
 	<!--    Список рабочих мест-->
 	<?= $this->render('../dt-enquiry-workplaces/index', ['modelDoc' => $model, 'dataProvider' => $wpProvider]) ?>
 
-	<h3>Список устройств списанных с указанных рабочих мест:</h3>
+
 	<!--    Список списаных с рабочих мест устройств-->
 	<?php
 	$arr_ids_wp = [];
@@ -102,10 +102,13 @@ Modal::end();
 		$arr_ids_wp[] = $wpModel->workplace_id;
 		//var_dump($arr_ids_wp);
 	}
-	echo $this->render('../dt-defsheet-devices/to_enquire', [
-		'modelDoc' => $model,
-		'dataProvider' => \backend\models\DtDefsheetDevices::Devices127($arr_ids_wp),
-	]);
+	if ($model->status == 0) {
+		echo '<h3>Список устройств списанных с указанных рабочих мест:</h3>';
+		echo $this->render('../dt-defsheet-devices/to_enquire', [
+			'modelDoc' => $model,
+			'dataProvider' => \backend\models\DtDefsheetDevices::Devices127($arr_ids_wp),
+		]);
+	}
 	?>
 
 	<h3>Список устройств в заявке:</h3>
