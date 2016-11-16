@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\DtInvoices;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -11,11 +12,9 @@ use yii\grid\GridView;
 ?>
 <div class="dt-invoices-payment-index">
 
-    <h1> История платежей: </h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+    <h3> История платежей: </h3>
     <p>
-        <?= Html::a('Внести оплату', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) ?>
+        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Внести оплату', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

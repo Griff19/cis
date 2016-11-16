@@ -122,9 +122,9 @@ class DtInvoicesController extends Controller
     {
         $model = $this->findModel($id);
         if ($model->delete()) {
+            /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
             $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
             foreach ($did_models as $did_model){
-                /** @var $did_model DtInvoiceDevices */
                 DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::REQUEST_INVOICE],['id' => $did_model->dt_enquiry_devices_id]);
             }
             DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
@@ -132,6 +132,34 @@ class DtInvoicesController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Функция "сохранения" документа для преключения статуса устройств и самого документа
+     * позволяет сделать документ не доступным для редактирования
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionSave($id) {
+        /** @var DtInvoices $model модель документа "Счет" */
+        $model = $this->findModel($id);
+
+        if ($model->summ > $model->summPay) {
+            Yii::$app->session->setFlash('error', 'Счет не оплачен! Внесите оплату и повторите сохранение');
+
+        } else {
+            /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
+            $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
+            foreach ($did_models as $did_model) {
+                DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
+            }
+            DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $model->id]);
+            $model->status = DtInvoices::DOC_SAVE;
+            $model->save();
+            Yii::$app->session->setFlash('success', 'Документ сохранен.');
+        }
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**

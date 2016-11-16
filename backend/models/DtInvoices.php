@@ -15,10 +15,16 @@ use Yii;
  * @property integer $delivery_type
  * @property string $summ
  * @property string $d_partners_name переменная для подстановки имени контрагента и определени ИД
+ * @property integer $status
  * @property integer summPay
+ * @property string statusString строка статуса документа
  */
 class DtInvoices extends \yii\db\ActiveRecord
 {
+    const DOC_DEL = 0; //удаленный документ
+    const DOC_NEW = 1; //новый, не сохраненный документ
+    const DOC_SAVE = 2; //сохраненный документ
+
     public $d_partners_name;
 
     /**
@@ -30,13 +36,34 @@ class DtInvoices extends \yii\db\ActiveRecord
     }
 
     /**
+     * Определяем строковые значения статуса
+     * @return array
+     */
+    public static function arrStatusString(){
+        return [
+            self::DOC_DEL => 'Удален',
+            self::DOC_NEW => 'Новый',
+            self::DOC_SAVE => 'Сохранен'
+        ];
+    }
+
+    /**
+     * Возвращает строку статуса по номеру
+     * @return mixed
+     */
+    public function getStatusString() {
+        $arr = self::arrStatusString();
+        return $arr[$this->status];
+    }
+
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
             [['doc_date'], 'safe'],
-            [['d_partners_id', 'delivery_type'], 'integer'],
+            [['d_partners_id', 'delivery_type', 'status'], 'integer'],
             [['summ'], 'number'],
             [['doc_number'], 'string', 'max' => 10],
             ['d_partners_name', 'string', 'max' => 255],
@@ -58,7 +85,7 @@ class DtInvoices extends \yii\db\ActiveRecord
             'delivery_type' => 'Доставка',
             'summ' => 'Сумма',
             'summPay' => 'Сумма оплаты',
-
+            'status' => 'Статус'
         ];
     }
 
@@ -71,6 +98,7 @@ class DtInvoices extends \yii\db\ActiveRecord
     }
 
     /**
+     * Сумма всех оплат по счету
      * @return mixed
      */
     public function getSummPay(){

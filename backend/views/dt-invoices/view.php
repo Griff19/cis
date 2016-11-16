@@ -4,9 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
 use backend\models\Images;
+use backend\models\DtInvoices;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtInvoices */
+
 $this->registerJs('Modal();');
 
 $this->title = 'Документ №' . $model->doc_number;
@@ -33,14 +35,17 @@ Modal::end();
 	<div class="row">
 		<div class="col-lg-6">
 			<p>
-				<?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-				<?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-					'class' => 'btn btn-danger',
-					'data' => [
-						'confirm' => 'Уверенны что хотите удалить документ?',
-						'method' => 'post',
-					],
-				]) ?>
+				<?php
+				if ($model->status == DtInvoices::DOC_NEW) {
+					echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+					echo Html::a('Удалить', ['delete', 'id' => $model->id], [
+						'class' => 'btn btn-danger',
+						'data' => [
+							'confirm' => 'Уверенны что хотите удалить документ?',
+							'method' => 'post',
+						],
+					]);
+				}?>
 			</p>
 
 			<?= DetailView::widget([
@@ -60,10 +65,12 @@ Modal::end();
 			<div class="img-thumbnail img-block" style="margin-top: 20px; height: 350px">
 				<?php
 				$key = md5('dt-invoices' . $model->id);
-				echo Html::a('Добавить/Изменить скан', ['images/index',
+				echo $model->status == DtInvoices::DOC_NEW ?
+					Html::a('Добавить/Изменить скан', ['images/index',
 					'target' => 'dt-invoices/view',
 					'owner' => $key,
-					'owner_id' => $model->id]);
+					'owner_id' => $model->id])
+					: '';
 				?>
 				<br>
 				<?php $img = Html::img('/admin/' . Images::getLinkfile($key), ['class' => 'img-responsive', 'alt' => 'Отсутствует изображение']);
@@ -73,13 +80,19 @@ Modal::end();
 		</div>
 	</div>
 
-	<?= Html::a('Выбрать устройства', '#', ['class' => 'btn btn-primary',
+	<?= $model->status == DtInvoices::DOC_NEW ?
+		Html::a('Выбрать устройства', '#', ['class' => 'btn btn-primary',
 		'id' => 'linkModal',
 		'data-target' => '/admin/dt-enquiry-devices/index-invoices?id=' . $model->id,
-		'data-header' => 'Выбор устройства'
-	]) ?>
+		'data-header' => 'Выбор устройства'])
+		: '';
+	?>
 	<?php //echo $this->render('../dt-enquiry-devices/index_invoices', ['dt_invoice_id' => $model->id, 'dataProvider' => $dt_ed_provider, 'searchModel' => $dt_ed_search]) ?>
-	<?= $this->render('../dt-invoice-devices/index', ['dataProvider' => $dt_id_provider, 'searchModel' => $dt_id_search]) ?>
+	<?= $this->render('../dt-invoice-devices/index', ['modelDoc' => $model, 'dataProvider' => $dt_id_provider, 'searchModel' => $dt_id_search]) ?>
 	<?= $this->render('../dt-invoices-payment/index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
-
+	<br>
+	<?= $model->status == DtInvoices::DOC_NEW ?
+		Html::a('Сохранить', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
+		: '';
+	?>
 </div>

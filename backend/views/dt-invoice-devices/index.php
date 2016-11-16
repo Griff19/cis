@@ -2,11 +2,12 @@
 
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
-use yii\web\JsExpression;
+use backend\models\DtInvoices;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
+/* @var $modelDoc \backend\models\DtInvoices */
 /* @var $searchModel app\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -17,7 +18,7 @@ use yii\grid\GridView;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Добавить в счет', ['dt-invoice-devices/create'], ['class' => 'btn btn-success']) ?>
+        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить в счет', ['dt-invoice-devices/create'], ['class' => 'btn btn-success']) : ''; ?>
     </p>
     <?php \yii\widgets\Pjax::begin(); ?>
     <?= GridView::widget([
