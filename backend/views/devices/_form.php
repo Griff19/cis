@@ -72,12 +72,12 @@ $this->registerJs('Valid()');
             ['tabindex' => 4,
                 'prompt' => 'Выберите тип устройства...',
                 'onchange' => '$.post("/admin/devices/set-type-id?type_id="+$(this).val(), function(data) {
-            if (data) {
-                $("#devices-brand").val("");
-                $("#devices-model").val("");
-                $("#devices-specification").val("");
-            }
-        });'
+                    if (data) {
+                        $("#devices-brand").val("");
+                        $("#devices-model").val("");
+                        $("#devices-specification").val("");
+                    }
+                });'
             ])
         ?>
     <?php } ?>

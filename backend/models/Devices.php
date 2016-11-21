@@ -186,15 +186,20 @@ class Devices extends \yii\db\ActiveRecord
 
     /**
      * @param $type_id
-     * @param string $term значение вводимое в поле Модель на форме
+     * @param string $brand значение выбранное или введенное в поле "Бренд"
+     * @param string $term значение вводимое в поле "Модель" на форме
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arrayModels($type_id, $term){
-        return Devices::find()->select('model as value, model as label, COUNT(*) as count')
+    public static function arrayModels($type_id, $brand, $term){
+        $arr = Devices::find()->select('model as value, model as label, COUNT(*) as count')
             ->where("model > ''")
             ->andWhere(['type_id' => $type_id])
+            //->andWhere(['brand' => $brand])
             ->andWhere(['like', 'LOWER(model)', mb_strtolower($term)])
-            ->groupBy('model')->orderBy('count DESC')->asArray()->all();
+            ->groupBy('model')->orderBy('count DESC');
+        if ($brand)
+            $arr->andWhere(['brand' => $brand]);
+        return $arr->asArray()->all();;
     }
 
     /**

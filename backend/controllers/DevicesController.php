@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
+use yii\web\JsExpression;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
@@ -207,7 +208,10 @@ class DevicesController extends Controller
         $model = new Devices(['scenario' => $scenario]);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-
+            if ($model->brand)
+                Yii::$app->session->set('brand', $model->brand);
+            else
+                Yii::$app->session->remove('brand');
             Yii::$app->response->format = 'json';
             return ActiveForm::validate($model);
         }
@@ -681,7 +685,8 @@ class DevicesController extends Controller
      */
     public function actionGetModels($term){
         $type_id = Yii::$app->session->get('type_id');
-        $models = Devices::arrayModels($type_id, $term);
+        $brand = Yii::$app->session->get('brand');
+        $models = Devices::arrayModels($type_id, $brand, $term);
         echo Json::encode($models);
     }
 
