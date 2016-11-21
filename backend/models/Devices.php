@@ -105,10 +105,10 @@ class Devices extends \yii\db\ActiveRecord
             'device_note' => 'Заметка',
             'specification' => 'Спецификация',
             'workplace_id' => 'Рабочее место',
-            'brand' => 'Брэнд',
+            'brand' => 'Бренд',
             'model' => 'Модель',
-            'chekMode' => 'Без серийника',
-            'sn' => 'SN',
+            'chekMode' => 'Серийный номер отсутствует',
+            'sn' => 'Серийный номер',
             'branch_id' => 'Подразделение',
             'room_id' => 'Отдел/Кабинет',
             'count' => 'Количество',
@@ -170,20 +170,37 @@ class Devices extends \yii\db\ActiveRecord
         return $count;
     }
 
-    public static function arrayBrands($type_id){
-        return Devices::find()->select('brand as value, brand as label')
+    /**
+     * @param $type_id
+     * @param string $term значение вводимое в поле Бренд на форме
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function arrayBrands($type_id, $term){
+
+        return Devices::find()->select('brand as value, brand as label, COUNT(*) as count')
             ->where("brand > ''")
             ->andWhere(['type_id' => $type_id])
-            ->groupBy('brand')->orderBy('brand')->asArray()->all();
+            ->andWhere(['like', 'LOWER(brand)', mb_strtolower($term)])
+            ->groupBy('brand')->orderBy('count DESC')->asArray()->all();
     }
 
-    public static function arrayModels($type_id){
-        return Devices::find()->select('model as value, model as label')
+    /**
+     * @param $type_id
+     * @param string $term значение вводимое в поле Модель на форме
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function arrayModels($type_id, $term){
+        return Devices::find()->select('model as value, model as label, COUNT(*) as count')
             ->where("model > ''")
             ->andWhere(['type_id' => $type_id])
-            ->groupBy('model')->orderBy('model')->asArray()->all();
+            ->andWhere(['like', 'LOWER(model)', mb_strtolower($term)])
+            ->groupBy('model')->orderBy('count DESC')->asArray()->all();
     }
 
+    /**
+     * @param int $mode
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function arraySns($mode = 1){
         if ($mode == 1) $select = 'sn as value, sn as label';
         else $select = 'sn';
@@ -205,10 +222,11 @@ class Devices extends \yii\db\ActiveRecord
             ->groupBy('imei2')->orderBy('imei2')->asArray()->all();
     }
 
-    public static function arraySpecifications($type_id){
-        return Devices::find()->select('specification as value, specification as label, count(*) as count')
+    public static function arraySpecifications($type_id, $term){
+        return Devices::find()->select('specification as value, specification as label, COUNT(*) as count')
             ->where("specification > ''")
             ->andWhere(['type_id' => $type_id])
+            ->andWhere(['like', 'LOWER(specification)', mb_strtolower($term)])
             ->groupBy('specification')->orderBy('count DESC')->asArray()->all();
     }
 

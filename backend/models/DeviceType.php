@@ -60,11 +60,20 @@ class DeviceType extends \yii\db\ActiveRecord
      * Обязательно в запросе должны быть поля 'type_id' и 'title' т.к. они используются в форме
      * @return array|\yii\db\ActiveRecord[]
      */
+//    public static function arrDevType(){
+//        return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
+//            ->from(['dt' => 'device_type'])
+//            ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
+//            ->orderBy(new Expression('c DESC NULLS LAST'))
+//            ->all();
+//    }
+    /**
+     * @return array
+     */
     public static function arrDevType(){
-        return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
-            ->from(['dt' => 'device_type'])
-            ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
-            ->orderBy(new Expression('c DESC NULLS LAST'))
+        return (new Query())->select(['type_id' => 'id', 'title' => 'title'])
+            ->from('device_type')
+            ->orderBy('usr_sort, title')
             ->all();
     }
 }

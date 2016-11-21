@@ -90,17 +90,24 @@ $this->registerJs('Valid()');
 
     <?= $form->field($model, 'sn')->textInput()->widget(
         AutoComplete::className(), [
-        'clientOptions' => ['source' => $model::arraySns()],
+        'clientOptions' => [
+            'source' => $model::arraySns(),
+            'minLength' => 3
+        ],
         'options' => ['class' => 'form-control', 'tabindex' => 1001,]
     ]) ?>
 
     <?= $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]) ?>
 
-    <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
+    <?=
+
+        $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
         'clientOptions' => ['source' => Url::to(['devices/get-brands'])],
+//        'clientOptions' => ['source' => $model::arrayBrands()],
         'options' => ['class' => 'form-control', 'tabindex' => 1003]
-    ]) ?>
+        ])
+    ?>
 
     <?= $form->field($model, 'model')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [

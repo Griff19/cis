@@ -662,24 +662,37 @@ class DevicesController extends Controller
         ]);
     }
 
-    //Формируем массив для автозавешения поля brand
-    public function actionGetBrands(){
+    /**
+     * Экшн вызывается через ajax получает массив "брендов" и выводит в форме в формате Json
+     * @param string $term значение вводимое в поле Бренд на форме
+     * @return Json
+     */
+    public function actionGetBrands($term){
         $type_id = Yii::$app->session->get('type_id');
-        $brands = Devices::arrayBrands($type_id);
+        $brands = Devices::arrayBrands($type_id, $term);
         echo Json::encode($brands);
+
     }
 
-    //Формируем массив для автозавешения поля model
-    public function actionGetModels(){
+    /**
+     * Экшн вызывается через ajax получает массив "моделей" и выводит в форме в формате Json
+     * @param string $term значение вводимое в поле Модель на форме
+     * @return Json
+     */
+    public function actionGetModels($term){
         $type_id = Yii::$app->session->get('type_id');
-        $models = Devices::arrayModels($type_id);
+        $models = Devices::arrayModels($type_id, $term);
         echo Json::encode($models);
     }
 
-    //Формируем массив для автозавершения поля specification
-    public function actionGetSpecifications(){
+    /**
+     * Экшн вызывается через ajax получает массив "спецификаций" и выводит в форме в формате Json
+     * @param string $term значение вводимое в поле Модель на форме
+     * @return Json
+     */
+    public function actionGetSpecifications($term){
         $type_id = Yii::$app->session->get('type_id');
-        $specifications = Devices::arraySpecifications($type_id);
+        $specifications = Devices::arraySpecifications($type_id, $term);
         echo Json::encode($specifications);
     }
 
