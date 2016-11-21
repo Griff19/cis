@@ -227,12 +227,37 @@ class Devices extends \yii\db\ActiveRecord
             ->groupBy('imei2')->orderBy('imei2')->asArray()->all();
     }
 
+    /**
+     * Функция возвращает массив "Спецификаций", вызывается при ручном вводе
+     * @param $type_id
+     * @param $term
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public static function arraySpecifications($type_id, $term){
         return Devices::find()->select('specification as value, specification as label, COUNT(*) as count')
             ->where("specification > ''")
             ->andWhere(['type_id' => $type_id])
             ->andWhere(['like', 'LOWER(specification)', mb_strtolower($term)])
             ->groupBy('specification')->orderBy('count DESC')->asArray()->all();
+    }
+
+    /**
+     * Функция возвращает строку "спецификации"
+     * @param $type_id
+     * @param $brand
+     * @param $model
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function arraySpecificationsAuto($type_id, $brand, $model){
+        $arr = Devices::find()->select('specification')
+            ->where(['type_id' => $type_id])
+            ->andWhere(['brand' => $brand])
+            ->andWhere(['model' => $model])
+            ->andWhere("specification > ' '")
+            ->orderBy('id DESC')
+            ->asArray()->one();
+        return $arr['specification'];
+
     }
 
     /**

@@ -48,8 +48,8 @@ $this->registerJs('Valid()');
                 ['tabindex' => 2,
                     'prompt' => 'Выберите отдел/кабинет...',
                     'onchange' => '$.post("/admin/workplaces/list?id=' . '"+$(this).val(), function(data) {
-            $("select#devices-workplace_id").html(data);
-        });'
+                        $("select#devices-workplace_id").html(data);
+                    });'
                 ])
             ?>
 
@@ -99,19 +99,22 @@ $this->registerJs('Valid()');
 
     <?= $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]) ?>
 
-    <?=
-
-        $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
+    <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
         'clientOptions' => ['source' => Url::to(['devices/get-brands'])],
-//        'clientOptions' => ['source' => $model::arrayBrands()],
         'options' => ['class' => 'form-control', 'tabindex' => 1003]
-        ])
-    ?>
+        ]) ?>
 
     <?= $form->field($model, 'model')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
-        'clientOptions' => ['source' => Url::to(['devices/get-models'])],
+        'clientOptions' => ['source' => Url::to(['devices/get-models']),
+            'autoFill' => true,
+            'select' => new JsExpression('function (event, ui){
+                $.post("/admin/devices/set-specification-auto?model="+encodeURIComponent(ui.item.value), function(data){
+                    $("#devices-specification").val(data);
+                })
+            }')
+        ],
         'options' => ['class' => 'form-control', 'tabindex' => 1004]
     ]) ?>
 
@@ -142,3 +145,5 @@ $this->registerJs('Valid()');
 
 
 </div>
+
+

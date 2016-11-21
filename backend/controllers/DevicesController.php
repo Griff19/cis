@@ -50,6 +50,7 @@ class DevicesController extends Controller
                             'get-brands',
                             'get-models',
                             'get-specifications',
+                            'set-specification-auto',
                             'set-type-id',
                             'delfromwp',
                             'delcomp',
@@ -208,10 +209,9 @@ class DevicesController extends Controller
         $model = new Devices(['scenario' => $scenario]);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            if ($model->brand)
-                Yii::$app->session->set('brand', $model->brand);
-            else
-                Yii::$app->session->remove('brand');
+            if ($model->brand) Yii::$app->session->set('brand', $model->brand);
+            else Yii::$app->session->remove('brand');
+
             Yii::$app->response->format = 'json';
             return ActiveForm::validate($model);
         }
@@ -323,11 +323,6 @@ class DevicesController extends Controller
             $act_id = ArrayHelper::getValue($arr, 'act_id');
             InventoryActsTb::CreateTb($act_id, $new_model->id, $new_model->workplace_id, null, InventoryActs::REPLACE_DEV);
         }
-
-//        if ($param) {
-//            parse_str($param, $arr);
-//            $id_wp = ArrayHelper::getValue($arr, 'id_wp');
-//        }
 
         $str = mb_strtoupper($label) . ' = ' . $value;
         Yii::$app->session->setFlash('success', 'Выбрано устройство по введенным данным: ' . $str);
@@ -710,6 +705,19 @@ class DevicesController extends Controller
     public function actionSetTypeId($type_id){
         Yii::$app->session->set('type_id', $type_id);
         return true;
+    }
+
+    /**
+     * @param string $model строка в формате encodeURIComponent()
+     * @return string
+     */
+    public function actionSetSpecificationAuto($model){
+        $type_id = Yii::$app->session->get('type_id');
+        $brand = Yii::$app->session->get('brand');
+
+        $specification = Devices::arraySpecificationsAuto($type_id, $brand, $model);
+
+        return $specification;
     }
 
     /**
