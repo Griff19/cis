@@ -176,12 +176,12 @@ class Devices extends \yii\db\ActiveRecord
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arrayBrands($type_id, $term){
-
-        return Devices::find()->select('brand as value, brand as label, COUNT(*) as count')
+        $arr = Devices::find()->select('brand as value, brand as label, COUNT(*) as count')
             ->where("brand > ''")
             ->andWhere(['type_id' => $type_id])
-            ->andWhere(['like', 'LOWER(brand)', mb_strtolower($term)])
-            ->groupBy('brand')->orderBy('count DESC')->asArray()->all();
+            ->groupBy('brand')->orderBy('count DESC');
+        if ($term != ' ') $arr->andWhere(['like', 'LOWER(brand)', mb_strtolower($term)]);
+        return $arr->asArray()->all();
     }
 
     /**
@@ -194,11 +194,9 @@ class Devices extends \yii\db\ActiveRecord
         $arr = Devices::find()->select('model as value, model as label, COUNT(*) as count')
             ->where("model > ''")
             ->andWhere(['type_id' => $type_id])
-            //->andWhere(['brand' => $brand])
-            ->andWhere(['like', 'LOWER(model)', mb_strtolower($term)])
             ->groupBy('model')->orderBy('count DESC');
-        if ($brand)
-            $arr->andWhere(['brand' => $brand]);
+        if ($brand) $arr->andWhere(['brand' => $brand]);
+        if ($term != ' ') $arr->andWhere(['like', 'LOWER(model)', mb_strtolower($term)]);
         return $arr->asArray()->all();;
     }
 
