@@ -82,11 +82,11 @@ class Devices extends \yii\db\ActiveRecord
     public function scenarios(){
         $scenario = parent::scenarios();
         $scenario[self::SCENARIO_INSERT] = [
-            'sn', 'imei1', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
+            'sn', 'imei1', 'imei2', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
             'brand', 'model', 'dt_title', 'dev_comp', 'device_mac', 'chekMode'
         ];
         $scenario[self::SCENARIO_UPDATE] = [
-            'sn', 'imei1', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
+            'sn', 'imei1', 'imei2', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
             'brand', 'model', 'dt_title', 'dev_comp', 'device_mac', 'chekMode'
         ];
 

@@ -85,6 +85,15 @@ $this->registerJs('Valid()');
     <?= $form->field($model, 'chekMode')->widget('\kartik\checkbox\CheckboxX', [
         'autoLabel' => true,
         'pluginOptions' => ['threeState' => false],
+        'pluginEvents' => [
+            'change' => "function() {
+                if ($(this).val() == 1) {
+                    $('.field-devices-sn').hide('fast')
+                } else {
+                    $('.field-devices-sn').show('fast')
+                }
+            }",
+        ],
         'options' => ['tabindex' => 5,]
     ])->label(false) ?>
 
