@@ -10,7 +10,7 @@ use yii\grid\Column;
 
 $this->title = $model->id . ' ';
 $this->title .= ($model->deviceType ? $model->deviceType->title : '') . ' ';
-$this->title .= '('. $model->device_note .')';
+$this->title .=  $model->device_note ? '('. $model->device_note .')' : '';
 $id_wp = Yii::$app->session->get('id_wp');
 if ($id_wp != 0) {
     $this->params['breadcrumbs'][] = ['label' => 'Рабочее место', 'url' => ['workplaces/view', 'id' => $id_wp]];
