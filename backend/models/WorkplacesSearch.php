@@ -62,7 +62,18 @@ class WorkplacesSearch extends Workplaces
             'attributes' => [
                 'branch_id',
                 'room_id',
-                'workplaces_title',
+                'workplaces_title' => [
+                    'asc' => [
+                        'branches.branch_title' => SORT_ASC,
+                        'rooms.room_title' => SORT_ASC,
+                        'workplaces.workplaces_title' => SORT_ASC
+                    ],
+                    'desc' => [
+                        'branches.branch_title' => SORT_ASC,
+                        'rooms.room_title' => SORT_ASC,
+                        'workplaces.workplaces_title' => SORT_DESC
+                    ],
+                ],
                 '_owner' => [
                     'asc' => ['employees.snp' => SORT_ASC],
                     'desc' => ['employees.snp' => SORT_DESC]
