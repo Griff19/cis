@@ -106,7 +106,7 @@ $this->registerJs('Valid()');
         'options' => ['class' => 'form-control', 'tabindex' => 1001,]
     ]) ?>
 
-    <?php //echo $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]) ?>
+    <?= $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]) ?>
 
     <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
