@@ -84,7 +84,7 @@ if($target && $param) {
                     ]);
                 } else if ($mode == 'def'){
                     return Html::a(Html::img('/admin/img/man.png', ['style' => 'height:24px;']), ['workplaces/view', 'id' => $model->workplace_id], [
-                        'title' => $model->workplace_id . ' ' . $model->wp_title . "\n" . $model->snp]);
+                        'title' => $model->getFullWorkplace(1)]);
                 }
             }
         ],

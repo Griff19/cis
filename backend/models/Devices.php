@@ -148,12 +148,20 @@ class Devices extends \yii\db\ActiveRecord
     }
 
     /**
+     * Возвращает полное наименование рабочего места
+     * $mode = 0 - для вывода в строку, 1 - для вывода в "столбец"
      * @return string
      */
-    public function getFullWorkplace(){
-        return $this->workplace->room->branch->branch_title . ' - '
-        . $this->workplace->room->room_title . ' - '
-        . $this->workplace->workplaces_title;
+    public function getFullWorkplace($mode = 0){
+        if ($mode == 0)
+            return $this->workplace->room->branch->branch_title . ' - '
+            . $this->workplace->room->room_title . ' - '
+            . $this->workplace->workplaces_title;
+        else
+            return $this->workplace->room->branch->branch_title . "\n"
+            . $this->workplace->room->room_title . "\n"
+            . $this->workplace->workplaces_title . "\n"
+            . $this->snp;
     }
 
     public function getVoip(){
