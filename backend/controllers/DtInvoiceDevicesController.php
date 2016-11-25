@@ -99,6 +99,7 @@ class DtInvoiceDevicesController extends Controller
     public function actionAdd($dt_invoices_id){
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
+        $model->status = DtEnquiryDevices::AWAITING_PAYMENT;
         if ($model->load(Yii::$app->request->post()) && $model->save())
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
         else
@@ -133,7 +134,7 @@ class DtInvoiceDevicesController extends Controller
 
         if ($summ > $summPay) {
             $model->status = DtEnquiryDevices::NEED_BUY; //если счет еще не оплачен то статус: "Требует оплаты"
-            $modelEnquiry->status = DtEnquiryDevices::NEED_BUY;;
+            $modelEnquiry->status = DtEnquiryDevices::NEED_BUY;
         } else {
             $model->status = DtEnquiryDevices::PAID; //если счет закрыт то статус: "Оплачен"
             $modelEnquiry->status = DtEnquiryDevices::PAID;
@@ -150,13 +151,15 @@ class DtInvoiceDevicesController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        /** @var DtEnquiryDevices $modelEnquiry */
-        $modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiry_devices_id);
 
         $dt_invoices_id = $model->dt_invoices_id;
         if ($model->delete()) {
-            $modelEnquiry->status = DtEnquiryDevices::REQUEST_INVOICE;
-            $modelEnquiry->save();
+            /** @var DtEnquiryDevices $modelEnquiry */
+            $modelEnquiry = DtEnquiryDevices::findOne($model->dt_enquiry_devices_id);
+            if ($modelEnquiry) {
+                $modelEnquiry->status = DtEnquiryDevices::REQUEST_INVOICE;
+                $modelEnquiry->save();
+            }
         }
         return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
     }

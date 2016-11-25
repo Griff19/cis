@@ -16,15 +16,18 @@ use yii\widgets\ActiveForm;
     <h4> Счет id:<?= $model->dt_invoices_id ?></h4>
     <h4> Заявка id:<?= $model->dt_enquiries_id ?></h4>
     <?php //echo $form->field($model, 'dt_invoices_id')->textInput() ?>
-    <h4> Тип устройства: <?= DeviceType::getTitle($model->type_id) ?></h4>
-    <?php //echo $form->field($model, 'type_id')->dropDownList(
-        //ArrayHelper::map(DeviceType::arrDevType(), 'type_id', 'title'),
-        //['prompt' => 'Выберите тип устройства...'])
+    <?php
+    if ($model->type_id)
+        echo '<h4> Тип устройства: ' . DeviceType::getTitle($model->type_id) .'</h4>';
+    else
+        echo $form->field($model, 'type_id')->dropDownList(
+            ArrayHelper::map(DeviceType::arrDevType(), 'type_id', 'title'),
+            ['prompt' => 'Выберите тип устройства...']);
     ?>
 
     <?= $form->field($model, 'price')->textInput() ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?php //echo $form->field($model, 'status')->textInput() ?>
 
     <?= $form->field($model, 'note')->textInput(['maxlength' => true]) ?>
 
