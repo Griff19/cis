@@ -25,7 +25,7 @@ use yii\helpers\Json;
  * @property boolean dev_comp
  * @property mixed deviceType
  * @property mixed fake_device помечает устройство как фейк
- *
+ * @property string fullWorkplace полное имя рабочего места
  */
 class Devices extends \yii\db\ActiveRecord
 {
@@ -145,6 +145,15 @@ class Devices extends \yii\db\ActiveRecord
      */
     public function getWorkplace(){
         return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullWorkplace(){
+        return $this->workplace->room->branch->branch_title . ' - '
+        . $this->workplace->room->room_title . ' - '
+        . $this->workplace->workplaces_title;
     }
 
     public function getVoip(){

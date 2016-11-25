@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'imei2',
             [
                 'attribute' => 'workplace_id',
-                'value' => isset($model->workplace) ? Html::a($model->workplace->workplaces_title, ['workplaces/view', 'id' => $model->workplace_id]) : '-',
+                'value' => isset($model->workplace) ? Html::a($model->fullWorkplace, ['workplaces/view', 'id' => $model->workplace_id]) : '-',
                 'format' => 'raw'
             ],
             [
