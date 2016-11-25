@@ -48,7 +48,7 @@ class AdminWorkplacesSearch extends AdminWorkplaces
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Отбираем дынные по рабочим местам
      * @param array $params
      * @return ActiveDataProvider
      */

@@ -175,26 +175,31 @@ use yii\bootstrap\Tabs;
 
                     $old_branch = $branch;
                 }
-                $device = $wpModel['device_type_title'] . ' ' . $wpModel['devices_id'];
-                if ($old_device != $device) {
-                    if ($table) {echo  '</table>'; $table = false;}
-                    echo '<b>' . $device . '</b>';
+                if ($wpModel['netints_id']) {
+                    $device = $wpModel['device_type_title'] . ' ' . $wpModel['devices_id'];
+                    if ($old_device != $device) {
+                        if ($table) {
+                            echo '</table>';
+                            $table = false;
+                        }
+                        echo '<b>' . $device . '</b>';
 
-                    $old_device = $device;
-                    if (!$table)
-                        echo '<table class="table table-bordered table-condensed">';
-                    $table = true;
+                        $old_device = $device;
+                        if (!$table)
+                            echo '<table class="table table-bordered table-condensed">';
+                        $table = true;
+                    }
+
+                    echo empty($wpModel['sub_type_title']) ? '' : '<tr><td colspan="7"><b>' . $wpModel['sub_type_title'] . '</b></td></tr>';
+
+
+                    echo '<tr><td>' . Netints::arrTypes()[$wpModel['netints_type']] . '</td><td>'
+                        . $wpModel['netints_id'] . '</td><td>'
+                        . $wpModel['mac'] . '</td><td>'
+                        . $wpModel['domain_name'] . '</td><td>'
+                        . $wpModel['ip'] . '</td><td>'
+                        . $wpModel['ports'] . '</td></tr>';
                 }
-
-                echo empty($wpModel['sub_type_title']) ? '' : '<tr><td colspan="7"><b>' . $wpModel['sub_type_title'] . '</b></td></tr>';
-
-                echo '<tr><td>' . Netints::arrTypes()[$wpModel['netints_type']] . '</td><td>'
-                    . $wpModel['netints_id'] . '</td><td>'
-                    . $wpModel['mac'] . '</td><td>'
-                    . $wpModel['domain_name'] . '</td><td>'
-                    . $wpModel['ip'] . '</td><td>'
-                    . $wpModel['ports'] . '</td></tr>';
-
             }
             if ($table) {echo  '</table>'; $table = false;}
 

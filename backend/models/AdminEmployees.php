@@ -79,6 +79,10 @@ class AdminEmployees extends \yii\db\ActiveRecord
             ->where("email_address > '' AND status = 1")->orderBy('email_address')->asArray()->all();
     }
 
+    /**
+     * @param $employee_id
+     * @return ActiveDataProvider
+     */
     public static function workplacesProvider($employee_id) {
         $query = (new Query())
             ->select([
@@ -113,7 +117,7 @@ class AdminEmployees extends \yii\db\ActiveRecord
             ->leftJoin('employees', 'employees.id = wp_owners.employee_id')
             //->leftJoin('cell_numbers', 'cell_numbers.employee_id = employees.id AND cell_numbers.status = 1')
             //->leftJoin('emails', 'emails.employee_id = employees.id AND emails.status = 1')
-            ->where('workplaces.id <> 119 AND netints.id > 0')
+            ->where('workplaces.id <> 119')// AND netints.id > 0')
             ->andWhere(['employees.id' => $employee_id])
             ->orderBy('workplaces.id')
         ;
