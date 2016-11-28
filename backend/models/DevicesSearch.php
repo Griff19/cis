@@ -235,7 +235,7 @@ class DevicesSearch extends Devices
     }
 
     /**
-     * Отбираем устройства на рабочем месте без комплектующих
+     * Отбираем устройства на рабочем месте не являющиеся комплектующими
      * @param $params
      * @param $id_wp
      * @return ActiveDataProvider

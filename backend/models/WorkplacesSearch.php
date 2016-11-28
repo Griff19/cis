@@ -83,7 +83,9 @@ class WorkplacesSearch extends Workplaces
                     'desc' => ['inventory_acts.act_date' => SORT_DESC]
                 ]
             ],
-            'defaultOrder' => ['branch_id' => SORT_ASC, 'room_id' => SORT_ASC]
+            'defaultOrder' => [
+                'workplaces_title' => SORT_ASC
+            ]
         ]);
 
         $this->load($params);

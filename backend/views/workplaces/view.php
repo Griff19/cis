@@ -8,6 +8,7 @@ use yii\bootstrap\Modal;
 use backend\models\Workplaces;
 use backend\models\Images;
 use backend\models\DeviceType;
+use backend\models\Devices;
 
 /**
  * @var $this yii\web\View
@@ -223,20 +224,23 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php } ?>
         <?php
         //формируем массив с идентификаторами родителей
-        $arrParent = [];
+        $arrParent = Devices::arrayParentId($model->id);
+        //var_dump($arrParent);
 
         $col1 = [
             'dataProvider' => $deviceProvider,
             'filterModel' => $searchDeviceModel,
             'tableOptions' => ['class' => 'table table-bordered table-hover'],
-            'rowOptions' => function ($model) {
-                //if (in_array($model['id'], $arrParent)){
+            'rowOptions' => function ($model) use ($arrParent) {
+                if (in_array($model['id'], $arrParent)){
                     return [
                         'class' => 'info',
                         'id' => 'row'.$model->id,
                         'data-target' => '/admin/devices/view-table-comp?id=' . $model->id
                     ];
-                //}
+                } else {
+                    return '';
+                }
             },
             'layout' => "{items}",
             'columns' => [
@@ -251,14 +255,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 //'type_id',
                 'device_note',
-//                'workplace_id',
-//                ['class' => Column::className(),
-//                    'header' => 'Рабочее место',
-//                    'content' => function ($model){
-//                        return Workplaces::getTitle($model['workplace_id']);
-//                    }
-//                ],
-
                 'brand',
                 'model',
                 'sn',
