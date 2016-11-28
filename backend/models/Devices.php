@@ -351,13 +351,19 @@ class Devices extends \yii\db\ActiveRecord
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arrayParentId($id_wp){
-        return (new Query())
+
+        $query = (new Query())
             ->select('parent_device_id as id')
             ->from('devices')
             ->where(['workplace_id' => $id_wp])
             ->andWhere('parent_device_id > 0')
             ->groupBy('parent_device_id')
-            ->asArray()->all();
+            ->all();
+        foreach ($query as $item) {
+            $arr[] = $item['id'];
+        }
+
+        return !empty($arr) ? $arr : [0];
     }
 
 }
