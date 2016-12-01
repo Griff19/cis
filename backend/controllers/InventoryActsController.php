@@ -401,7 +401,8 @@ class InventoryActsController extends Controller
         /** @var Pdf $pdf */
         $pdf = Yii::$app->pdf;
         $pdf->options = ['title' => 'Акт инвентаризации №' . $model->id];
-        $pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
+        //$pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
+        //$pdf->content = "Содержимое";
         $pdf->content = $this->render('pdf', [
             'model' => $model,
             'iatProvider' => $iatProvider,
@@ -420,6 +421,7 @@ class InventoryActsController extends Controller
     } //actionCreatePdf()
 
     /**
+     * Подтверждение документа
      * @param $id
      * @return \yii\web\Response
      * @throws NotFoundHttpException

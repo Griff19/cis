@@ -8,11 +8,11 @@
  * @var $oldModel InventoryActs
  * @var $oldModelTable \backend\models\InventoryActsTb
  */
-use yii\helpers\Html;
+//use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\grid\Column;
+//use yii\grid\Column;
 use backend\models\InventoryActs;
-
+use backend\models\DeviceType;
 $owner = $model->ownerEmployee->snp;
 $exec = $model->execEmployee->snp;
 ?>
@@ -33,7 +33,7 @@ $columns = [
     ['attribute' => 'type_id',
         //'header' => 'Тип устройства',
         'value' => function ($devModel) {
-            return \backend\models\DeviceType::getTitle($devModel['type_id']);
+            return DeviceType::getTitle($devModel['type_id']);
         }
     ],
     ['attribute' => 'brand',
