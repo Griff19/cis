@@ -46,7 +46,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'pdf' => [
-            'class' => 'yii\kartik\mpdf\Pdf',
+            'class' => 'kartik\mpdf\Pdf',
             'format' => 'A4',
             'orientation' => 'P',
             'destination' => 'I'
