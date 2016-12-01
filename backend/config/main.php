@@ -1,7 +1,5 @@
 <?php
 
-use kartik\mpdf\Pdf;
-
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -48,10 +46,10 @@ return [
             'errorAction' => 'site/error',
         ],
         'pdf' => [
-            'class' => Pdf::className(),
-            'format' => Pdf::FORMAT_A4,
-            'orientation' => Pdf::ORIENT_PORTRAIT,
-            'destination' => Pdf::DEST_BROWSER
+            'class' => 'yii\kartik\mpdf\Pdf',
+            'format' => 'A4',
+            'orientation' => 'P',
+            'destination' => 'I'
         ]
     ],
     'params' => $params,
