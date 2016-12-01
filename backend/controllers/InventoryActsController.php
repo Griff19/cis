@@ -61,7 +61,7 @@ class InventoryActsController extends Controller
     }
 
     /**
-     * Lists all InventoryActs models.
+     * Список актов инвентаризации.
      * @return mixed
      */
     public function actionIndex($id_wp = null)
@@ -77,7 +77,7 @@ class InventoryActsController extends Controller
     }
 
     /**
-     * Отображаем отображаем Акт инвентаризации по рабочему месту
+     * Отображаем Акт инвентаризации по рабочему месту
      * со списком устройств с которыми можно работать
      * @param integer $id идентификатор/номер документа Акт Инвентаризации
      * @return mixed
@@ -127,12 +127,15 @@ class InventoryActsController extends Controller
         $model->employee_name = $user_exec->employee->snp;
         $model->exec_employee_id = $user_exec->employee->id;
         $model->act_date = Yii::$app->formatter->asDate(new \DateTime(), 'yyyy-MM-dd');
-
-        if ($model->save())
-            return $this->redirect(['view', 'id' => $model->id]);
-        else {
-            Yii::$app->session->setFlash('error', Json::encode($model->errors));
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save())
+                return $this->redirect(['view', 'id' => $model->id]);
+            else {
+                Yii::$app->session->setFlash('error', Json::encode($model->errors));
+                return $this->redirect(['index']);
+            }
+        } else {
+            return $this->render('create', ['model' => $model]);
         }
     }
 
