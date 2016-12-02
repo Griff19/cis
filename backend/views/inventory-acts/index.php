@@ -10,8 +10,10 @@ use backend\models\InventoryActs;
 
 $this->title = 'Акты инвентаризации';
 
-if ($id_wp)
+if ($id_wp) {
+    $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['workplaces/index']];
     $this->params['breadcrumbs'][] = ['label' => 'Рабочее место №' . $id_wp, 'url' => ['workplaces/view', 'id' => $id_wp]];
+}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="inventory-acts-index">
@@ -58,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             ['class' => 'yii\grid\Column',
                 'content' => function ($model) use ($id_wp){
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',['view', 'id' => $model->id]);
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',['view', 'id' => $model->id, 'id_wp' => $id_wp]);
                 }
             ]
         ],

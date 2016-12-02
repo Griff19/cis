@@ -81,7 +81,7 @@ class InventoryActsController extends Controller
      * @param integer $id идентификатор/номер документа Акт Инвентаризации
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $id_wp = null)
     {
         $model = $this->findModel($id);
 
@@ -93,7 +93,8 @@ class InventoryActsController extends Controller
             'model' => $model,
             'iatSearch' => $iatSearch,
             'iatProvider' => $iatProvider,
-            'devProvider' => $devProvider
+            'devProvider' => $devProvider,
+            'id_wp' => $id_wp
         ]);
     }
 
