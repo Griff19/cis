@@ -657,6 +657,7 @@
                 "mailer"
             ],
             "time": "2016-11-24 01:01:23"
+
         },
         {
             "name": "yiisoft/yii2",
@@ -1246,6 +1247,7 @@
                 "yii2"
             ],
             "time": "2016-11-24 09:42:29"
+
         },
         {
             "name": "yiisoft/yii2-faker",
