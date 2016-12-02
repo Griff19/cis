@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use kartik\mpdf\Pdf;
 use Yii;
 use backend\models\Devices;
 use backend\models\Reports;
@@ -18,11 +17,11 @@ use yii\data\ArrayDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Json;
-//use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use kartik\mpdf\Pdf;
 
 /**
  * InventoryActsController implements the CRUD actions for InventoryActs model.
