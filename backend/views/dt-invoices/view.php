@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Представление документа "Счет"
+ */
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
@@ -9,7 +11,7 @@ use backend\models\DtInvoices;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtInvoices */
 
-$this->registerJs('Modal();');
+$this->registerAssetBundle('backend\assets\ModalAsset');
 
 $this->title = 'Документ №' . $model->doc_number;
 $this->params['breadcrumbs'][] = ['label' => 'Счета', 'url' => ['index']];
@@ -96,3 +98,4 @@ Modal::end();
 		: '';
 	?>
 </div>
+

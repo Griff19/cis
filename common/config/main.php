@@ -11,8 +11,6 @@ return [
         ],
         'formatter' => [
             'class' => 'microinginer\humanFormatter\HumanFormatter',
-            //'class' => 'yii\i18n\Formatter',
-            //'timeZone' => 'Asia/Krasnoyarsk',
             'locale' => 'ru-RU',
             'dateFormat' => 'yyyy-MM-dd',
             'timeFormat' => 'H:mm:ss',

@@ -9,7 +9,7 @@ use backend\models\DtDefsheets;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtDefsheets */
-$this->registerJs('Modal()');
+$this->registerAssetBundle('backend\assets\ModalAsset');
 
 $this->title = 'Акт списания №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Акты списания', 'url' => ['index']];

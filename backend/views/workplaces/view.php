@@ -270,9 +270,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ];
+        $this->registerAssetBundle('backend\assets\CollapseTableAsset');
         \yii\widgets\Pjax::begin();
-        $this->registerJs("CollapseTable()");
         echo GridView::widget($col1);
+        $this->registerJs('CollapseTable();');
         \yii\widgets\Pjax::end();
         ?>
 

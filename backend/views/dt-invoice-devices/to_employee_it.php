@@ -19,7 +19,7 @@ use yii\grid\GridView;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['class' => '\yii\grid\Column',
+            ['class' => 'yii\grid\Column',
                 'header' => 'Счет',
                 'content' => function ($model) {
                     return Html::a('Счет №' . $model->dt_invoices_id, ['dt-invoices/view', 'id' => $model->dt_invoices_id]);
@@ -45,13 +45,15 @@ use yii\grid\GridView;
                 'value' => function ($model) {
                     /** @var \backend\models\DtInvoiceDevices $model */
                     $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
-                    //return $stts;
-                    return Html::a($stts, ['dt-invoices-payment/create', 'id' => $model->dt_invoices_id], ['title' => 'Внести оплату']);
+                    if ($stts != 'Куплено') {
+                        return Html::a($stts, ['dt-invoices-payment/create', 'id' => $model->dt_invoices_id], ['title' => 'Внести оплату']);
+                    } else {
+                        return Html::a('Приходовать');
+                    }
                 },
                 'format' => 'raw',
             ],
             'note',
         ],
     ]); ?>
-
 </div>

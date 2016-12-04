@@ -15,8 +15,8 @@ use yii\web\JsExpression;
 /* @var $model backend\models\Devices */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->registerJs('Valid()');
-
+$this->registerAssetBundle('backend\assets\ValidDeviceAsset');
+//$this->registerJs('Valid();');
 ?>
 
 <div class="devices-form">
@@ -101,7 +101,8 @@ $this->registerJs('Valid()');
         AutoComplete::className(), [
         'clientOptions' => [
             'source' => $model::arraySns(),
-            'minLength' => 3
+            'minLength' => 3,
+            'select' => 'Valid();'
         ],
         'options' => ['class' => 'form-control', 'tabindex' => 1001,]
     ]) ?>
