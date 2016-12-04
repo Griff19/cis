@@ -38,7 +38,6 @@ $("form").on("ajaxComplete", function (e) {
     //далее либо выводим кнопку с приглашением выбрать имеющееся утройство
     //либо удаляем все подобные кнопки
     if (notunique && value !== '') {
-
         $("#change-by-attr").remove();
         $(".field-devices-" + label + ">.help-block").after(
             '<a id="change-by-attr" class="btn btn-success" href="change-by-attr?label=' + label + '&value=' + value + '&' + query + '" > Выбрать это устройство </a>'
