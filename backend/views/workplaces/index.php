@@ -21,7 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
         $param = Yii::$app->request->queryParams;
         $query = '';
         if($param) $query = 'mode=' . ArrayHelper::getValue($param, 'mode')
-            . '&id_dev=' . ArrayHelper::getValue($param, 'id_dev');
+            . '&id_dev=' . ArrayHelper::getValue($param, 'id_dev')
+            . '&target=' . urlencode(ArrayHelper::getValue($param, 'target'))
+            . '&target_id=' . ArrayHelper::getValue($param, 'target_id');
     ?>
 
     <p>

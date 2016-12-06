@@ -234,7 +234,7 @@ class DevicesController extends Controller
         $query = Yii::$app->request->queryString;
         $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
         //var_dump($model->scenarios()); die;
-        $model->workplace_id = 2; //$id_wp;
+        $model->workplace_id = $id_wp;
 
         if ($model->load(Yii::$app->request->post())) {
             $mode = '';
