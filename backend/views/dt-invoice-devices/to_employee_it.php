@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Таблица устройств, отраженных в документах "Счет"
+ * Выводится в представлении site/employee-it (site\it_index.php)
+ */
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use yii\helpers\Html;
@@ -45,15 +48,23 @@ use yii\grid\GridView;
                 'value' => function ($model) {
                     /** @var \backend\models\DtInvoiceDevices $model */
                     $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
-                    if ($stts != 'Куплено') {
+                    if ($model->status == DtEnquiryDevices::AWAITING_PAYMENT) {
                         return Html::a($stts, ['dt-invoices-payment/create', 'id' => $model->dt_invoices_id], ['title' => 'Внести оплату']);
-                    } else {
-                        return Html::a('Приходовать');
-                    }
+                    //} elseif ($model->status == DtEnquiryDevices::DEBIT) {
+                    //    return $stts;
+                    } elseif ($model->status == DtEnquiryDevices::PAID) {
+                        return Html::a('Приходовать', ['devices/create-from-doc',
+                            'type_id' => $model->type_id,
+                            'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
+                            'idid' => $model->id
+                        ]);
+                    } else {return $stts;}
                 },
                 'format' => 'raw',
             ],
-            'note',
+            ['attribute' => 'note',
+                'format' => 'raw'
+            ]
         ],
     ]); ?>
 </div>

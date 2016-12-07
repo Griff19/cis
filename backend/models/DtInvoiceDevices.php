@@ -14,7 +14,9 @@ use Yii;
  * @property string $note
  * @property integer $type_id
  * @property integer $dt_enquiries_id
- * @property integer dt_enquiry_devices_id
+ * @property integer $dt_enquiry_devices_id
+ * @property DtEnquiries dtEnquiry
+ * @property DtEnquiryDevices dtEnquiryDevice
  */
 class DtInvoiceDevices extends \yii\db\ActiveRecord
 {
@@ -44,6 +46,13 @@ class DtInvoiceDevices extends \yii\db\ActiveRecord
      */
     public function getDtEnquiry() {
         return $this->hasOne(DtEnquiries::className(), ['id' => 'dt_enquiries_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDtEnquiryDevice() {
+        return $this->hasOne(DtEnquiryDevices::className(), ['id' => 'dt_enquiry_devices_id']);
     }
 
     /**

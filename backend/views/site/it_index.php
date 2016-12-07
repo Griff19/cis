@@ -1,12 +1,16 @@
 <?php
 /**
- * Страница для сотрудника ит-отдела
+ * Страница для сотрудника ит-отдела. Генерируется actionEmployeeIt() контроллера SiteController
+ */
+
+use yii\helpers\Html;
+
+/**
  * @var $provider_did \yii\data\ActiveDataProvider
  * @var $search_did \backend\models\DtInvoiceDevicesSearch
  * @var $provider_ded \yii\data\ActiveDataProvider
  * @var $search_ded \backend\models\DtEnquiryDevicesSearch
  */
-use yii\helpers\Html;
 
 ?>
 <div>

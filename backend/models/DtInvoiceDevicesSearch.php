@@ -35,9 +35,7 @@ class DtInvoiceDevicesSearch extends DtInvoiceDevices
 
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params, $id = null)
@@ -49,7 +47,8 @@ class DtInvoiceDevicesSearch extends DtInvoiceDevices
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false
+            'pagination' => false,
+            'sort' => ['defaultOrder' => ['dt_invoices_id' => SORT_ASC]]
         ]);
 
         $this->load($params);

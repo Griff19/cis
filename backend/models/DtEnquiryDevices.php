@@ -32,6 +32,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
     const REQUEST_INVOICE = 3; //запросить счет
     const AWAITING_PAYMENT = 4; //ожидает оплаты
     const PAID = 5; //куплено
+    const DEBIT = 6; //приходовано
 
     /**
      * Готовим массив строк статуса
@@ -44,6 +45,7 @@ class DtEnquiryDevices extends \yii\db\ActiveRecord
             self::REQUEST_INVOICE => 'Запросить счет',
             self::AWAITING_PAYMENT => 'Ожидает оплаты',
             self::PAID => 'Куплено',
+            self::DEBIT => 'Оприходовано'
         ];
     }
 

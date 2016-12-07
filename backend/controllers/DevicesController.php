@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoiceDevices;
 use Yii;
 use backend\models\InventoryActs;
 use backend\models\InventoryActsTb;
@@ -12,6 +14,7 @@ use backend\models\VoipnumbersSearch;
 use backend\models\Netints;
 use backend\models\NetintsSearch;
 use backend\models\Parameters;
+use yii\bootstrap\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\BadRequestHttpException;
@@ -44,6 +47,7 @@ class DevicesController extends Controller
                             'view-table-comp',
                             'update',
                             'create',
+                            'create-from-doc',
                             'validation',
                             'addcomp',
                             'change-by-attr',
@@ -302,7 +306,45 @@ class DevicesController extends Controller
     }
 
     /**
+     * Создание устройства из введенных документов
+     * @param $type_id тип устройства
+     * @param $id_wp идентификатор рабочего места
+     * @param $idid идентификатор
+     * @return string|\yii\web\Response
+     */
+    public function actionCreateFromDoc($type_id, $idid, $id_wp = null){
+        $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
+        $model->type_id = $type_id;
+        $model->workplace_id = $id_wp;
+        /** чтобы форма приняла значение и подстроила зависимые поля */
+        Yii::$app->session->set('type_id', $type_id);
+        if ($model->load(Yii::$app->request->post())){
+            if ($model->save()) {
+                /** @var DtInvoiceDevices $did */
+                $did = DtInvoiceDevices::findOne($idid);
+                $ded = DtEnquiryDevices::findOne($did->dt_enquiry_devices_id);
+                $did->status = DtEnquiryDevices::DEBIT;
+                $did->note = Html::a('Устройство #' . $model->id, ['devices/view', 'id' => $model->id]);
+                $ded->status = DtEnquiryDevices::DEBIT;
+
+                $did->save();
+                $ded->save();
+
+                return $this->redirect(['site/employee-it']);
+            }
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'id_wp' => $id_wp,
+                'id_dev' => null,
+                'mode' => 'create'
+            ]);
+        }
+    }
+
+    /**
      * Выбираем устройство по введенным данным sn, imei или mac
+     * вызывается по кнопке, генерируемой скриптом js\valid_device.js
      * @param $label
      * @param $value
      * @return \yii\web\Response
