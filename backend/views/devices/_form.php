@@ -36,11 +36,10 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                 ['tabindex' => 1,
                     'prompt' => 'Выберите подраздление...',
                     'onchange' => '$.post("/admin/rooms/list?id=' . '"+$(this).val(), function(data) {
-            var devRoom = $("select#devices-room_id");
-            devRoom.html(data);
-            var devWork = $("select#devices-workplace_id");
-            devWork.html(\'<option value="0"> - </option>\');
-        });'
+                        $("select#devices-room_id").html(data);
+                        $("select#devices-workplace_id").html(\'<option value="0"> - </option>\');
+                        $(".field-devices-room_id").show("fast");
+                    });'
                 ])
             ?>
             <?= $form->field($model, 'room_id')->dropDownList(
@@ -49,6 +48,7 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                     'prompt' => 'Выберите отдел/кабинет...',
                     'onchange' => '$.post("/admin/workplaces/list?id=' . '"+$(this).val(), function(data) {
                         $("select#devices-workplace_id").html(data);
+                        $(".field-devices-workplace_id").show("fast");
                     });'
                 ])
             ?>
@@ -86,13 +86,13 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
         'autoLabel' => true,
         'pluginOptions' => ['threeState' => false],
         'pluginEvents' => [
-            'change' => "function() {
+            'change' => 'function() {
                 if ($(this).val() == 1) {
-                    $('.field-devices-sn').hide('fast')
+                    $(".field-devices-sn").hide("fast")
                 } else {
-                    $('.field-devices-sn').show('fast')
+                    $(".field-devices-sn").show("fast")
                 }
-            }",
+            }',
         ],
         'options' => ['tabindex' => 5,]
     ])->label(false) ?>
@@ -156,4 +156,9 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 
 </div>
 
-
+<?php
+    $this->registerJs('
+        $(".field-devices-room_id").hide();
+        $(".field-devices-workplace_id").hide();
+    ');
+?>

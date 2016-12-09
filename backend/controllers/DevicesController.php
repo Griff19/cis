@@ -316,20 +316,21 @@ class DevicesController extends Controller
         $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
         $model->type_id = $type_id;
         $model->workplace_id = $id_wp;
-        /** чтобы форма приняла значение и подстроила зависимые поля */
+        //Значение $type_id сохраняем в сессию чтобы форма подстроила зависимые поля
         Yii::$app->session->set('type_id', $type_id);
         if ($model->load(Yii::$app->request->post())){
             if ($model->save()) {
                 /** @var DtInvoiceDevices $did */
                 $did = DtInvoiceDevices::findOne($idid);
-                $ded = DtEnquiryDevices::findOne($did->dt_enquiry_devices_id);
                 $did->status = DtEnquiryDevices::DEBIT;
                 $did->note = Html::a('Устройство #' . $model->id, ['devices/view', 'id' => $model->id]);
-                $ded->status = DtEnquiryDevices::DEBIT;
-
                 $did->save();
-                $ded->save();
-
+                /** @var DtEnquiryDevices $ded */
+                $ded = DtEnquiryDevices::findOne($did->dt_enquiry_devices_id);
+                if ($ded) {
+                    $ded->status = DtEnquiryDevices::DEBIT;
+                    $ded->save();
+                }
                 return $this->redirect(['site/employee-it']);
             }
         } else {
