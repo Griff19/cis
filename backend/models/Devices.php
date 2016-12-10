@@ -201,6 +201,36 @@ class Devices extends \yii\db\ActiveRecord
         return $arr->asArray()->all();
     }
 
+    public static function arrBrands($type_id, $term){
+        $query1 = (new Query)->select(['brand' => 'brand', 'count' => 'COUNT(*)', 'sort' => 'MAX(0)'])
+            ->from("devices")
+            ->where("brand > ''")
+            ->andWhere(['type_id' => $type_id])
+            //->andWhere(['ilike', 'brand', $term])
+            ->groupBy("brand");
+
+        $query2 = (new Query)->select(['brand' => 'brand', 'count' => 'COUNT(*)', 'sort' => 'MAX(1)'])
+            ->from("devices")
+            ->where("brand > ''")
+            ->andWhere(['not in', 'brand', $query1->column()])
+            //->andWhere(['ilike', 'brand', $term])
+            ->groupBy("brand");
+
+        if ($term != ' ') {
+            $query1->andWhere(['ilike', 'brand', $term]);
+            $query2->andWhere(['ilike', 'brand', $term]);
+        }
+        $union = (new Query())->select("brand, count, sort")
+            ->from(['t' => $query1->union($query2)])
+            ->orderBy(['sort' => SORT_ASC, 'count' => SORT_DESC])
+            ->all();
+
+        foreach ($union as $item){
+            $arr[] = ['value' => $item['brand'], 'label' => $item['brand'], 'sort' => $item['sort']];
+        }
+        return $arr;
+    }
+
     /**
      * @param $type_id
      * @param string $brand значение выбранное или введенное в поле "Бренд"

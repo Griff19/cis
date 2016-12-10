@@ -711,7 +711,8 @@ class DevicesController extends Controller
      */
     public function actionGetBrands($term){
         $type_id = Yii::$app->session->get('type_id');
-        $brands = Devices::arrayBrands($type_id, $term);
+        //$brands = Devices::arrayBrands($type_id, $term);
+        $brands = Devices::arrBrands($type_id, $term);
         echo Json::encode($brands);
 
     }

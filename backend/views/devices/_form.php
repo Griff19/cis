@@ -111,7 +111,18 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 
     <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
-        'clientOptions' => ['source' => Url::to(['devices/get-brands'])],
+        'clientOptions' => ['source' => Url::to(['devices/get-brands']),
+            'autoFill' => true,
+            'create' => new JsExpression('function(event, ui) {
+                $("#devices-brand").autocomplete("instance")._renderItem = function(ul, item) {
+                    if (item.sort == 0){
+                        return $("<li></li>").data("item.autocomplete", item).append("<b>"+item.label+"</b>").appendTo(ul);
+                    } else {
+                        return $("<li></li>").data("item.autocomplete", item).append(item.label).appendTo(ul);
+                    }
+                }
+            }'),
+        ],
         'options' => ['class' => 'form-control', 'tabindex' => 1003]
         ]) ?>
 
