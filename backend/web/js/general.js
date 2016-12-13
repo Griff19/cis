@@ -4,7 +4,7 @@
  */
 
     $("img").error(function () {
-        $(this).attr("src", "../img/no_img.png");
+        $(this).attr("src", "../img/noimage.jpg");
     });
 
 
