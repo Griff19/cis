@@ -33,7 +33,7 @@ Modal::end();
 
 <div class="dt-enquiries-view">
 	<div class="row">
-		<div class="col-lg-6">
+		<div class="col-sm-6">
 			<h1><?= Html::encode($this->title) ?></h1>
 
 			<p>
@@ -70,7 +70,7 @@ Modal::end();
 				],
 			]) ?>
 		</div>
-		<div class="col-lg-6">
+		<div class="col-sm-6">
 			<div class="img-thumbnail img-block" style="margin-top: 20px; height: 350px">
 				<?php
 				$key = md5('dt-enquiries' . $model->id);

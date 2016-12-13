@@ -53,14 +53,15 @@ use yii\grid\GridView;
                     //} elseif ($model->status == DtEnquiryDevices::DEBIT) {
                     //    return $stts;
                     } elseif ($model->status == DtEnquiryDevices::PAID) {
-                        return Html::a('Приходовать', ['devices/create-from-doc',
+                        return Html::a($stts, ['devices/create-from-doc',
                             'type_id' => $model->type_id,
                             'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
                             'idid' => $model->id
-                        ]);
+                        ], ['title' => 'Приходовать устройство']);
                     } else {return $stts;}
                 },
                 'format' => 'raw',
+                'filter' => DtEnquiryDevices::arrStatusString()
             ],
             ['attribute' => 'note',
                 'format' => 'raw'

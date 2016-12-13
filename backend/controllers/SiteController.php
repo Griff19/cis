@@ -4,7 +4,10 @@ namespace backend\controllers;
 use app\models\DtInvoiceDevicesSearch;
 use backend\models\AdminEmployeesSearch;
 use backend\models\AdminWorkplacesSearch;
+use backend\models\DtEnquiriesSearch;
 use backend\models\DtEnquiryDevicesSearch;
+use backend\models\DtInvoices;
+use backend\models\DtInvoicesSearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -93,6 +96,12 @@ class SiteController extends Controller
      * @return string
      */
     public function actionEmployeeIt(){
+        //собираем документы "Заявка на оборудование"
+        $search_de = new DtEnquiriesSearch();
+        $provider_de = $search_de->search(Yii::$app->request->queryParams);
+        //собираем документы "Счет"
+        $search_di = new DtInvoicesSearch();
+        $provider_di = $search_di->search(Yii::$app->request->queryParams);
         //собираем данные по устройствам в документах "Счет"
         $search_did = new DtInvoiceDevicesSearch();
         $provider_did = $search_did->search(Yii::$app->request->queryParams);
@@ -100,6 +109,10 @@ class SiteController extends Controller
         $search_ded = new DtEnquiryDevicesSearch();
         $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);
         return $this->render('it_index', [
+            'search_de' => $search_de,
+            'provider_de' => $provider_de,
+            'search_di' => $search_di,
+            'provider_di' => $provider_di,
             'search_did' => $search_did,
             'provider_did' => $provider_did,
             'search_ded' => $search_ded,

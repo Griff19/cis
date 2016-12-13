@@ -18,7 +18,8 @@ class DtEnquiriesSearch extends DtEnquiries
     public function rules()
     {
         return [
-            [['id', 'employee_id', 'status'], 'integer'],
+            [['id', 'employee_id'], 'integer'],
+            [['status', 'employee_name'], 'string'],
             [['create_date', 'do_date', 'create_time'], 'safe'],
         ];
     }
@@ -47,6 +48,15 @@ class DtEnquiriesSearch extends DtEnquiries
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'attributes' => [
+                    'id',
+                    'create_date',
+                    'do_date',
+                    'employee_name' => ['asc' => ['employees.snp' => SORT_ASC], 'desc' => ['employees.snp' => SORT_DESC]],
+                    'status'
+                ]
+            ]
         ]);
 
         $this->load($params);
@@ -56,7 +66,7 @@ class DtEnquiriesSearch extends DtEnquiries
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->joinWith('employee');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -65,8 +75,9 @@ class DtEnquiriesSearch extends DtEnquiries
             'do_date' => $this->do_date,
             'create_time' => $this->create_time,
             //'workplace_id' => $this->workplace_id,
-            'status' => $this->status,
+            'dt_enquiries.status' => $this->status,
         ]);
+        $query->andFilterWhere(['ilike', 'employees.snp', $this->employee_name]);
 
         return $dataProvider;
     }

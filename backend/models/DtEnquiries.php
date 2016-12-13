@@ -5,7 +5,7 @@ namespace backend\models;
 use Yii;
 
 /**
- * This is the model class for table "dt_enquiries".
+ * Модель документа "Заявка на оборудование", соответствует таблице "dt_enquiries".
  *
  * @property integer id
  * @property integer employee_id
@@ -22,10 +22,31 @@ class DtEnquiries extends \yii\db\ActiveRecord
 {
     const DTE_NEW = 0; //новый документ
     const DTE_SAVED = 1; //сохраненный документ
+    const DTE_COMPLETE = 2; //документ обработан
+    const DTE_CLOSED = 3; //документ закрыт
 
+    public $employee_name; //используем для автоподстановки и сортировки
 
-    public $employee_name;//используем для автоподстановки имени
-    //если будут использоваться имена пользователей то не понадобится
+    /**
+     * @return array
+     */
+    public static function arrStatusString(){
+        return [
+            self::DTE_NEW => 'Новый',
+            self::DTE_SAVED => 'В обработке',
+            self::DTE_COMPLETE => 'Обработан',
+            self::DTE_CLOSED => 'Закрыт'
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusString(){
+        $arr = self::arrStatusString();
+        return $arr[$this->status];
+    }
+
     /**
      * @inheritdoc
      */
@@ -42,6 +63,7 @@ class DtEnquiries extends \yii\db\ActiveRecord
         return [
             [['employee_id'], 'required'],
             [['employee_id', 'status'], 'integer'],
+
             ['memo', 'boolean'],
             [['create_date', 'do_date', 'create_time'], 'safe'],
             ['do_date', 'compare', 'compareAttribute' => 'create_date', 'operator' => '>', 'message' => '"{attribute}" должна быть позже "{compareAttribute}"']
@@ -58,7 +80,7 @@ class DtEnquiries extends \yii\db\ActiveRecord
             'employee_name' => 'Имя сотрудника',
             'employee_id' => 'Ид Сотрудника',
             'create_date' => 'Дата создания',
-            'do_date' => 'Дата исполнения',
+            'do_date' => 'Исполнить до',
             'create_time' => 'Время создания',
             //'workplace_id' => 'Номер рабочего места',
             'memo' => 'Есть служебка',
@@ -79,14 +101,4 @@ class DtEnquiries extends \yii\db\ActiveRecord
         return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])->viaTable('dt_enquiry_workplaces', ['dt_enquiries_id' => 'id']);
     }
 
-    /**
-     * @return mixed
-     */
-    public function getStatusString(){
-        $arr = [
-            0 => 'Новый',
-            1 => 'Сохранен'
-        ];
-        return $arr[$this->status];
-    }
 }

@@ -10,7 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * DtInvoicesPaymentController implements the CRUD actions for DtInvoicesPayment model.
+ * Контроллер, обслуживающий таблицу платежей по документу "Счет"
  */
 class DtInvoicesPaymentController extends Controller
 {

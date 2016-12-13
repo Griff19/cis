@@ -60,7 +60,9 @@ use yii\grid\GridView;
                 },
                 'format' => 'raw',
             ],
-            'note',
+            ['attribute' => 'note',
+                'format' => 'raw'
+            ],
 
             ['class' => 'yii\grid\ActionColumn',
                 'controller' => 'dt-invoice-devices',

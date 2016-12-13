@@ -24,8 +24,9 @@ class DtInvoices extends \yii\db\ActiveRecord
     const DOC_DEL = 0; //удаленный документ
     const DOC_NEW = 1; //новый, не сохраненный документ
     const DOC_SAVE = 2; //сохраненный документ
+    const DOC_CLOSED = 3; //счет закрыт
 
-    public $d_partners_name;
+    public $d_partners_name; //для работы автоподстановки
 
     /**
      * @inheritdoc
@@ -43,7 +44,8 @@ class DtInvoices extends \yii\db\ActiveRecord
         return [
             self::DOC_DEL => 'Удален',
             self::DOC_NEW => 'Новый',
-            self::DOC_SAVE => 'Сохранен'
+            self::DOC_SAVE => 'Сохранен',
+            self::DOC_CLOSED => 'Закрыт'
         ];
     }
 

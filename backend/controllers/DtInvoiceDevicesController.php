@@ -118,10 +118,12 @@ class DtInvoiceDevicesController extends Controller
 
     /**
      * @param $id
+     * @return int
      * @throws NotFoundHttpException
      */
     public function actionSetStatus($id){
         $model = $this->findModel($id);
+        if ($model->status == DtEnquiryDevices::DEBIT) return 0;
         /**
          * @var $modelInvoices DtInvoices документ "Счет"
          * @var $modelEnquiry DtEnquiryDevices строка устройства в документе "Заявка"
