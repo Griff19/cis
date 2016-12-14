@@ -13,11 +13,18 @@ use Yii;
  * @property string $summ
  * @property integer $employee_id
  * @property string $employee_name
+ * @property integer $status
  * @property DtInvoices dtInvoice
  * @property Employees employee
  */
 class DtInvoicesPayment extends \yii\db\ActiveRecord
 {
+    const PAY_DELETE = 0; //удален
+    const PAY_WAITING = 1; //ожидает согласования
+    const PAY_AGREED = 2; //согласован
+    const PAY_REFER = 3; //передан бухгалтеру
+    const PAY_OK = 4; //оплата прошла
+
     public $employee_name;
     /**
      * @inheritdoc
@@ -33,11 +40,32 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dt_invoices_id', 'employee_id'], 'integer'],
+            [['dt_invoices_id', 'employee_id', 'status'], 'integer'],
             [['agreed_date'], 'date'],
             [['summ'], 'number'],
             ['employee_name', 'string', 'max' => 255]
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function arrStatusString(){
+        return [
+            self::PAY_DELETE => 'Удален',
+            self::PAY_WAITING => 'Согласовывается',
+            self::PAY_AGREED => 'Согласован',
+            self::PAY_REFER => 'Передан',
+            self::PAY_OK => 'Оплачен'
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatusString(){
+        $arr = self::arrStatusString();
+        return $arr[$this->status];
     }
 
     /**
@@ -51,7 +79,9 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
             'agreed_date' => 'Согласование',
             'summ' => 'Сумма',
             'employee_id' => 'Сотрудник',
-            'employee_name' => 'Сотрудник'
+            'employee_name' => 'Сотрудник',
+            'status' => 'Статус',
+            'statusString' => 'Статус'
         ];
     }
 

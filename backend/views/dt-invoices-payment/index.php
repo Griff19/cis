@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Список согласованных платежей по счету
+ * встраивается в представление dt-invoices\view
+ */
 use backend\models\DtInvoices;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -14,7 +17,7 @@ use yii\grid\GridView;
 
     <h3> История платежей: </h3>
     <p>
-        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Внести оплату', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
+        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Согласовать', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -27,10 +30,11 @@ use yii\grid\GridView;
             'agreed_date',
             'summ',
             'employee.snp',
-
+            ['attribute' => 'status',
+                'value' => 'statusString'
+            ],
             ['class' => 'yii\grid\ActionColumn',
                 'controller' => 'dt-invoices-payment',
-                'template' => '{update} {delete}'
             ],
         ],
     ]); ?>

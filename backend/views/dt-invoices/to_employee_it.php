@@ -27,7 +27,10 @@ use yii\grid\GridView;
             'summ',
             'summPay',
 //            'delivery_type',
-
+            ['attribute' => 'status',
+                'value' => 'statusString',
+                'filter' => \backend\models\DtInvoices::arrStatusString()
+            ],
 //            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

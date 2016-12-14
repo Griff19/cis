@@ -18,7 +18,7 @@ class DtInvoicesSearch extends DtInvoices
     public function rules()
     {
         return [
-            [['id', 'd_partners_id', 'delivery_type'], 'integer'],
+            [['id', 'd_partners_id', 'delivery_type', 'status'], 'integer'],
             [['doc_number', 'doc_date'], 'safe'],
             [['summ'], 'number'],
         ];
@@ -65,6 +65,7 @@ class DtInvoicesSearch extends DtInvoices
             'd_partners_id' => $this->d_partners_id,
             'delivery_type' => $this->delivery_type,
             'summ' => $this->summ,
+            'status' => $this->status
         ]);
 
         $query->andFilterWhere(['like', 'doc_number', $this->doc_number]);

@@ -22,13 +22,14 @@ use yii\grid\GridView;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            ['class' => 'yii\grid\Column',
-                'header' => 'Счет',
-                'content' => function ($model) {
+
+            ['attribute' => 'dt_invoices_id',
+                'label' => 'Док. Счет',
+                'value' => function ($model) {
                     return Html::a('Счет №' . $model->dt_invoices_id, ['dt-invoices/view', 'id' => $model->dt_invoices_id]);
-                }
+                },
+                'format' => 'raw'
             ],
-            'dt_invoices_id',
             ['attribute' => 'dt_enquiries_id',
                 'value' => function ($model) {
                     if ($model->dt_enquiries_id)

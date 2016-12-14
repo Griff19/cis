@@ -65,6 +65,7 @@ class DtInvoicesPaymentController extends Controller
     {
         $model = new DtInvoicesPayment();
         $model->dt_invoices_id = $id;
+        $model->status = DtInvoicesPayment::PAY_AGREED;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['dt-invoices/view', 'id' => $id]);

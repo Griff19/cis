@@ -21,10 +21,13 @@ use yii\widgets\Pjax;
 <div>
 	<h1> Страница сотрудника It-отдела </h1>
 	<div class="row">
-
 		<div class="col-sm-3">
 			<?=  Html::a('Рабочие места', ['workplaces/index'], ['class'=>'btn btn-primary'])?>
 			<p>Список рабочих мест.</p>
+		</div>
+		<div class="col-sm-3">
+			<?= Html::a('Заявки на оборудование',['dt-enquiries/index'],['class'=>'btn btn-warning'])?>
+			<p>Заявки на оборудование</p>
 		</div>
 	</div>
 	<?php Pjax::begin(); ?>
@@ -35,7 +38,6 @@ use yii\widgets\Pjax;
 		<div class="col-lg-6">
 			<?= $this->render('../dt-invoices/to_employee_it', ['searchModel' => $search_di, 'dataProvider' => $provider_di])?>
 		</div>
-
 	</div>
 	<?= $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded,'dataProvider' => $provider_ded]) ?>
 	<?= $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did,'dataProvider' => $provider_did]) ?>
