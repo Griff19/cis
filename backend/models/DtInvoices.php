@@ -104,6 +104,6 @@ class DtInvoices extends \yii\db\ActiveRecord
      * @return mixed
      */
     public function getSummPay(){
-        return DtInvoicesPayment::find()->where(['dt_invoices_id' => $this->id])->sum('summ');
+        return DtInvoicesPayment::find()->where(['dt_invoices_id' => $this->id, 'status' => DtInvoicesPayment::PAY_OK])->sum('summ');
     }
 }
