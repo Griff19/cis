@@ -7,31 +7,31 @@ class m161217_034325_gi_newFields_deviceType extends Migration
     public function up()
     {
         $this->addColumn('device_type', 'mac', $this->boolean() . ' DEFAULT FALSE');
-        $this->addCommentOnColumn('device_type', 'mac', 'îòîáğàæàòü ïîëå mac-àäğåñà íà ôîğìå');
+        $this->addCommentOnColumn('device_type', 'mac', 'Ğ¾Ñ‚Ğ¾Ğ±Ñ€Ğ°Ğ¶Ğ°Ñ‚ÑŒ mac-Ğ°Ğ´Ñ€ĞµÑ Ğ² Ñ„Ğ¾Ñ€Ğ¼Ğµ');
 
         $this->addColumn('device_type', 'imei', $this->boolean() . ' DEFAULT FALSE');
-        $this->addCommentOnColumn('device_type', 'imei', 'îòîáğàæàòü ïîëå imei íà ôîğìå');
+        $this->addCommentOnColumn('device_type', 'imei', 'Ğ¾Ñ‚Ğ¾Ğ±Ñ€Ğ°Ğ¶Ğ°Ñ‚ÑŒ imei Ğ² Ñ„Ğ¾Ñ€Ğ¼Ğµ');
 
-        $this->update('device_type', ['mac' => true], 'id = 22'); //Âèäåîêàìåğà
-        $this->update('device_type', ['mac' => true], 'id = 20'); //Âèäåîğåãèñòğàòîğ
-        $this->update('device_type', ['mac' => true], 'id = 8'); //Êîìóòàòîğ
-        $this->update('device_type', ['mac' => true], 'id = 17'); //Ìàğøğóòèçàòîğ
-        $this->update('device_type', ['mac' => true], 'id = 18'); //Ìàòåğèíñêàÿ ïëàòà
-        $this->update('device_type', ['mac' => true], 'id = 39'); //Íåòòîï
-        $this->update('device_type', ['mac' => true], 'id = 7'); //Íîóòáóê
-        $this->update('device_type', ['mac' => true], 'id = 34'); //Ïëàíøåò
-        $this->update('device_type', ['mac' => true], 'id = 4'); //Ïğèíòåğ
-        $this->update('device_type', ['mac' => true], 'id = 36'); //Ñåğâåğ
-        $this->update('device_type', ['mac' => true], 'id = 27'); //Ñåòåâàÿ êàğòà
-        $this->update('device_type', ['mac' => true], 'id = 16'); //Ñêàíåğ øòğèõ
-        $this->update('device_type', ['mac' => true], 'id = 43'); //Òåëåôîí
-        $this->update('device_type', ['mac' => true], 'id = 3'); //Òåëåôîí
-        $this->update('device_type', ['mac' => true], 'id = 40'); //Òîíêèé êëèåíò
-        $this->update('device_type', ['mac' => true], 'id = 19'); //Òî÷êà äîñòóïà
+        $this->update('device_type', ['mac' => true], 'id = 22'); //
+        $this->update('device_type', ['mac' => true], 'id = 20'); //
+        $this->update('device_type', ['mac' => true], 'id = 8'); //
+        $this->update('device_type', ['mac' => true], 'id = 17'); //
+        $this->update('device_type', ['mac' => true], 'id = 18'); //
+        $this->update('device_type', ['mac' => true], 'id = 39'); //
+        $this->update('device_type', ['mac' => true], 'id = 7'); //
+        $this->update('device_type', ['mac' => true], 'id = 34'); //
+        $this->update('device_type', ['mac' => true], 'id = 4'); //
+        $this->update('device_type', ['mac' => true], 'id = 36'); //
+        $this->update('device_type', ['mac' => true], 'id = 27'); //
+        $this->update('device_type', ['mac' => true], 'id = 16'); //
+        $this->update('device_type', ['mac' => true], 'id = 43'); //
+        $this->update('device_type', ['mac' => true], 'id = 3'); //
+        $this->update('device_type', ['mac' => true], 'id = 40'); //
+        $this->update('device_type', ['mac' => true], 'id = 19'); //
 
-        $this->update('device_type', ['imei' => true], 'id = 17'); //Ìîäåì
-        $this->update('device_type', ['imei' => true], 'id = 34'); //Ïëàíøåò
-        $this->update('device_type', ['imei' => true], 'id = 43'); //Òåëåôîí
+        $this->update('device_type', ['imei' => true], 'id = 17'); //
+        $this->update('device_type', ['imei' => true], 'id = 34'); //
+        $this->update('device_type', ['imei' => true], 'id = 43'); //
         
         return true;
     }
