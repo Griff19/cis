@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\Expression;
 use yii\db\Query;
 
 /**
@@ -10,10 +11,6 @@ use yii\db\Query;
  *
  * @property integer $id
  * @property string $title
- * @property string $synonyms
- * @property boolean $comp
- * @property boolean $mac
- * @property boolean $imei
  */
 class DeviceType extends \yii\db\ActiveRecord
 {
@@ -32,7 +29,7 @@ class DeviceType extends \yii\db\ActiveRecord
     {
         return [
             [['title','synonyms'], 'string', 'max' => 255],
-            [['comp', 'mac', 'imei'], 'boolean']
+            [['comp'], 'boolean']
         ];
     }
 
@@ -45,9 +42,7 @@ class DeviceType extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Тип устройства',
             'synonyms' => 'Синоним',
-            'comp' => 'Комплектующее',
-            'mac' => 'Отображать MAC',
-            'imei' => 'Отображать IMEI'
+            'comp' => 'Комплектующее'
         ];
     }
 
@@ -63,21 +58,16 @@ class DeviceType extends \yii\db\ActiveRecord
     /**
      * Получаем массив типов устройств, отсортированных по частоте использования
      * Обязательно в запросе должны быть поля 'type_id' и 'title' т.к. они используются в форме
-     * Задача №62 {{@link http://redmine.corp.altburenka.ru/issues/62}} изменила сортировку, этот блок пока не нужен...
      * @return array|\yii\db\ActiveRecord[]
-     *
-        public static function arrDevType(){
-            return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
-                ->from(['dt' => 'device_type'])
-                ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
-                ->orderBy(new Expression('c DESC NULLS LAST'))
-                ->all();
-        }
-     *
      */
-
+//    public static function arrDevType(){
+//        return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
+//            ->from(['dt' => 'device_type'])
+//            ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
+//            ->orderBy(new Expression('c DESC NULLS LAST'))
+//            ->all();
+//    }
     /**
-     * Получаем типы устройств отсортированные по полю "usr_sort" и далее по алфавиту
      * @return array
      */
     public static function arrDevType(){

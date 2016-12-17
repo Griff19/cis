@@ -30,15 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            ['attribute' => 'comp',
-                'format' => 'boolean',
-            ],
-            ['attribute' => 'mac',
-                'format' => 'boolean',
-            ],
-            ['attribute' => 'imei',
-                'format' => 'boolean',
-            ],
+            [
+                'attribute' => 'comp',
+                'value' => $model->comp ? 'Да' : 'Нет',
+            ]
         ],
     ]) ?>
 

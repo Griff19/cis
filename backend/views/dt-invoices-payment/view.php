@@ -66,5 +66,4 @@ Modal::end();
             </div>
         </div>
     </div>
-    <?= Html::a('Платеж согласован', '', ['class' =>  'btn btn-success'])?>
 </div>
