@@ -30,9 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'synonyms',
             [
                 'attribute' => 'comp',
-                'value' => function($model) {
-                    return $model->comp ? 'Да' : 'Нет';
-                },
+                'format' => 'boolean',
+                'filter' => ['Нет', 'Да'],
+            ],
+            ['attribute' => 'mac',
+                'label' => 'MAC?',
+                'format' => 'boolean',
+                'filter' => ['Нет', 'Да'],
+            ],
+            ['attribute' => 'imei',
+                'label' => 'IMEI?',
+                'format' => 'boolean',
                 'filter' => ['Нет', 'Да'],
             ],
 

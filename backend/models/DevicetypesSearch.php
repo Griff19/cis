@@ -5,10 +5,9 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-//use backend\models\DeviceType;
 
 /**
- * DevicetypesSearch represents the model behind the search form about `backend\models\DeviceType`.
+ * DevicetypesSearch модель выборки данных для модели DeviceType.
  */
 class DevicetypesSearch extends DeviceType
 {
@@ -20,7 +19,7 @@ class DevicetypesSearch extends DeviceType
         return [
             [['id'], 'integer'],
             [['title', 'synonyms'], 'safe'],
-            [['comp'], 'boolean']
+            [['comp', 'mac', 'imei'], 'boolean']
         ];
     }
 
@@ -46,7 +45,7 @@ class DevicetypesSearch extends DeviceType
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' => ['defaultOrder' => ['title' => SORT_ASC]],
+            'sort' => ['defaultOrder' => ['usr_sort' => SORT_ASC, 'title' => SORT_ASC]],
             'pagination' => false
         ]);
 
@@ -61,6 +60,8 @@ class DevicetypesSearch extends DeviceType
         $query->andFilterWhere([
             'id' => $this->id,
             'comp' => $this->comp,
+            //'mac' => $this->mac,
+            //'imei' => $this->imei
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
