@@ -4,10 +4,13 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Devices */
+/* @var $dt_mac boolean */
+/* @var $dt_imei boolean */
+/* @var $model->deviceType backend\models\DeviceType */
 
-$this->title = 'Редактировать: ' . $model->id. ' ' . $model->device_note;
+$this->title = 'Редактировать: ' . $model->id. ' ' . $model->deviceType->title . ' ' . $model->device_note;
 $this->params['breadcrumbs'][] = ['label' => 'Устройства', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->device_note, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = ['label' => $model->deviceType->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Редактировать';
 ?>
 <div class="devices-update">
@@ -17,7 +20,9 @@ $this->params['breadcrumbs'][] = 'Редактировать';
     <?= $this->render('_form', [
         'model' => $model,
         'id_wp' => $id_wp,
-        'mode' => $mode
+        'mode' => $mode,
+        'dt_mac' => $dt_mac,
+        'dt_imei' => $dt_imei,
     ]) ?>
 
 </div>

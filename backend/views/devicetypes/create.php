@@ -6,6 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DeviceType */
 
+
 $this->title = 'Добавить тип устройства';
 $this->params['breadcrumbs'][] = ['label' => 'Типы устройств', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -16,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+
     ]) ?>
 
 </div>

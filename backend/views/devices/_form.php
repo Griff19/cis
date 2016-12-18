@@ -77,6 +77,19 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                         $("#devices-model").val("");
                         $("#devices-specification").val("");
                     }
+                    deviseType = JSON.parse(data);
+                    if (deviseType.mac == false){
+                        $(".field-devices-device_mac").hide("fast");
+                    } else {
+                        $(".field-devices-device_mac").show("fast");
+                    };
+                    if (deviseType.imei == false){
+                        $(".field-devices-imei1").hide("fast");
+                        $(".field-devices-imei2").hide("fast");
+                    } else {
+                        $(".field-devices-imei1").show("fast");
+                        $(".field-devices-imei2").show("fast");
+                    }
                 });'
             ])
         ?>
@@ -107,7 +120,10 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
         'options' => ['class' => 'form-control', 'tabindex' => 1001,]
     ]) ?>
 
-    <?= $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]) ?>
+    <?php
+    if ($dt_mac)
+        echo $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]);
+    ?>
 
     <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
@@ -139,17 +155,20 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
         'options' => ['class' => 'form-control', 'tabindex' => 1004]
     ]) ?>
 
-    <?= $form->field($model, 'imei1')->textInput(['maxlength' => true])->widget(
-        AutoComplete::className(), [
-        'clientOptions' => ['source' => $model::arrayImei1()],
-        'options' => ['class' => 'form-control', 'tabindex' => 1005]
-    ]) ?>
-
-    <?= $form->field($model, 'imei2')->textInput(['maxlength' => true])->widget(
-        AutoComplete::className(), [
-        'clientOptions' => ['source' => $model::arrayImei2()],
-        'options' => ['class' => 'form-control', 'tabindex' => 1006]
-    ]) ?>
+    <?php
+    if ($dt_imei) {
+        echo $form->field($model, 'imei1')->textInput(['maxlength' => true])->widget(
+            AutoComplete::className(), [
+            'clientOptions' => ['source' => $model::arrayImei1()],
+            'options' => ['class' => 'form-control', 'tabindex' => 1005]
+        ]);
+        echo $form->field($model, 'imei2')->textInput(['maxlength' => true])->widget(
+            AutoComplete::className(), [
+            'clientOptions' => ['source' => $model::arrayImei2()],
+            'options' => ['class' => 'form-control', 'tabindex' => 1006]
+        ]);
+    }
+    ?>
 
     <?= $form->field($model, 'specification')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [

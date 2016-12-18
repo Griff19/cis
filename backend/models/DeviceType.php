@@ -3,7 +3,6 @@
 namespace backend\models;
 
 use Yii;
-use yii\db\Expression;
 use yii\db\Query;
 
 /**
@@ -11,6 +10,9 @@ use yii\db\Query;
  *
  * @property integer $id
  * @property string $title
+ * @property boolean $comp
+ * @property boolean $mac
+ * @property boolean $imei
  */
 class DeviceType extends \yii\db\ActiveRecord
 {
@@ -29,7 +31,7 @@ class DeviceType extends \yii\db\ActiveRecord
     {
         return [
             [['title','synonyms'], 'string', 'max' => 255],
-            [['comp'], 'boolean']
+            [['comp', 'mac', 'imei'], 'boolean']
         ];
     }
 
@@ -42,7 +44,9 @@ class DeviceType extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Тип устройства',
             'synonyms' => 'Синоним',
-            'comp' => 'Комплектующее'
+            'comp' => 'Комплектующее',
+            'mac' => 'Имеет MAC-адрес',
+            'imei' => 'Имеет IMEI'
         ];
     }
 
@@ -56,17 +60,20 @@ class DeviceType extends \yii\db\ActiveRecord
     }
 
     /**
+     * Задача №62 изменила сортировку, эта функция пока не нужна...
      * Получаем массив типов устройств, отсортированных по частоте использования
      * Обязательно в запросе должны быть поля 'type_id' и 'title' т.к. они используются в форме
      * @return array|\yii\db\ActiveRecord[]
+     *
+    public static function arrDevType(){
+        return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
+            ->from(['dt' => 'device_type'])
+            ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
+            ->orderBy(new Expression('c DESC NULLS LAST'))
+            ->all();
+    }
      */
-//    public static function arrDevType(){
-//        return (new Query())->select(['type_id' => 'dt.id', 'title' => 'dt.title', 'c' => 'c'])
-//            ->from(['dt' => 'device_type'])
-//            ->leftJoin('(SELECT type_id, COUNT(*) c FROM devices GROUP BY type_id) d', 'd.type_id = dt.id')
-//            ->orderBy(new Expression('c DESC NULLS LAST'))
-//            ->all();
-//    }
+
     /**
      * @return array
      */

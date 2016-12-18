@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
 use Yii;
@@ -300,7 +301,9 @@ class DevicesController extends Controller
                 'model' => $model,
                 'id_wp' => $id_wp,
                 'id_dev' => $id_dev,
-                'mode' => 'create'
+                'mode' => 'create',
+                'dt_mac' => true,
+                'dt_imei' => true
             ]);
         }
     }
@@ -452,7 +455,6 @@ class DevicesController extends Controller
 
         $oldwp  = $model->workplace_id;
 
-        //$id_wp = $id_wp == 0 ? Yii::$app->session->get('id_wp') : $id_wp;
         if ($id_wp) $model->workplace_id = $id_wp;
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()){
@@ -473,7 +475,10 @@ class DevicesController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'id_wp' => $id_wp,
-                'mode' => 'update'
+                'mode' => 'update',
+                'dt_mac' => $model->deviceType->mac,
+                'dt_imei' => $model->deviceType->imei
+
             ]);
         }
     }
@@ -748,7 +753,8 @@ class DevicesController extends Controller
      */
     public function actionSetTypeId($type_id){
         Yii::$app->session->set('type_id', $type_id);
-        return true;
+        $model = DeviceType::findOne($type_id);
+        return Json::encode($model);
     }
 
     /**
