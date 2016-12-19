@@ -741,7 +741,7 @@ class DevicesController extends Controller
      */
     public function actionGetSpecifications($term){
         $type_id = Yii::$app->session->get('type_id');
-        $specifications = Devices::arraySpecifications($type_id, $term);
+        $specifications = Devices::arrSpecifications($type_id, $term);
         echo Json::encode($specifications);
     }
 

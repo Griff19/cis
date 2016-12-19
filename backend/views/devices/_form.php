@@ -1,6 +1,5 @@
 <?php
 use backend\models\DeviceType;
-//use backend\models\Devices;
 use backend\models\Workplaces;
 use backend\models\Branches;
 use backend\models\Rooms;
@@ -14,6 +13,8 @@ use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Devices */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $dt_mac boolean определяет отображать ли поле mac-адреса на форме */
+/* @var $dt_imei boolean определяет отображать ли поля imei на форме */
 
 $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 //$this->registerJs('Valid();');
@@ -21,17 +22,17 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 
 <div class="devices-form">
 
-    <?php $form = ActiveForm::begin([
+    <?php
+    $form = ActiveForm::begin([
         'id' => $model->formName(),
         'enableAjaxValidation' => true,
         //'validateOnBlur' => true,
         'validationUrl' => Url::toRoute('devices/validation?scenario=' . $model->scenario)
     ]);
-    ?>
-    <?php
+
     if ($mode !== 'update') {
-        if ($id_wp == 0) { ?>
-            <?= $form->field($model, 'branch_id')->dropDownList(
+        if ($id_wp == 0) {
+            echo $form->field($model, 'branch_id')->dropDownList(
                 ArrayHelper::map(Branches::find()->all(), 'id', 'branch_title'),
                 ['tabindex' => 1,
                     'prompt' => 'Выберите подраздление...',
@@ -40,9 +41,9 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                         $("select#devices-workplace_id").html(\'<option value="0"> - </option>\');
                         $(".field-devices-room_id").show("fast");
                     });'
-                ])
-            ?>
-            <?= $form->field($model, 'room_id')->dropDownList(
+                ]);
+
+            echo $form->field($model, 'room_id')->dropDownList(
                 ArrayHelper::map(Rooms::find()->orderBy('room_title')->all(), 'id', 'room_title'),
                 ['tabindex' => 2,
                     'prompt' => 'Выберите отдел/кабинет...',
@@ -50,24 +51,23 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                         $("select#devices-workplace_id").html(data);
                         $(".field-devices-workplace_id").show("fast");
                     });'
-                ])
-            ?>
+                ]);
 
-            <?= $form->field($model, 'workplace_id')->dropDownList(
+            echo $form->field($model, 'workplace_id')->dropDownList(
                 ArrayHelper::map(Workplaces::find()->all(), 'id', function ($model_wp) {
                     $snp = '';
                     if ($model_wp->owner) $snp = $model_wp->owner[0]['snp'];
                     return '"' . $model_wp->workplaces_title . '" ' . $snp;
                 }),
                 ['tabindex' => 3,
-                    'prompt' => 'Выберите рабочее место...'])
-            ?>
-        <?php } else {
+                    'prompt' => 'Выберите рабочее место...']);
+
+        } else {
             $model_wp = Workplaces::findOne($id_wp);
             echo '<h4>на Рабочее место №' . $id_wp .' ('. $model_wp->workplaces_title.')</h4>';
         }
-        ?>
-        <?= $form->field($model, 'type_id')->dropDownList(
+
+        echo $form->field($model, 'type_id')->dropDownList(
             ArrayHelper::map(DeviceType::arrDevType(), 'type_id', 'title'),
             ['tabindex' => 4,
                 'prompt' => 'Выберите тип устройства...',
@@ -91,11 +91,10 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
                         $(".field-devices-imei2").show("fast");
                     }
                 });'
-            ])
-        ?>
-    <?php } ?>
+            ]);
+        }
 
-    <?= $form->field($model, 'chekMode')->widget('\kartik\checkbox\CheckboxX', [
+    echo $form->field($model, 'chekMode')->widget('\kartik\checkbox\CheckboxX', [
         'autoLabel' => true,
         'pluginOptions' => ['threeState' => false],
         'pluginEvents' => [
@@ -108,9 +107,9 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
             }',
         ],
         'options' => ['tabindex' => 5,]
-    ])->label(false) ?>
+    ])->label(false);
 
-    <?= $form->field($model, 'sn')->textInput()->widget(
+    echo $form->field($model, 'sn')->textInput()->widget(
         AutoComplete::className(), [
         'clientOptions' => [
             'source' => $model::arraySns(),
@@ -118,14 +117,12 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
             'select' => 'Valid();'
         ],
         'options' => ['class' => 'form-control', 'tabindex' => 1001,]
-    ]) ?>
+    ]);
 
-    <?php
     if ($dt_mac)
         echo $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]);
-    ?>
 
-    <?= $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
+    echo $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
         'clientOptions' => ['source' => Url::to(['devices/get-brands']),
             'autoFill' => true,
@@ -140,9 +137,9 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
             }'),
         ],
         'options' => ['class' => 'form-control', 'tabindex' => 1003]
-        ]) ?>
+        ]);
 
-    <?= $form->field($model, 'model')->textInput(['maxlength' => true])->widget(
+    echo $form->field($model, 'model')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
         'clientOptions' => ['source' => Url::to(['devices/get-models']),
             'autoFill' => true,
@@ -153,9 +150,8 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
             }')
         ],
         'options' => ['class' => 'form-control', 'tabindex' => 1004]
-    ]) ?>
+    ]);
 
-    <?php
     if ($dt_imei) {
         echo $form->field($model, 'imei1')->textInput(['maxlength' => true])->widget(
             AutoComplete::className(), [
@@ -168,21 +164,30 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
             'options' => ['class' => 'form-control', 'tabindex' => 1006]
         ]);
     }
-    ?>
 
-    <?= $form->field($model, 'specification')->textInput(['maxlength' => true])->widget(
+    echo $form->field($model, 'specification')->textInput(['maxlength' => true])->widget(
         AutoComplete::className(), [
-        'clientOptions' => ['source' => Url::to(['devices/get-specifications'])],
+        'clientOptions' => ['source' => Url::to(['devices/get-specifications']),
+            'create' => new JsExpression('function(event, ui) {
+                $("#devices-specification").autocomplete("instance")._renderItem = function(ul, item) {
+                    if (item.sort == 0){
+                        return $("<li></li>").data("item.autocomplete", item).append("<b>"+item.label+"</b>").appendTo(ul);
+                    } else {
+                        return $("<li></li>").data("item.autocomplete", item).append(item.label).appendTo(ul);
+                    }
+                }
+            }')
+        ],
         'options' => ['class' => 'form-control', 'tabindex' => 1007]
-    ]) ?>
-    <?= $form->field($model, 'device_note')->textInput(['maxlength' => true, 'tabindex' => 1008]) ?>
+    ]);
+    echo $form->field($model, 'device_note')->textInput(['maxlength' => true, 'tabindex' => 1008]);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'tabindex' => 1009]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 
 </div>
 

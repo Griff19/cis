@@ -6,10 +6,9 @@ use Yii;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Json;
 
 /**
- * This is the model class for table "devices".
+ * Модель для таблицы "devices".
  *
  * @property integer id
  * @property integer type_id
@@ -122,10 +121,9 @@ class Devices extends \yii\db\ActiveRecord
     /**
      * Валидатор проверяет уникальность мак-адреса
      * @param $attribute
-     * @param $params
+     * @internal param $params
      */
-    public function uniqueMac($attribute, $params){
-
+    public function uniqueMac($attribute){
         $mac = Netints::findAll(['mac' => $this->device_mac]);
         if ($mac) {
             $this->addError($attribute, 'Устройство с таким mac-адресом уже существует');
@@ -201,6 +199,14 @@ class Devices extends \yii\db\ActiveRecord
         return $arr->asArray()->all();
     }
 
+	/**
+     * Функция реализованная по задаче №62
+     * Собирает данные в два этапа: сначала по конкретному типу устройсва затем по всем остальным
+     * результаты оъединяет.
+     * @param $type_id
+     * @param $term
+     * @return array|int
+     */
     public static function arrBrands($type_id, $term){
         $query1 = (new Query)->select(['brand' => 'brand', 'count' => 'COUNT(*)', 'sort' => 'MAX(0)'])
             ->from("devices")
@@ -224,7 +230,7 @@ class Devices extends \yii\db\ActiveRecord
             ->from(['t' => $query1->union($query2)])
             ->orderBy(['sort' => SORT_ASC, 'count' => SORT_DESC])
             ->all();
-
+        $arr = [];
         foreach ($union as $item){
             $arr[] = ['value' => $item['brand'], 'label' => $item['brand'], 'sort' => $item['sort']];
         }
@@ -244,7 +250,7 @@ class Devices extends \yii\db\ActiveRecord
             ->groupBy('model')->orderBy('count DESC');
         if ($brand) $arr->andWhere(['brand' => $brand]);
         if ($term != ' ') $arr->andWhere(['like', 'LOWER(model)', mb_strtolower($term)]);
-        return $arr->asArray()->all();;
+        return $arr->asArray()->all();
     }
 
     /**
@@ -282,8 +288,44 @@ class Devices extends \yii\db\ActiveRecord
         return Devices::find()->select('specification as value, specification as label, COUNT(*) as count')
             ->where("specification > ''")
             ->andWhere(['type_id' => $type_id])
-            ->andWhere(['like', 'LOWER(specification)', mb_strtolower($term)])
+            ->andWhere(['ilike', 'specification', $term])
             ->groupBy('specification')->orderBy('count DESC')->asArray()->all();
+    }
+
+    /**
+     * @param $type_id
+     * @param $term
+     * @return array|int
+     */
+    public static function arrSpecifications($type_id, $term){
+        $query1 = (new Query)->select(['specification' => 'specification', 'count' => 'COUNT(*)', 'sort' => 'MAX(0)'])
+            ->from("devices")
+            ->where("specification > ''")
+            ->andWhere(['type_id' => $type_id])
+            //->andWhere(['ilike', 'brand', $term])
+            ->groupBy("specification");
+
+        $query2 = (new Query)->select(['specification' => 'specification', 'count' => 'COUNT(*)', 'sort' => 'MAX(1)'])
+            ->from("devices")
+            ->where("specification > ''")
+            ->andWhere(['not in', 'specification', $query1->column()])
+            //->andWhere(['ilike', 'brand', $term])
+            ->groupBy("specification");
+
+        if ($term != ' ') {
+            $query1->andWhere(['ilike', 'specification', $term]);
+            $query2->andWhere(['ilike', 'specification', $term]);
+        }
+        $union = (new Query())->select("specification, count, sort")
+            ->from(['t' => $query1->union($query2)])
+            ->orderBy(['sort' => SORT_ASC, 'count' => SORT_DESC])
+            ->all();
+        $arr = [];
+        foreach ($union as $item){
+            $arr[] = ['value' => $item['specification'], 'label' => $item['specification'], 'sort' => $item['sort']];
+        }
+        return $arr;
+
     }
 
     /**
