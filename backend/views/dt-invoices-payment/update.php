@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtInvoicesPayment */
 
-$this->title = 'Update Dt Invoices Payment: ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Dt Invoices Payments', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Изменить данные платежа: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Счет', 'url' => ['dt-invoices/view', 'id' => $model->dt_invoices_id]];
+//$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Изменить';
 ?>
 <div class="dt-invoices-payment-update">
 

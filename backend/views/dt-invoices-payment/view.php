@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Modal;
 use backend\models\Images;
+use backend\models\DtInvoicesPayment;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtInvoicesPayment */
@@ -16,13 +17,12 @@ Modal::begin([
     'id' => 'modalImg',
     'size' => 'modal-lg'
 ]);
-$key = md5('dt-invoices' . $model->id);
+$key = md5('dt-invoices-payment' . $model->id);
 echo Html::img('/admin/' . Images::getLinkfile($key), ['style' => 'width: 100%', 'alt' => 'Отсутствует изображение']);
 Modal::end();
 
 ?>
 <div class="dt-invoices-payment-view">
-
 
     <div class="row">
         <div class="col-sm-6">
@@ -41,10 +41,10 @@ Modal::end();
             'model' => $model,
             'attributes' => [
                 'id',
-                'dt_invoices_id',
+                ['attribute' => 'dt_invoices_id', 'label' => 'Счет №'],
                 'agreed_date',
                 'summ',
-                'employee.snp',
+                ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
                 'statusString'
             ],
             ]) ?>
@@ -52,9 +52,9 @@ Modal::end();
         <div class="col-sm-6">
             <div class="img-thumbnail img-block" style="margin-top: 20px; height: 350px">
                 <?php
-                $key = md5('dt-invoices' . $model->id);
+                $key = md5('dt-invoices-payment' . $model->id);
                 echo Html::a('Добавить/Изменить скан', ['images/index',
-                    'target' => 'dt-invoices/view',
+                    'target' => 'dt-invoices-payment/view',
                     'owner' => $key,
                     'owner_id' => $model->id]);
                 //echo Html::a('Удалить скан', '', ['class' => 'btn btn-danger', 'style' => 'float: right']);
@@ -66,4 +66,12 @@ Modal::end();
             </div>
         </div>
     </div>
+    <?php
+    if ($model->status == DtInvoicesPayment::PAY_WAITING)
+        echo Html::a('Согласовано', ['agree', 'id' => $model->id], ['class' => 'btn btn-success']);
+    if ($model->status == DtInvoicesPayment::PAY_AGREED) {
+        echo Html::a('Рассогласовать', ['disagree', 'id' => $model->id], ['class' => 'btn btn-danger']) . ' ';
+        echo Html::a('Отправить бухгалтеру', '', ['class' => 'btn btn-success']);
+    }
+    ?>
 </div>

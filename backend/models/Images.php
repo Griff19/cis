@@ -49,6 +49,11 @@ class Images extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Возвращает ссылку на изображение
+     * @param $key
+     * @return mixed
+     */
     public static function getLinkfile($key){
         $img = Images::find()->where(['owner' => $key])->one();
         //var_dump($img);

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Images;
 use Yii;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
@@ -107,6 +108,41 @@ class DtInvoicesPaymentController extends Controller
         $model->delete();
 
         return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
+    }
+
+    /**
+     * Устанавливает статус платежа "Согласован" проверив загружен ли скан счета с подписью
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionAgree($id){
+        $model = $this->findModel($id);
+        $key = md5('dt-invoices-payment' . $id);
+        if (Images::getLinkfile($key)){
+            $model->status = DtInvoicesPayment::PAY_AGREED;
+            if (!$model->save())
+                Yii::$app->session->setFlash('error', 'Не удалось сохранить платеж с новым статусом');
+        } else {
+            Yii::$app->session->setFlash('error', 'Необхожимо загрузить скан счета с подписью');
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->redirect(['dt-invoices/view','id' => $model->dt_invoices_id]);
+
+    }
+
+    /**
+     * Снимает согласование
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionDisagree($id){
+        $model = $this->findModel($id);
+        $model->status = DtInvoicesPayment::PAY_WAITING;
+        $model->save();
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**
