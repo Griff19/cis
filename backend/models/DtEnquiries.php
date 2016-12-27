@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * Модель документа "Заявка на оборудование", соответствует таблице "dt_enquiries".
@@ -17,6 +18,8 @@ use Yii;
  * @property integer status
  * @property Employees employee
  * @property string statusString
+ * @property mixed enquiryDevices
+ * @property mixed invoices
  */
 class DtEnquiries extends \yii\db\ActiveRecord
 {
@@ -99,6 +102,22 @@ class DtEnquiries extends \yii\db\ActiveRecord
 
     public function getWorkplaces(){
         return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])->viaTable('dt_enquiry_workplaces', ['dt_enquiries_id' => 'id']);
+    }
+
+    /**
+     * Связь с таблицей устройств
+     * @return ActiveRecord
+     */
+    public function getEnquiryDevices(){
+        return $this->hasMany(DtEnquiryDevices::className(), ['dt_enquiries_id' => 'id']);
+    }
+
+    /**
+     * Связь с документом "Счет"
+     * @return ActiveRecord
+     */
+    public function getInvoices(){
+        return $this->hasMany(DtInvoices::className(), ['id' => 'dt_inv_id'])->via('enquiryDevices');
     }
 
 }

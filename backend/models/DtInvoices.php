@@ -18,6 +18,7 @@ use Yii;
  * @property integer $status
  * @property integer summPay
  * @property string statusString строка статуса документа
+ * @property DtInvoiceDevices invoiceDevices
  */
 class DtInvoices extends \yii\db\ActiveRecord
 {
@@ -89,6 +90,13 @@ class DtInvoices extends \yii\db\ActiveRecord
             'summPay' => 'Сумма оплаты',
             'status' => 'Статус'
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getInvoiceDevices(){
+        return $this->hasMany(DtInvoiceDevices::className(), ['dt_invoices_id' => 'id']);
     }
 
     /**

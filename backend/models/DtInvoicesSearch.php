@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\DtInvoices;
+use yii\db\ActiveRecord;
 
 /**
  * DtInvoicesSearch represents the model behind the search form about `backend\models\DtInvoices`.
@@ -34,15 +35,18 @@ class DtInvoicesSearch extends DtInvoices
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
+     * Формируем провайдер из данных таблицы dt-invoices
+     * @param ActiveRecord $enq_invoices записи об имеющихся Счетов по текущей заявке
      * @param array $params
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $enq_invoices = null)
     {
-        $query = DtInvoices::find();
+        if ($enq_invoices)
+            $query = DtInvoices::find()->where(['IN', 'id', $enq_invoices]);
+        else
+            $query = DtInvoices::find();
 
         // add conditions that should always apply here
 

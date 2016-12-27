@@ -11,6 +11,7 @@ use backend\models\Images;
 use backend\models\Tasks;
 use backend\models\DtEnquiries;
 use backend\models\DtEnquiriesSearch;
+use backend\models\DtInvoicesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,7 +38,7 @@ class DtEnquiriesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete', 'save', 'un-save'],
+                        'actions' => ['create','update','delete', 'save', 'un-save', 'index-agree'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -219,6 +220,21 @@ class DtEnquiriesController extends Controller
         $model = DtEnquiryDevices::findOne($id);
         $model->workplace_id = $id_wp;
         $model->save();
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionIndexAgree($id) {
+        $model = $this->findModel($id);
+        $search_di = new DtInvoicesSearch();
+        $provider_di = $search_di->search(Yii::$app->request->queryParams, $model->invoices);
+        return $this->render('index_agree', [
+            'model' => $model,
+            'provider' => $provider_di
+        ]);
     }
 
     /**

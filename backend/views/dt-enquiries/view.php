@@ -35,7 +35,6 @@ Modal::end();
 	<div class="row">
 		<div class="col-sm-6">
 			<h1><?= Html::encode($this->title) ?></h1>
-
 			<p>
 				<?php
 				if ($model->status == 0) {
@@ -49,6 +48,7 @@ Modal::end();
 					]);
 				} else {
 					echo Html::a('Ввести счет', ['dt-invoices/create'], ['class' => 'btn btn-primary']);
+					echo Html::a('Согласовать', ['index-agree', 'id' => $model->id], ['class' => 'btn btn-default']);
 				} ?>
 			</p>
 

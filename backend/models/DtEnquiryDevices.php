@@ -21,7 +21,7 @@ use Yii;
  * @property integer $dt_def_dev_id
  * @property integer $workplace_id
  * @property integer $status
- * @property integer $dt_inv_id
+ * @property integer $dt_inv_id идентификатор документа "Счет"
  * @property string statusString
  * @property DtEnquiries dtEnquiry
  */
