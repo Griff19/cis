@@ -37,7 +37,7 @@ class DtInvoicesSearch extends DtInvoices
     /**
      * Формируем провайдер из данных таблицы dt-invoices
      * @param ActiveRecord $enq_invoices записи об имеющихся Счетов по текущей заявке
-     * @param array $params
+     * @param array $params (мелкие изменения)
      *
      * @return ActiveDataProvider
      */
