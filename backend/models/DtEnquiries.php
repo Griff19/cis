@@ -16,12 +16,12 @@ use yii\db\ActiveRecord;
  * @property string create_time
  * @property mixed memo
  * @property integer status
- * @property Employees employee
+ * @property \backend\models\Employees employee
  * @property string statusString
  * @property mixed enquiryDevices
  * @property mixed invoices
  */
-class DtEnquiries extends \yii\db\ActiveRecord
+class DtEnquiries extends ActiveRecord
 {
     const DTE_NEW = 0; //новый документ
     const DTE_SAVED = 1; //сохраненный документ
@@ -81,7 +81,7 @@ class DtEnquiries extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'employee_name' => 'Имя сотрудника',
-            'employee_id' => 'Ид Сотрудника',
+            'employee_id' => 'Сотрудник',
             'create_date' => 'Дата создания',
             'do_date' => 'Исполнить до',
             'create_time' => 'Время создания',
@@ -92,6 +92,9 @@ class DtEnquiries extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getEmployee(){
         return $this->hasOne(Employees::className(), ['id' => 'employee_id']);
     }

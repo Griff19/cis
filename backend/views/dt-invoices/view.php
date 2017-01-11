@@ -33,13 +33,14 @@ echo Html::img('/admin/' . Images::getLinkfile($key), ['style' => 'width: 100%',
 Modal::end();
 ?>
 <div class="dt-invoices-view">
-	<h1> <?= Html::encode($this->title) ?></h1>
+
 	<div class="row">
 		<div class="col-lg-6">
+			<h1> <?= Html::encode($this->title) ?></h1>
 			<p>
 				<?php
 				if ($model->status == DtInvoices::DOC_NEW) {
-					echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
+					echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) . ' ';
 					echo Html::a('Удалить', ['delete', 'id' => $model->id], [
 						'class' => 'btn btn-danger',
 						'data' => [
@@ -59,7 +60,8 @@ Modal::end();
 					'partner.brand',
 					'delivery_type',
 					'summ',
-					'summPay'
+					'summPay',
+					'statusString'
 				],
 			]) ?>
 		</div>

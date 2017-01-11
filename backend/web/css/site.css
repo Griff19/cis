@@ -145,7 +145,8 @@ a.delete:hover {}
 .glyphicon-pencil,
 .glyphicon-eye-close,
 .glyphicon-eye-open,
-.glyphicon-ok {
+.glyphicon-ok,
+.glyphicon-print {
     color: #777;
     font-size: large;
     line-height: normal;
@@ -153,7 +154,8 @@ a.delete:hover {}
 
 .glyphicon-pencil:hover,
 .glyphicon-eye-open:hover,
-.glyphicon-ok:hover {
+.glyphicon-ok:hover,
+.glyphicon-print:hover {
     background: linear-gradient(to left, #25e825, green);
     width: 18px;
     color: transparent;

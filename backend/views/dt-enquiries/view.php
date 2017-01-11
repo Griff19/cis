@@ -8,7 +8,6 @@ use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtEnquiries */
 /* @var $wpProvider \yii\data\ActiveDataProvider */
-$this->registerJs('Modal();');
 
 $this->title = 'Заявка №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Заявки на оборудование', 'url' => ['index']];
@@ -47,7 +46,7 @@ Modal::end();
 						],
 					]);
 				} else {
-					echo Html::a('Ввести счет', ['dt-invoices/create'], ['class' => 'btn btn-primary']);
+					echo Html::a('Ввести счет', ['dt-invoices/create'], ['class' => 'btn btn-primary']) . ' ';
 					echo Html::a('Согласовать', ['index-agree', 'id' => $model->id], ['class' => 'btn btn-default']);
 				} ?>
 			</p>

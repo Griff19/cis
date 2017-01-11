@@ -45,7 +45,7 @@ class DtInvoices extends \yii\db\ActiveRecord
         return [
             self::DOC_DEL => 'Удален',
             self::DOC_NEW => 'Новый',
-            self::DOC_SAVE => 'Сохранен',
+            self::DOC_SAVE => 'В обработке',
             self::DOC_CLOSED => 'Закрыт'
         ];
     }
@@ -88,8 +88,17 @@ class DtInvoices extends \yii\db\ActiveRecord
             'delivery_type' => 'Доставка',
             'summ' => 'Сумма',
             'summPay' => 'Сумма оплаты',
-            'status' => 'Статус'
+            'status' => 'Статус',
+            'statusString' => 'Статус',
         ];
+    }
+
+    /**
+     * Форматируем дату
+     * @return string
+     */
+    public function getDocDate(){
+        return $this->doc_date;
     }
 
     /**

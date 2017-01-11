@@ -38,7 +38,7 @@ use yii\grid\GridView;
                 'value' => function ($model) {
                     $str = $model->statusString;
                     if ($model->status == DtInvoicesPayment::PAY_AGREED) {
-                        $str = $str . ' ' . Html::a('Отправить', '', ['title' => 'отправить бухгалтеру на оплату']);
+                        $str = $str . ' ' . Html::a('(Отправить)', '', ['title' => 'отправить бухгалтеру на оплату']);
                     }
                     return  $str;
                 },

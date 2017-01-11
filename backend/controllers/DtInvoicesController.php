@@ -2,18 +2,19 @@
 
 namespace backend\controllers;
 
-use app\models\DtInvoiceDevicesSearch;
-use backend\models\DtEnquiryDevices;
-use backend\models\DtInvoiceDevices;
-use backend\models\DtInvoicesPayment;
 use Yii;
-use backend\models\DtInvoicesPaymentSearch;
+use backend\models\DtEnquiryDevices;
+//use backend\models\DtEnquiryDevicesSearch;
 use backend\models\DtInvoices;
 use backend\models\DtInvoicesSearch;
-use backend\models\DtEnquiryDevicesSearch;
+use backend\models\DtInvoiceDevices;
+use backend\models\DtInvoiceDevicesSearch;
+use backend\models\DtInvoicesPayment;
+use backend\models\DtInvoicesPaymentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
 
 /**
  * DtInvoicesController implements the CRUD actions for DtInvoices model.
@@ -55,7 +56,7 @@ class DtInvoicesController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $mode = 0)
     {
         $dt_id_search = new DtInvoiceDevicesSearch();
         $dt_id_provider = $dt_id_search->search(Yii::$app->request->queryParams, $id);
@@ -63,17 +64,52 @@ class DtInvoicesController extends Controller
         $dt_ip_search = new DtInvoicesPaymentSearch();
         $dt_ip_provider = $dt_ip_search->search(Yii::$app->request->queryParams, $id);
 
-        $dt_ed_search = new DtEnquiryDevicesSearch();
-        $dt_ed_provider = $dt_ed_search->searchDevices(Yii::$app->request->queryParams);
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'dt_id_search' => $dt_id_search,
-            'dt_id_provider' => $dt_id_provider,
-            'dt_ip_search' => $dt_ip_search,
-            'dt_ip_provider' => $dt_ip_provider,
-            'dt_ed_search' => $dt_ed_search,
-            'dt_ed_provider' => $dt_ed_provider
+//        $dt_ed_search = new DtEnquiryDevicesSearch();
+//        $dt_ed_provider = $dt_ed_search->searchDevices(Yii::$app->request->queryParams);
+
+        if ($mode == 0)
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+                'dt_id_search' => $dt_id_search,
+                'dt_id_provider' => $dt_id_provider,
+                'dt_ip_search' => $dt_ip_search,
+                'dt_ip_provider' => $dt_ip_provider,
+//                'dt_ed_search' => $dt_ed_search,
+//                'dt_ed_provider' => $dt_ed_provider
+            ]);
+        else
+            return $this->renderAjax('view_to_enquiry', [
+                'model' => $this->findModel($id),
+                //'dt_id_search' => $dt_id_search,
+                'dt_id_provider' => $dt_id_provider,
+                //'dt_ip_search' => $dt_ip_search,
+                'dt_ip_provider' => $dt_ip_provider,
+                //'dt_ed_search' => $dt_ed_search,
+                //'dt_ed_provider' => $dt_ed_provider
+            ]);
+    }
+
+    /**
+     * В тестовом режиме...
+     * Формирование pdf-документа
+     * @param $id
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
+    public function actionCreatePdf($id){
+        $model = $this->findModel($id);
+
+        $this->layout = 'pdf';
+        /** @var Pdf $pdf */
+        $pdf = Yii::$app->pdf;
+        $pdf->options = ['title' => 'Счет ID' . $model->id];
+        //$pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
+        //$pdf->content = "Содержимое";
+        $pdf->content = $this->render('pdf', [
+            'model' => $model,
         ]);
+
+        return $pdf->render();
     }
 
     /**
