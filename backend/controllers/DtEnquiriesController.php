@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Контроллер для модели документа "Заявка на оборудование"
+ */
 namespace backend\controllers;
 
 use Yii;
@@ -17,10 +19,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Html;
+use kartik\mpdf\Pdf;
 
-/**
- * DtEnquiriesController implements the CRUD actions for DtEnquiries model.
- */
 class DtEnquiriesController extends Controller
 {
     /**
@@ -33,7 +33,7 @@ class DtEnquiriesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index','view', 'pdf'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -54,7 +54,7 @@ class DtEnquiriesController extends Controller
     }
 
     /**
-     * Lists all DtEnquiries models.
+     * Формируем список документов
      * @return mixed
      */
     public function actionIndex()
@@ -69,7 +69,7 @@ class DtEnquiriesController extends Controller
     }
 
     /**
-     * Открыть документ Заявка на оборудование.
+     * Открыть документ "Заявка на оборудование"
      * @param integer $id
      * @return mixed
      */
@@ -90,8 +90,37 @@ class DtEnquiriesController extends Controller
     }
 
     /**
-     * Creates a new DtEnquiries model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Формируем pdf-версию
+     * @param $id
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
+    public function actionPdf($id){
+        $model = $this->findModel($id);
+
+        $dedSearch = new DtEnquiryDevicesSearch();
+        $dedProvider = $dedSearch->search(Yii::$app->request->queryParams);
+
+        $wpSearch = new DtEnquiryWorkplacesSearch();
+        $wpProvider = $wpSearch->search(Yii::$app->request->queryParams);
+
+        $this->layout = 'pdf';
+        /** @var Pdf $pdf */
+        $pdf = Yii::$app->pdf;
+        $pdf->options = ['title' => 'Заявка на оборудование ID' . $model->id];
+        //$pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
+        //$pdf->content = "Содержимое";
+        $pdf->content = $this->render('pdf', [
+            'model' => $model,
+            'wpProvider' => $wpProvider,
+            'dedProvider' => $dedProvider
+        ]);
+
+        return $pdf->render();
+    }
+
+    /**
+     * Создание нового документа
      * @return mixed
      */
     public function actionCreate()
@@ -115,8 +144,7 @@ class DtEnquiriesController extends Controller
     }
 
     /**
-     * Updates an existing DtEnquiries model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Редактирование документа
      * @param integer $id
      * @return mixed
      */
@@ -141,7 +169,7 @@ class DtEnquiriesController extends Controller
     }
 
     /**
-     * Удаление документа Заявка на оборудование и его табличной части
+     * Удаление документа "Заявка на оборудование" и его табличной части
      * @param integer $id
      * @return mixed
      */
@@ -223,6 +251,7 @@ class DtEnquiriesController extends Controller
     }
 
     /**
+     * Формируем страницу "Согласования" заявки
      * @param $id
      * @return string
      * @throws NotFoundHttpException
@@ -249,7 +278,7 @@ class DtEnquiriesController extends Controller
         if (($model = DtEnquiries::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
         }
     }
 }

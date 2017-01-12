@@ -12,9 +12,9 @@ return [
         'formatter' => [
             'class' => 'microinginer\humanFormatter\HumanFormatter',
             'locale' => 'ru-RU',
-            'dateFormat' => 'yyyy-MM-dd',
+            'dateFormat' => 'dd.MM.y',
             'timeFormat' => 'H:mm:ss',
-            'datetimeFormat' => 'dd.MM.Y H:mm:ss',
+            'datetimeFormat' => 'dd.MM.y H:mm:ss',
             'defaultTimeZone' => 'Asia/Krasnoyarsk',
             'nullDisplay' => '-'
         ],

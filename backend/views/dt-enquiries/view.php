@@ -49,6 +49,11 @@ Modal::end();
 					echo Html::a('Ввести счет', ['dt-invoices/create'], ['class' => 'btn btn-primary']) . ' ';
 					echo Html::a('Согласовать', ['index-agree', 'id' => $model->id], ['class' => 'btn btn-default']);
 				} ?>
+				<?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/pdf', 'id' => $model->id], [
+					'class' => 'btn btn-default',
+					'style' => 'padding: 3px 6px',
+					'title' => 'Открыть PDF'
+				]); ?>
 			</p>
 
 			<?= DetailView::widget([
@@ -58,8 +63,8 @@ Modal::end();
 					['attribute' => 'employee_id',
 						'value' => $model->employee ? $model->employee->snp : '',
 					],
-					'create_date',
-					'do_date',
+					'create_date:date',
+					'do_date:date',
 					'create_time:datetime',
 					//'workplace_id',
 //                    ['label' => 'Ответственный',

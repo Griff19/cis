@@ -1,15 +1,18 @@
 <?php
 /**
+ * Представление pdf-версии документа "Счет" (dt-invoices/create-pdf)
+ */
+use yii\widgets\DetailView;
+
+/**
  * @var $model \backend\models\DtInvoices
  */
-//use yii\helpers\Html;
-use yii\grid\GridView;
-//use yii\grid\Column;
+
 ?>
 
 <h3> Документ счет. Тест. </h3>
 
-<?= \yii\widgets\DetailView::widget([
+<?= DetailView::widget([
     'model' => $model,
     'attributes' => [
         'id',

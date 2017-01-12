@@ -4,6 +4,7 @@ namespace backend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use DateTime;
 
 /**
  * Модель документа "Заявка на оборудование", соответствует таблице "dt_enquiries".
@@ -83,13 +84,30 @@ class DtEnquiries extends ActiveRecord
             'employee_name' => 'Имя сотрудника',
             'employee_id' => 'Сотрудник',
             'create_date' => 'Дата создания',
+            'createDate' => 'Дата создания',
             'do_date' => 'Исполнить до',
+            'doDate' => 'Исполнить до',
             'create_time' => 'Время создания',
-            //'workplace_id' => 'Номер рабочего места',
             'memo' => 'Есть служебка',
             'status' => 'Статус',
             'statusString' => 'Статус',
         ];
+    }
+
+    /**
+     * Форматируем дату создания документа
+     * @return string
+     */
+    public function getCreateDate(){
+        return Yii::$app->formatter->asDate($this->create_date);
+    }
+
+    /**
+     * Форматируем дату исполнения документа
+     * @return string
+     */
+    public function getDoDate(){
+        return Yii::$app->formatter->asDate($this->do_date);
     }
 
     /**
