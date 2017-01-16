@@ -6,7 +6,7 @@ use backend\models\User;
 use yii\jui\AutoComplete;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Tasks */
+/* @var $model backend\models\Message */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 

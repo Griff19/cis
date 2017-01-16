@@ -2,10 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\Tasks;
+use backend\models\Message;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Tasks */
+/* @var $model backend\models\Message */
 
 $this->title = $model->subject;
 $this->params['breadcrumbs'][] = ['label' => 'Сообщения', 'url' => ['index']];
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if ($model->status < Tasks::STATUS_READ)
+        if ($model->status < Message::STATUS_READ)
             echo Html::a('Прочитано', ['read', 'id' => $model->id],
                 ['class' => 'btn btn-success', 'title' => 'Отметить как прочитанное']);
         else {
@@ -37,7 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             //'id',
-            'date_send',
+            'stringType',
+            'stringStatus',
+            'date_send:datetime',
+            ['attribute' => 'from_user_id',
+                'value' => $model->userFrom ? $model->userFrom->username : null
+            ],
+            ['attribute' => 'Имя От кого:',
+                'value' => $model->employeeFrom ? $model->employeeFrom->snp : null
+            ],
             ['attribute' => 'user_id',
                 'value' => $model->userTo->username,
             ],
@@ -45,18 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $model->employeeTo->snp
             ],
             'subject',
-            'stringType',
             ['attribute' => 'content',
                 'format' => 'raw'
             ],
-            'stringStatus',
             'date_complete',
-            ['attribute' => 'from_user_id',
-                'value' => $model->userFrom ? $model->userFrom->username : null
-            ],
-            ['attribute' => 'Имя От кого:',
-                'value' => $model->employeeFrom ? $model->employeeFrom->snp : null
-            ]
+
         ],
     ]) ?>
 

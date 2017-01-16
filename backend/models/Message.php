@@ -3,9 +3,10 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
- * Модель для таблицы "tasks".
+ * Модель для таблицы "message".
  *
  * @property integer $id идентификатор сообщения-задачи
  * @property integer $user_id идентификатор пользователя-получателя
@@ -25,7 +26,7 @@ use Yii;
  * @property string stringType строковое представление типа сообщения
  * @property string stringStatus строковое представление статуса сообщения
  */
-class Tasks extends \yii\db\ActiveRecord
+class Message extends ActiveRecord
 {
 	const STATUS_DELETED = 0;
 	const STATUS_CREATED = 1;
@@ -47,7 +48,7 @@ class Tasks extends \yii\db\ActiveRecord
 	 * @inheritdoc
 	 */
 	public static function tableName() {
-		return 'tasks';
+		return 'message';
 	}
 
 	/**
@@ -90,10 +91,12 @@ class Tasks extends \yii\db\ActiveRecord
 	 * @param string $subject тема
 	 * @param integer $type тип сообщения 1 - задача, 2 - сообщение
 	 * @param string $content тело сообщения
+	 * @param null $target
+	 * @param null $target_id
 	 * @return bool|string
 	 */
 	public static function Create($user_id = null, $subject, $type, $content, $target = null, $target_id = null) {
-		$task = new Tasks();
+		$task = new Message();
 		$task->user_id = $user_id;
 		$task->subject = $subject;
 		$task->type = $type;
@@ -112,7 +115,7 @@ class Tasks extends \yii\db\ActiveRecord
 	 * @return int|string
 	 */
 	public static function CountNewMessage() {
-		$countNew = Tasks::find()->where(['user_id' => Yii::$app->user->id])
+		$countNew = Message::find()->where(['user_id' => Yii::$app->user->id])
 			->andWhere(['status' => self::STATUS_CREATED])
 			->count();
 		return $countNew;
@@ -123,7 +126,7 @@ class Tasks extends \yii\db\ActiveRecord
 	 * @return int|string
 	 */
 	public static function CountMessage() {
-		$count = Tasks::find()->where(['user_id' => Yii::$app->user->id])->count();
+		$count = Message::find()->where(['user_id' => Yii::$app->user->id])->count();
 		return $count;
 	}
 

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Tasks */
+/* @var $model backend\models\Message */
 
 $this->title = 'Новое сообщение';
 $this->params['breadcrumbs'][] = ['label' => 'Сообщения', 'url' => ['index']];

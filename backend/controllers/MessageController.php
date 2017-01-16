@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Tasks;
-use backend\models\TasksSearch;
+use backend\models\Message;
+use backend\models\MessageSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * TasksController implements the CRUD actions for Tasks model.
  */
-class TasksController extends Controller
+class MessageController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,12 +30,12 @@ class TasksController extends Controller
     }
 
     /**
-     * Lists all Tasks models.
-     * @return mixed
+     * @param null $mode
+     * @return string
      */
     public function actionIndex($mode = null)
     {
-        $searchModel = new TasksSearch();
+        $searchModel = new MessageSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $mode);
 
         return $this->render('index', [
@@ -45,9 +45,9 @@ class TasksController extends Controller
     }
 
     /**
-     * Displays a single Tasks model.
-     * @param integer $id
-     * @return mixed
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -57,15 +57,13 @@ class TasksController extends Controller
     }
 
     /**
-     * Creates a new Tasks model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Tasks();
+        $model = new Message();
         $model->from_user_id = Yii::$app->user->id;
-        $model->type = Tasks::TYPE_MESSAGE;
+        $model->type = Message::TYPE_MESSAGE;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -77,8 +75,6 @@ class TasksController extends Controller
     }
 
     /**
-     * Updates an existing Tasks model.
-     * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
@@ -96,8 +92,6 @@ class TasksController extends Controller
     }
 
     /**
-     * Deletes an existing Tasks model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
@@ -117,10 +111,10 @@ class TasksController extends Controller
     public function actionRead($id){
         $model = $this->findModel($id);
 
-        $model->status = Tasks::STATUS_READ;
+        $model->status = Message::STATUS_READ;
         if ($model->save())
             Yii::$app->session->setFlash('success', 'Сообщение прочитано.');
-        return $this->redirect(['tasks/view', 'id' => $id]);
+        return $this->redirect(['message/view', 'id' => $id]);
     }
 
     /**
@@ -132,25 +126,23 @@ class TasksController extends Controller
     public function actionNotRead($id){
         $model = $this->findModel($id);
 
-        $model->status = Tasks::STATUS_CREATED;
+        $model->status = Message::STATUS_CREATED;
         if ($model->save())
             Yii::$app->session->setFlash('error', 'Сообщение не прочитано.');
-        return $this->redirect(['tasks/view', 'id' => $id]);
+        return $this->redirect(['message/view', 'id' => $id]);
     }
 
     /**
-     * Finds the Tasks model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Tasks the loaded model
+     * @return Message the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Tasks::findOne($id)) !== null) {
+        if (($model = Message::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
         }
     }
 }

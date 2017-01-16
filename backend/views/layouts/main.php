@@ -9,7 +9,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
-use backend\models\Tasks;
+use backend\models\Message;
 
 AppAsset::register($this);
 ?>
@@ -41,16 +41,16 @@ AppAsset::register($this);
         ['label' => 'Главная', 'url' => ['/site/index']]
     ];
     if (Yii::$app->user->can('admin')) {
-        $label = Html::tag('span', Tasks::CountNewMessage() ? : Tasks::CountMessage(),
-            ['class' => Tasks::CountNewMessage() ? 'label label-danger' : 'label label-default']);
-        $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/tasks']];
+        $label = Html::tag('span', Message::CountNewMessage() ? : Message::CountMessage(),
+            ['class' => Message::CountNewMessage() ? 'label label-danger' : 'label label-default']);
+        $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/message']];
         $menuItems[] = ['label' => 'Страница Админа', 'url' => ['/site/admin']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/inventory-acts']];
 
     } elseif (Yii::$app->user->can('it')) {
-        $label = Html::tag('span', Tasks::CountNewMessage() ? : Tasks::CountMessage(),
-            ['class' => Tasks::CountNewMessage() ? 'label label-danger' : 'label label-default']);
-        $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/tasks']];
+        $label = Html::tag('span', Message::CountNewMessage() ? : Message::CountMessage(),
+            ['class' => Message::CountNewMessage() ? 'label label-danger' : 'label label-default']);
+        $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/message']];
         $menuItems[] = ['label' => 'Для сотруднков IT', 'url' => ['/site/employee-it']];
         //$menuItems[] = ['label' => 'Рабочие места', 'url' => ['/site/admin_workplace']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/workplaces']];

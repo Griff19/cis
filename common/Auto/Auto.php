@@ -309,9 +309,9 @@ class Main
 
         //запрос для создания сообщения администратору
         $message = $db->prepare("
-            INSERT INTO tasks (user_id, subject, content, target, target_id)
+            INSERT INTO message (user_id, subject, content, target, target_id)
             VALUES (1, 'Отсутствует сотрудник', :content, :target, :target_id);
-            INSERT INTO tasks (user_id, subject, content, target, target_id)
+            INSERT INTO message (user_id, subject, content, target, target_id)
             VALUES (5, 'Отсутствует сотрудник', :content, :target, :target_id);
         ");
 

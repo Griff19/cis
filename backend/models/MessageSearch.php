@@ -5,12 +5,11 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Tasks;
 
 /**
- * TasksSearch represents the model behind the search form about `backend\models\Tasks`.
+ * MessageSearch represents the model behind the search form about `backend\models\Message`.
  */
-class TasksSearch extends Tasks
+class MessageSearch extends Message
 {
     /**
      * @inheritdoc
@@ -33,19 +32,17 @@ class TasksSearch extends Tasks
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
+     * @param $params
+     * @param null $mode
      * @return ActiveDataProvider
      */
     public function search($params, $mode = null)
     {
         if ($mode)
-            $query = Tasks::find();
+            $query = Message::find();
         else {
             $usrid = Yii::$app->user->id;
-            $query = Tasks::find()->where(['user_id' => $usrid])->orWhere(['from_user_id' => $usrid]);
+            $query = Message::find()->where(['user_id' => $usrid])->orWhere(['from_user_id' => $usrid]);
         }
 
         // add conditions that should always apply here
