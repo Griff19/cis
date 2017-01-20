@@ -16,6 +16,7 @@ use Yii;
  * @property integer $status
  * @property DtInvoices dtInvoice
  * @property Employees employee
+ * @property mixed agreedDate
  */
 class DtInvoicesPayment extends \yii\db\ActiveRecord
 {
@@ -46,6 +47,21 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
             ['employee_name', 'string', 'max' => 255]
         ];
     }
+
+	/**
+	 * Перед сохранением меняем формат даты для хранения в базе
+	 * @return bool
+	 * @internal param bool $insert
+	 */
+	public function beforeSave()
+	{
+		if (parent::beforeSave(true)) {
+			$this->agreed_date = (new \DateTime($this->agreed_date))->format('Y-m-d');
+			return true;
+		} else {
+			return false;
+		}
+	}
 
     /**
      * @return array

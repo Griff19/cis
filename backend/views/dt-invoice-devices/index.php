@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Устройства в счете
+ * Представление встраивается в представление документа "Счет" (dt-invoices/view)
+ * отображает список устройств которые будут оплачиваться данным счетом
+ */
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoices;
@@ -8,7 +12,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $modelDoc \backend\models\DtInvoices */
-/* @var $searchModel app\models\DtInvoiceDevicesSearch */
+/* @var $searchModel backend\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>

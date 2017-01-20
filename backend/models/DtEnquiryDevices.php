@@ -1,17 +1,15 @@
 <?php
+/**
+ * Модель "Устройства в заявке на оборудование" таблица "dt_enquiry_devices"
+ * Отвечает за данные по устройствам, отраженным в документе "Заявка на оборудование" (DtEnquiries)
+ */
 
 namespace backend\models;
 
 use Yii;
-//use yii\bootstrap\ActiveField;
-//use yii\bootstrap\Dropdown;
-//use yii\helpers\Html;
-//use yii\web\JsExpression;
+use yii\db\ActiveRecord;
 
 /**
- * Модель для таблицы "dt_enquiry_devices".
- * Документ "Заявка на оборудование"
- *
  * @property integer $dt_enquiries_id
  * @property integer $type_id
  * @property integer $parent_device_id
@@ -25,7 +23,7 @@ use Yii;
  * @property string statusString
  * @property DtEnquiries dtEnquiry
  */
-class DtEnquiryDevices extends \yii\db\ActiveRecord
+class DtEnquiryDevices extends ActiveRecord
 {
     const RESERVED = 1; //зарезервировано
     const NEED_BUY = 2; //требуется покупка

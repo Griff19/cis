@@ -31,7 +31,7 @@ use yii\grid\GridView;
 
             //'id',
             //'dt_invoices_id',
-            'agreed_date',
+            'agreed_date:date',
             'summ',
             ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
             ['attribute' => 'status',

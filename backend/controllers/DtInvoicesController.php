@@ -98,6 +98,13 @@ class DtInvoicesController extends Controller
      */
     public function actionCreatePdf($id){
         $model = $this->findModel($id);
+		//устройства в счете
+		$dt_id_search = new DtInvoiceDevicesSearch();
+		$dt_id_provider = $dt_id_search->search(Yii::$app->request->queryParams, $id);
+		//оплаты по счету
+		$dt_ip_search = new DtInvoicesPaymentSearch();
+		$dt_ip_provider = $dt_ip_search->search(Yii::$app->request->queryParams, $id);
+
 
         $this->layout = 'pdf';
         /** @var Pdf $pdf */
@@ -107,6 +114,8 @@ class DtInvoicesController extends Controller
         //$pdf->content = "Содержимое";
         $pdf->content = $this->render('pdf', [
             'model' => $model,
+			'dt_id_provider' => $dt_id_provider,
+			'dt_ip_provider' => $dt_ip_provider
         ]);
 
         return $pdf->render();

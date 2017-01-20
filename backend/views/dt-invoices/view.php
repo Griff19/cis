@@ -56,7 +56,7 @@ Modal::end();
 				'attributes' => [
 					'id',
 					'doc_number',
-					'doc_date',
+					'doc_date:date',
 					'partner.brand',
 					'delivery_type',
 					'summ',

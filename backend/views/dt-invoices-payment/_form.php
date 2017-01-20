@@ -20,7 +20,7 @@ use yii\web\JsExpression;
 
     <?=
     $form->field($model, 'agreed_date')->widget(DatePicker::className(), [
-        'dateFormat' => 'yyyy-MM-dd',
+        'dateFormat' => 'dd.MM.y',
         'options' => ['class' => 'form-control']
     ])
     ?>

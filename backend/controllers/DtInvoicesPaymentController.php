@@ -70,9 +70,9 @@ class DtInvoicesPaymentController extends Controller
         $model->status = DtInvoicesPayment::PAY_AGREED;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $invoice = DtInvoices::findOne($model->dt_invoices_id);
-            $invoice->status = DtInvoices::DOC_SAVE;
-            $invoice->save();
+            //$invoice = DtInvoices::findOne($model->dt_invoices_id);
+            //$invoice->status = DtInvoices::DOC_SAVE;
+            //$invoice->save();
             return $this->redirect(['dt-invoices/view', 'id' => $id]);
         } else {
             return $this->render('create', [

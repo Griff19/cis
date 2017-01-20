@@ -1,16 +1,19 @@
 <?php
+/**
+ * Модель "Устройства в Счете" таблица "dt_invoice_devices"
+ * Отвечает за данные по устройствам, отраженным в документе "Счет" (DtInvoices)
+ */
 
 namespace backend\models;
 
 use Yii;
 
 /**
- * Модель для таблицы "dt_invoice_devices".
- *
  * @property integer $id
  * @property integer $dt_invoices_id
  * @property string $price
- * @property integer $status
+ * @property integer $status имеет ту же расшифровку что и DtEnquiryDevices
+ * @property string statusString
  * @property string $note
  * @property integer $type_id
  * @property integer $dt_enquiries_id
@@ -40,6 +43,15 @@ class DtInvoiceDevices extends \yii\db\ActiveRecord
             [['note'], 'string', 'max' => 255],
         ];
     }
+
+	/**
+	 * Получаем строку статуса. Массив строк получаем из аналогичной модели "Устройства в заявке на оборудование"
+	 * @return string
+	 */
+	public function getStatusString(){
+		$arr = DtEnquiryDevices::arrStatusString();
+		return $arr[$this->status];
+	}
 
     /**
      * @return \yii\db\ActiveQuery

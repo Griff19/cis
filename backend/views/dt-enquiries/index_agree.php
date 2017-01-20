@@ -21,7 +21,8 @@ echo '<div id = "modalContent"> Загрузка...</div>';
 Modal::end();
 ?>
 
-<h1> Согласование Заявки </h1>
+<h1> Согласование Заявки на оборудование </h1>
+<?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/pdf', 'id' => $model->id], ['class' => 'btn btn-default'])?>
 <?= \yii\widgets\DetailView::widget([
 	'model' => $model,
 	'attributes' => [
@@ -29,8 +30,8 @@ Modal::end();
 		['attribute' => 'employee_id',
 			'value' => $model->employee ? $model->employee->snp : null
 		],
-		'create_date',
-		'do_date',
+		'create_date:date',
+		'do_date:date',
 		'create_time:datetime',
 	]
 ])?>
