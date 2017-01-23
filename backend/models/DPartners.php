@@ -12,6 +12,13 @@ use Yii;
  * @property string $type_partner
  * @property string $brand
  * @property string $inn
+ * @property string $legal_address
+ * @property string $mailing_address
+ * @property string $ogrn
+ * @property string $kpp
+ * @property string $bik
+ * @property string $check_account
+ * @property string $corr_account
  *
  * @property DDocsAcc[] $dDocsAccs
  * @property DPartnerContacts[] $dPartnerContacts
@@ -33,9 +40,14 @@ class DPartners extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name_partner', 'brand'], 'string', 'max' => 255],
-            [['type_partner'], 'string', 'max' => 10],
-            [['inn'], 'string', 'max' => 12],
+            [['name_partner', 'brand', 'legal_address', 'mailing_address'], 'string', 'max' => 255],
+            [['kpp', 'bik'], 'string', 'max' => 9],
+			['type_partner', 'string', 'max' => 10],
+			['inn', 'string', 'max' => 12],
+			['ogrn', 'string', 'min' => 13, 'max' => 13],
+			['corr_account', 'string', 'min' => 20, 'max' => 20],
+			['check_account', 'string', 'min' => 20, 'max' => 25],
+			[['check_account', 'corr_account', 'kpp', 'bik', 'inn', 'ogrn'], 'match', 'pattern' => '/[0-9]/', 'message' => 'Поле "{attribute}" должно содержать только цифры'],
         ];
     }
 
@@ -50,6 +62,13 @@ class DPartners extends \yii\db\ActiveRecord
             'type_partner' => 'Форма собственности',
             'brand' => 'Наименование',
             'inn' => 'ИНН',
+			'legal_address' => 'Юр. адрес',
+			'mailing_address' => 'Почтовый адрес',
+			'ogrn' => 'ОГРН',
+			'kpp' => 'КПП',
+			'bik' => 'БИК',
+			'check_account' => 'Расченый счет',
+			'corr_account' => 'Корр. счет'
         ];
     }
 

@@ -29,6 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'type_partner',
             'brand',
             'inn',
+//			'legal_address',
+			'mailing_address',
+//			'ogrn',
+//			'kpp',
+//			'bik',
+//			'check_account',
+//			'corr_account',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

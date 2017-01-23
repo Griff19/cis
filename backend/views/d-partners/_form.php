@@ -20,6 +20,20 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'inn')->textInput(['maxlength' => true]) ?>
 
+	<?= $form->field($model, 'legal_address')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'mailing_address')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'ogrn')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'kpp')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'bik')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'check_account')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'corr_account')->textInput(['maxlength' => true]) ?>
+
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

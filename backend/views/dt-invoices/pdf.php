@@ -4,7 +4,7 @@
  */
 
 use backend\models\DeviceType;
-use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoicesPayment;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -28,10 +28,11 @@ use yii\helpers\Html;
 		'partner.brand',
 		'delivery_type',
 		'summ',
-		'summPay',
+		['attribute' => 'summPay', 'label' => 'Уже оплачено'],
 		'statusString'
     ]
 ])?>
+
 <h4>Оплачиваемые устройства:</h4>
 <?= GridView::widget([
 	'dataProvider' => $dt_id_provider,
@@ -66,4 +67,11 @@ use yii\helpers\Html;
 	'dataProvider' => $dt_ip_provider,
 	'tableOptions' => ['class' => 'table table-striped table-condensed', 'style' => 'font-size: 12px'],
 	'layout' => '{items}',
+	'columns' => [
+		['class' => 'yii\grid\SerialColumn'],
+		['attribute' => 'agreed_date', 'header' => 'Дата согласования', 'format' => 'date'],
+		['attribute' => 'summ', 'header' => 'Сумма'],
+		['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
+		['attribute' => 'status', 'header' => 'Статус', 'value' => 'statusString'],
+	]
 ])?>

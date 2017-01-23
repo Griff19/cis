@@ -20,6 +20,7 @@ class DPartnersSearch extends DPartners
         return [
             [['id'], 'integer'],
             [['name_partner', 'type_partner', 'brand', 'inn'], 'safe'],
+			['mailing_address', 'string']
         ];
     }
 
@@ -33,7 +34,6 @@ class DPartnersSearch extends DPartners
     }
 
     /**
-     * Creates data provider instance with search query applied
      *
      * @param array $params
      *
@@ -65,7 +65,8 @@ class DPartnersSearch extends DPartners
         $query->andFilterWhere(['like', 'name_partner', $this->name_partner])
             ->andFilterWhere(['like', 'type_partner', $this->type_partner])
             ->andFilterWhere(['like', 'brand', $this->brand])
-            ->andFilterWhere(['like', 'inn', $this->inn]);
+            ->andFilterWhere(['like', 'inn', $this->inn])
+			->andFilterWhere(['ilike', 'mailing_address', $this->mailing_address]);
 
         return $dataProvider;
     }
