@@ -27,7 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('Редактировать', ['update', 'id' => $model->id, ], ['class' => 'btn btn-primary', 'data-method' => 'POST']) ?>
         <?= Html::a('Назначить рабочее место', ['workplaces/index', 'mode' => 'sel', 'target' => 'devices/addtowp', 'target_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?php
+        <?= Html::a('История', ['storydevice/index', 'id_dev' => $model->id])?>
+		<?php
         if (Yii::$app->user->can('admin'))
             echo Html::a('Удалить', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-danger',
