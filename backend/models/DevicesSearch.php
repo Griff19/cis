@@ -87,7 +87,7 @@ class DevicesSearch extends Devices
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false
+            'pagination' => ['defaultPageSize' => 50]
         ]);
 
         $dataProvider->setSort([
