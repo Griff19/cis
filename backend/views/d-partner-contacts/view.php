@@ -6,8 +6,8 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DPartnerContacts */
 
-$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Dpartner Contacts', 'url' => ['index']];
+$this->title = $model->full_name;
+$this->params['breadcrumbs'][] = ['label' => $model->partner->name_partner, 'url' => ['d-partners/view', 'id' => $model->partner_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="dpartner-contacts-view">
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Хотите удалить этот контакт?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -32,9 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'full_name',
             'job_title',
             'phone1',
-            'phone2',
-            'email:email',
-            'partner_id',
+			'phone2',
+            'add_number',
+			'email:email',
+			'icq',
+            //'partner_id',
             'title',
         ],
     ]) ?>

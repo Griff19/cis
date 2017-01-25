@@ -28,12 +28,10 @@ use yii\grid\GridView;
             'job_title',
             'phone1',
             'phone2',
-            // 'email:email',
-            // 'partner_id',
-            // 'title',
+			'add_number',
 
             ['class' => 'yii\grid\ActionColumn',
-                'template' => '{update} {delete}',
+                //'template' => '{update}{delete}',
                 'controller' => 'd-partner-contacts'
             ],
         ],

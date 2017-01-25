@@ -20,7 +20,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'phone2')->textInput(['maxlength' => true]) ?>
 
+	<?= $form->field($model, 'add_number')->textInput(['maxlength' => true])?>
+
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'icq')->textInput(['maxlength' => true])?>
 
     <?php //echo $form->field($model, 'partner_id')->textInput() ?>
 
