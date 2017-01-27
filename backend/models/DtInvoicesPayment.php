@@ -42,26 +42,35 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     {
         return [
             [['dt_invoices_id', 'employee_id', 'status'], 'integer'],
-            [['agreed_date'], 'date', 'format' => 'Y-m-d'],
+            [['agreed_date'], 'date'],
             [['summ'], 'number'],
             ['employee_name', 'string', 'max' => 255]
         ];
     }
 
+	public function scenarios(){
+		$scenario = parent::scenarios();
+		$scenario['insert'] = ['dt_invoices_id', 'employee_id', 'status', 'agreed_date', 'summ', 'employee_name'];
+		$scenario['update'] = ['dt_invoices_id', 'employee_id', 'status', 'summ', 'employee_name'];
+		return $scenario;
+	}
+
 	/**
 	 * Перед сохранением меняем формат даты для хранения в базе
+	 * @param bool $insert
 	 * @return bool
 	 * @internal param bool $insert
 	 */
-//	public function beforeSave()
-//	{
-//		if (parent::beforeSave()) {
-//			$this->agreed_date = (new \DateTime($this->agreed_date))->format('Y-m-d');
-//			return true;
-//		} else {
-//			return false;
-//		}
-//	}
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			$this->agreed_date = (new \DateTime($this->agreed_date))->format('Y-m-d');
+
+			return true;
+		} else {
+			return false;
+		}
+	}
 
     /**
      * @return array

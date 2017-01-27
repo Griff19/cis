@@ -69,10 +69,12 @@ class DtInvoicesPaymentController extends Controller
         $model->dt_invoices_id = $id;
         $model->status = DtInvoicesPayment::PAY_AGREED;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            //$model->agreed_date = (new \DateTime ($model->agreed_date))->format('yyyy-mm-dd');
             //$invoice = DtInvoices::findOne($model->dt_invoices_id);
             //$invoice->status = DtInvoices::DOC_SAVE;
             //$invoice->save();
+			$model->save();
             return $this->redirect(['dt-invoices/view', 'id' => $id]);
         } else {
             return $this->render('create', [
@@ -159,6 +161,7 @@ class DtInvoicesPaymentController extends Controller
 	 */
 	public function actionSetStatus($id, $status, $mode = 0){
 		$model = $this->findModel($id);
+		$model->scenario = 'update';
 		$model->status = $status;
 		if (!$model->save())
 			Yii::$app->session->setFlash('error', serialize($model->getErrors()));
