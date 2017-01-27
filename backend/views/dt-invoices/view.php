@@ -8,8 +8,14 @@ use yii\bootstrap\Modal;
 use backend\models\Images;
 use backend\models\DtInvoices;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\DtInvoices */
+/**
+ * @var $this yii\web\View
+ * @var $model backend\models\DtInvoices
+ * @var $dt_id_provider \yii\data\ActiveDataProvider
+ * @var $dt_ip_provider \yii\data\ActiveDataProvider
+ * @var $dt_id_search \backend\models\DtInvoiceDevicesSearch
+ * @var $dt_ip_search \backend\models\DtInvoicesPaymentSearch
+ */
 
 $this->registerAssetBundle('backend\assets\ModalAsset');
 
@@ -49,6 +55,7 @@ Modal::end();
 						],
 					]) . ' ';
 				}
+
 				echo Html::a('<span class="glyphicon glyphicon-print"></span> <b>PDF</b>',['dt-invoices/create-pdf', 'id' => $model->id],[
 					'class' => 'btn btn-default',
 					'style' => 'padding: 3px 6px',

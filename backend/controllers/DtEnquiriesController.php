@@ -5,12 +5,12 @@
 namespace backend\controllers;
 
 use Yii;
+use backend\models\Message;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtEnquiryDevicesSearch;
 use backend\models\DtEnquiryWorkplacesSearch;
 use backend\models\User;
 use backend\models\Images;
-use backend\models\Tasks;
 use backend\models\DtEnquiries;
 use backend\models\DtEnquiriesSearch;
 use backend\models\DtInvoicesSearch;
@@ -210,7 +210,7 @@ class DtEnquiriesController extends Controller
             $model->status = DtEnquiries::DTE_SAVED;
             if ($model->save()) {
                 DtEnquiryDevices::updateAll(['status' => 3], ['dt_enquiries_id' => $id, 'status' => 2]);
-                Tasks::Create(Yii::$app->user->id, 'Запросить счет по заявке №' . $id, 1,
+                Message::Create(Yii::$app->user->id, 'Запросить счет по заявке №' . $id, 1,
                     "Вы создали и сохранили документ " . Html::a('Заявка на устройства №' . $id, ['dt-enquiries/view', 'id' => $id]) . ". \r\n
                         Теперь вам необходимо установить зарезервированное оборудование и запросить счет у поставщика.", 'DtEnquiries', $id
                 );
@@ -232,7 +232,7 @@ class DtEnquiriesController extends Controller
         $model->status = DtEnquiries::DTE_NEW;
         if ($model->save()) {
             DtEnquiryDevices::updateAll(['status' => 2], ['dt_enquiries_id' => $id, 'status' => 3]);
-            Tasks::deleteAll(['target' => 'DtEnquiries', 'target_id' => $id]);
+            Message::deleteAll(['target' => 'DtEnquiries', 'target_id' => $id]);
         }
         return $this->redirect(['view', 'id' => $id]);
     }
