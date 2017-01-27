@@ -10,22 +10,30 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 
 /**
- * @var $model \backend\models\DtInvoices3
- * @var $dt_id_provider \yii\data\ActiveDataProvider
- * @var $dt_ip_provider \yii\data\ActiveDataProvider
+ * @var \backend\models\DtInvoices $model
+ * @var \yii\data\ActiveDataProvider $dt_id_provider
+ * @var \yii\data\ActiveDataProvider $dt_ip_provider
  */
 
 ?>
 
-<h3> Счет №<?= $model->doc_number ?> </h3>
+<h3> Счет №<?= $model->doc_number ?> от <?= $model->docDate ?></h3>
 
 <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
-		'id',
-		'doc_number',
-		'doc_date:date',
-		'partner.brand',
+		//'id',
+		//'doc_number',
+		//'doc_date:date',
+
+		['attribute' => 'partner.name_partner',
+			'value' => $model->partner->type_partner . ' ' . $model->partner->name_partner
+		],
+		'partner.inn',
+		'partner.legal_address',
+		'partner.bik',
+		'partner.check_account',
+		'partner.corr_account',
 		'delivery_type',
 		'summ',
 		['attribute' => 'summPay', 'label' => 'Уже оплачено'],

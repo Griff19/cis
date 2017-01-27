@@ -42,7 +42,7 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     {
         return [
             [['dt_invoices_id', 'employee_id', 'status'], 'integer'],
-            [['agreed_date'], 'date'],
+            [['agreed_date'], 'date', 'format' => 'Y-m-d'],
             [['summ'], 'number'],
             ['employee_name', 'string', 'max' => 255]
         ];
@@ -53,15 +53,15 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
 	 * @return bool
 	 * @internal param bool $insert
 	 */
-	public function beforeSave()
-	{
-		if (parent::beforeSave(true)) {
-			$this->agreed_date = (new \DateTime($this->agreed_date))->format('Y-m-d');
-			return true;
-		} else {
-			return false;
-		}
-	}
+//	public function beforeSave()
+//	{
+//		if (parent::beforeSave()) {
+//			$this->agreed_date = (new \DateTime($this->agreed_date))->format('Y-m-d');
+//			return true;
+//		} else {
+//			return false;
+//		}
+//	}
 
     /**
      * @return array
@@ -71,7 +71,7 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
             self::PAY_DELETE => 'Удален',
             self::PAY_WAITING => 'Согласовывается',
             self::PAY_AGREED => 'Согласован',
-            self::PAY_REFER => 'Передан',
+            self::PAY_REFER => 'Оплачивается',
             self::PAY_OK => 'Оплачен'
         ];
     }

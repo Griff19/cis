@@ -105,7 +105,6 @@ class DtInvoicesController extends Controller
 		$dt_ip_search = new DtInvoicesPaymentSearch();
 		$dt_ip_provider = $dt_ip_search->search(Yii::$app->request->queryParams, $id);
 
-
         $this->layout = 'pdf';
         /** @var Pdf $pdf */
         $pdf = Yii::$app->pdf;
@@ -117,7 +116,6 @@ class DtInvoicesController extends Controller
 			'dt_id_provider' => $dt_id_provider,
 			'dt_ip_provider' => $dt_ip_provider
         ]);
-
         return $pdf->render();
     }
 

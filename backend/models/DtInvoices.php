@@ -1,24 +1,28 @@
 <?php
+/**
+ * Модель документа "Счет", таблица "dt_invoices".
+ * Содержит информацию по оплачиваемым устройствам и произведенным платежам
+ */
 
 namespace backend\models;
 
 use Yii;
 
 /**
- * Модель для таблицы "dt_invoices".
- * Документ "Счет"
- *
  * @property integer $id
  * @property string $doc_number
  * @property string $doc_date
  * @property integer $d_partners_id
  * @property integer $delivery_type
  * @property string $summ
- * @property string $d_partners_name переменная для подстановки имени контрагента и определени ИД
+ * @property string $d_partners_name Переменная для подстановки имени контрагента и определени ИД
  * @property integer $status
  * @property integer summPay
  * @property string statusString строка статуса документа
  * @property DtInvoiceDevices invoiceDevices
+ * @property DPartners $partner
+ * @property string docDate
+ *
  */
 class DtInvoices extends \yii\db\ActiveRecord
 {
@@ -98,7 +102,7 @@ class DtInvoices extends \yii\db\ActiveRecord
      * @return string
      */
     public function getDocDate(){
-        return $this->doc_date;
+        return Yii::$app->formatter->asDate($this->doc_date);
     }
 
     /**
@@ -109,7 +113,7 @@ class DtInvoices extends \yii\db\ActiveRecord
     }
 
     /**
-     * Связанная модель контрагентов
+     * Связь с моделью "Контрагенты"
      * @return \yii\db\ActiveQuery
      */
     public function getPartner(){

@@ -149,6 +149,25 @@ class DtInvoicesPaymentController extends Controller
         return $this->redirect(['view', 'id' => $id]);
     }
 
+	/**
+	 * Устанавливаем статус
+	 * @param $id
+	 * @param $status
+	 * @param int $mode
+	 * @return \yii\web\Response
+	 * @throws NotFoundHttpException
+	 */
+	public function actionSetStatus($id, $status, $mode = 0){
+		$model = $this->findModel($id);
+		$model->status = $status;
+		if (!$model->save())
+			Yii::$app->session->setFlash('error', serialize($model->getErrors()));
+		if ($mode == 0)
+			return $this->redirect(['view', 'id' => $id]);
+		else
+			return $this->redirect(['dt-invoices/view', 'id' => $model->dt_invoices_id]);
+	}
+
     /**
      *
      * @param integer $id

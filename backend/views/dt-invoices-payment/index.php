@@ -36,11 +36,18 @@ use yii\grid\GridView;
             ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
             ['attribute' => 'status',
                 'value' => function ($model) {
-                    $str = $model->statusString;
+                    $status = $model->statusString;
+
                     if ($model->status == DtInvoicesPayment::PAY_AGREED) {
-                        $str = $str . ' ' . Html::a('(Отправить)', '', ['title' => 'отправить бухгалтеру на оплату']);
-                    }
-                    return  $str;
+						$set = DtInvoicesPayment::PAY_REFER;
+						$str = '(Отправить)';
+						$title = 'Отправить бухгалтеру на оплату';
+					}elseif ($model->status == DtInvoicesPayment::PAY_REFER) {
+						$set = DtInvoicesPayment::PAY_OK;
+						$str = '(Подтвердить)';
+						$title = 'Подтвердить прошедшую оплату';
+					}
+					return $status . (empty($str) ? '' : ' '. Html::a($str, ['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1], ['title' => $title]));
                 },
                 'format' => 'raw'
             ],
