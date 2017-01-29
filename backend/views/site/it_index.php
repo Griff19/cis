@@ -42,8 +42,14 @@ use yii\widgets\Pjax;
 			<?= $this->render('../dt-invoices/to_employee_it', ['searchModel' => $search_di, 'dataProvider' => $provider_di])?>
 		</div>
 	</div>
-	<?= $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded,'dataProvider' => $provider_ded]) ?>
-	<?= $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did,'dataProvider' => $provider_did]) ?>
-	<?= $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]) ?>
+
+	<?php
+	//таблица устройств в заявке "Устройства, требующие покупки"
+	echo $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded, 'dataProvider' => $provider_ded]);
+	//таблица устройств в счете "Устройства, требующиие оплату"
+	echo $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did, 'dataProvider' => $provider_did]);
+	//таблица платежей по счету "Манипуляции с платежами"
+	echo $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]);
+	?>
 	<?php Pjax::end(); ?>
 </div>

@@ -9,7 +9,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\DtInvoiceDevicesSearch */
+/* @var $searchModel backend\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 ?>
@@ -48,18 +48,18 @@ use yii\grid\GridView;
             ['attribute' => 'status',
                 'value' => function ($model) {
                     /** @var \backend\models\DtInvoiceDevices $model */
-                    $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
+                    $status = $model->status ? $model->statusString : '-';
                     if ($model->status == DtEnquiryDevices::AWAITING_PAYMENT) {
-                        return Html::a($stts, ['dt-invoices-payment/create', 'id' => $model->dt_invoices_id], ['title' => 'Внести оплату']);
-                    //} elseif ($model->status == DtEnquiryDevices::DEBIT) {
-                    //    return $stts;
+                        return $status . ' ' .Html::a('(Согласовать)', ['dt-enquiries/index-agree', 'id' => $model->dt_enquiries_id], ['title' => 'Согласовать оплату']);
                     } elseif ($model->status == DtEnquiryDevices::PAID) {
-                        return Html::a($stts, ['devices/create-from-doc',
+                        return $status . ' ' .Html::a('(Приходовать)', ['devices/create-from-doc',
                             'type_id' => $model->type_id,
                             'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
                             'idid' => $model->id
                         ], ['title' => 'Приходовать устройство']);
-                    } else {return $stts;}
+                    } else {
+						return $status;
+					}
                 },
                 'format' => 'raw',
                 'filter' => DtEnquiryDevices::arrStatusString()

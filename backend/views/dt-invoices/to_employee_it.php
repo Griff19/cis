@@ -1,6 +1,9 @@
 <?php
+/**
+ * Список активных документов "Счет"
+ * Встраивается на страницу сотрудника it-отдела (site/it_index)
+ */
 
-use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -21,11 +24,9 @@ use yii\grid\GridView;
             'doc_number',
             'doc_date',
             //'d_partners_id',
-            ['attribute' => 'partner.name_partner',
-                'label' => 'Контрагент'
-            ],
+            ['attribute' => 'partner.name_partner', 'label' => 'Контрагент'],
             'summ',
-            'summPay',
+			['attribute' => 'summPay', 'label' => 'Оплачено'],
 //            'delivery_type',
             ['attribute' => 'status',
                 'value' => 'statusString',

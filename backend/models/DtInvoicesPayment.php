@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * Модель для таблицы "dt_invoices_payment".
@@ -18,7 +19,7 @@ use Yii;
  * @property Employees employee
  * @property mixed agreedDate
  */
-class DtInvoicesPayment extends \yii\db\ActiveRecord
+class DtInvoicesPayment extends ActiveRecord
 {
     const PAY_DELETE = 0; //удален
     const PAY_WAITING = 1; //ожидает согласования
@@ -111,6 +112,7 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     }
 
     /**
+	 * Связь с моделью документа "Счет"
      * @return \yii\db\ActiveQuery
      */
     public function getDtInvoice() {
@@ -118,6 +120,7 @@ class DtInvoicesPayment extends \yii\db\ActiveRecord
     }
 
     /**
+	 * Связь с моделью "Сотрудник"
      * @return \yii\db\ActiveQuery
      */
     public function getEmployee() {

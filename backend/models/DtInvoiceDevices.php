@@ -7,6 +7,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
@@ -21,7 +22,7 @@ use Yii;
  * @property DtEnquiries dtEnquiry
  * @property DtEnquiryDevices dtEnquiryDevice
  */
-class DtInvoiceDevices extends \yii\db\ActiveRecord
+class DtInvoiceDevices extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -82,4 +83,5 @@ class DtInvoiceDevices extends \yii\db\ActiveRecord
             'dt_enquiries_id' => 'Док. Заявка'
         ];
     }
+
 }

@@ -109,8 +109,9 @@ Modal::end();
 	<?= $this->render('../dt-invoices-payment/index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
 	<br>
 	<?= $model->status == DtInvoices::DOC_NEW ?
-		Html::a('Сохранить', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
+		Html::a('Закрыть счет', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
 		: '';
 	?>
+	Внимание! В закрытый счет нельзя вносить изменения.
 </div>
 

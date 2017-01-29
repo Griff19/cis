@@ -7,6 +7,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
@@ -24,7 +25,7 @@ use Yii;
  * @property string docDate
  *
  */
-class DtInvoices extends \yii\db\ActiveRecord
+class DtInvoices extends ActiveRecord
 {
     const DOC_DEL = 0; //удаленный документ
     const DOC_NEW = 1; //новый, не сохраненный документ
@@ -91,7 +92,7 @@ class DtInvoices extends \yii\db\ActiveRecord
             'd_partners_name' => 'Контрагент',
             'delivery_type' => 'Доставка',
             'summ' => 'Сумма',
-            'summPay' => 'Сумма оплаты',
+            'summPay' => 'Оплачено',
             'status' => 'Статус',
             'statusString' => 'Статус',
         ];
@@ -127,4 +128,25 @@ class DtInvoices extends \yii\db\ActiveRecord
     public function getSummPay(){
         return DtInvoicesPayment::find()->where(['dt_invoices_id' => $this->id, 'status' => DtInvoicesPayment::PAY_OK])->sum('summ');
     }
+
+	/**
+	 * "Сохраняем" документ изменяя все связанные статусы
+	 * @return bool
+	 */
+	public function saveDoc(){
+
+		if ($this->summ > $this->summPay) {
+			return false;
+		} else {
+			/** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
+			$did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $this->id]);
+			foreach ($did_models as $did_model) {
+				DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
+			}
+			DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $this->id]);
+			$this->status = DtInvoices::DOC_SAVE;
+			$this->save();
+		}
+		return true;
+	}
 }

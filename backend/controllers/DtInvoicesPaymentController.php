@@ -1,18 +1,19 @@
 <?php
+/**
+ * Контроллер, обслуживающий таблицу платежей по документу "Счет"
+ */
 
 namespace backend\controllers;
 
-use backend\models\Images;
 use Yii;
+use backend\models\Images;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * Контроллер, обслуживающий таблицу платежей по документу "Счет"
- */
+
 class DtInvoicesPaymentController extends Controller
 {
     /**
@@ -149,6 +150,15 @@ class DtInvoicesPaymentController extends Controller
         $model->save();
         return $this->redirect(['view', 'id' => $id]);
     }
+
+	/**
+	 * Нужно рассмотреть смену статуса всего документа при смене статуса платежей.
+	 * Чтобы система сама определяла что счет уже полностью оплачен
+	 */
+//	public function checkStatus($model){
+//		$dt_invoice = DtInvoices::findOne($model->dt_invoices_id);
+//
+//	}
 
 	/**
 	 * Устанавливаем статус

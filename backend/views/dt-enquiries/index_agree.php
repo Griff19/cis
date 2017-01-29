@@ -22,7 +22,12 @@ Modal::end();
 ?>
 
 <h1> Согласование Заявки на оборудование </h1>
-<?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/pdf', 'id' => $model->id], ['class' => 'btn btn-default'])?>
+<p> Распечатайте сопроводительный листок:
+	<?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>',
+		['dt-enquiries/pdf', 'id' => $model->id],
+		['class' => 'btn btn-default', 'style' => 'padding: 3px 6px'])
+	?>
+</p>
 <?= \yii\widgets\DetailView::widget([
 	'model' => $model,
 	'attributes' => [
@@ -36,6 +41,8 @@ Modal::end();
 	]
 ])?>
 <h3> Счета по заявке </h3>
+<p> Следующие документы необходимо отнести на подпись финансовому директору или лицу,
+	исполняющему его обязанности: </p>
 <?= \yii\grid\GridView::widget([
 	'dataProvider' => $provider,
 	'columns' => [
@@ -48,8 +55,11 @@ Modal::end();
 		'summ',
 		['attribute' => 'summPay',
 			'value' => function ($model) {
-				return $model->summPay ? : 0;
-			}
+				$value = $model->summPay ? : 0;
+				return $value . ' ' . Html::a('(Внести)', ['dt-invoices-payment/create', 'id' => $model->id],
+					['title' => 'Внести оплату по данному счету']);
+			},
+			'format' => 'raw'
 		],
 		['attribute' => 'status',
 			'value' => 'statusString'
@@ -66,3 +76,6 @@ Modal::end();
 		]
 	]
 ]) ?>
+<p> <span class="glyphicon glyphicon-info-sign"></span>
+	После согласования оплаты Вам необходимо ввести одобренную сумму в разделе "Платежей" соответствующего документа "Счет" </p>
+

@@ -51,11 +51,13 @@ class DtInvoicesController extends Controller
         ]);
     }
 
-    /**
-     * Открыть документ.
-     * @param integer $id
-     * @return mixed
-     */
+	/**
+	 * Открыть документ.
+	 * @param integer $id
+	 * @param int $mode
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id, $mode = 0)
     {
         $dt_id_search = new DtInvoiceDevicesSearch();
@@ -168,7 +170,11 @@ class DtInvoicesController extends Controller
             /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
             $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
             foreach ($did_models as $did_model){
-                DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::REQUEST_INVOICE],['id' => $did_model->dt_enquiry_devices_id]);
+                DtEnquiryDevices::updateAll(
+					['status' => DtEnquiryDevices::REQUEST_INVOICE,
+						'dt_inv_id' => null
+					],
+					['id' => $did_model->dt_enquiry_devices_id]);
             }
             DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
             DtInvoicesPayment::deleteAll(['dt_invoices_id' => $model->id]);
@@ -188,20 +194,11 @@ class DtInvoicesController extends Controller
         /** @var DtInvoices $model модель документа "Счет" */
         $model = $this->findModel($id);
 
-        if ($model->summ > $model->summPay) {
-            Yii::$app->session->setFlash('error', 'Счет не оплачен! Внесите оплату и повторите сохранение');
+		if ($model->saveDoc())
+			Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
+		else
+			Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
 
-        } else {
-            /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
-            $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
-            foreach ($did_models as $did_model) {
-                DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
-            }
-            DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $model->id]);
-            $model->status = DtInvoices::DOC_SAVE;
-            $model->save();
-            Yii::$app->session->setFlash('success', 'Документ сохранен.');
-        }
         return $this->redirect(['view', 'id' => $id]);
     }
 
@@ -217,7 +214,7 @@ class DtInvoicesController extends Controller
         if (($model = DtInvoices::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
         }
     }
 }

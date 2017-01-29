@@ -110,7 +110,7 @@ class SiteController extends Controller
         $search_ded = new DtEnquiryDevicesSearch();
         $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);
 		//собираем данные по оплатам счетов
-		$search_dip = new DtInvoicesPaymentSearch();
+		$search_dip = new DtInvoicesPaymentSearch(['scenario' => 'to_employee']);
 		$provider_dip = $search_dip->searchPayments(Yii::$app->request->queryParams);
         return $this->render('it_index', [
             'search_de' => $search_de,
