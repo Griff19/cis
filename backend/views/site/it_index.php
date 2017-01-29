@@ -15,6 +15,8 @@ use yii\widgets\Pjax;
  * @var $search_did \backend\models\DtInvoiceDevicesSearch
  * @var $provider_ded \yii\data\ActiveDataProvider
  * @var $search_ded \backend\models\DtEnquiryDevicesSearch
+ * @var $provider_dip \yii\data\ActiveDataProvider
+ * @var $search_dip \backend\models\DtInvoicesPaymentSearch
  */
 
 ?>
@@ -42,5 +44,6 @@ use yii\widgets\Pjax;
 	</div>
 	<?= $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded,'dataProvider' => $provider_ded]) ?>
 	<?= $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did,'dataProvider' => $provider_did]) ?>
+	<?= $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]) ?>
 	<?php Pjax::end(); ?>
 </div>

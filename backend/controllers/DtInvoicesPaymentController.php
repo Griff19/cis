@@ -2,7 +2,6 @@
 
 namespace backend\controllers;
 
-use backend\models\DtInvoices;
 use backend\models\Images;
 use Yii;
 use backend\models\DtInvoicesPayment;

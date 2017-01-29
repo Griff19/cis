@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\DtInvoicesPaymentSearch;
 use Yii;
 use backend\models\DtInvoiceDevicesSearch;
 use backend\models\AdminEmployeesSearch;
@@ -108,6 +109,9 @@ class SiteController extends Controller
         //собираем данные по устройствам в документах "Заявка на оборудование"
         $search_ded = new DtEnquiryDevicesSearch();
         $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);
+		//собираем данные по оплатам счетов
+		$search_dip = new DtInvoicesPaymentSearch();
+		$provider_dip = $search_dip->searchPayments(Yii::$app->request->queryParams);
         return $this->render('it_index', [
             'search_de' => $search_de,
             'provider_de' => $provider_de,
@@ -116,7 +120,9 @@ class SiteController extends Controller
             'search_did' => $search_did,
             'provider_did' => $provider_did,
             'search_ded' => $search_ded,
-            'provider_ded' => $provider_ded
+            'provider_ded' => $provider_ded,
+			'search_dip' => $search_dip,
+			'provider_dip' => $provider_dip
         ]);
     }
 
