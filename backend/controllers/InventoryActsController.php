@@ -59,10 +59,11 @@ class InventoryActsController extends Controller
         ];
     }
 
-    /**
-     * Список актов инвентаризации.
-     * @return mixed
-     */
+	/**
+	 * Список актов инвентаризации.
+	 * @param null $id_wp
+	 * @return mixed
+	 */
     public function actionIndex($id_wp = null)
     {
         $searchModel = new InventoryActsSearch();
@@ -75,12 +76,14 @@ class InventoryActsController extends Controller
         ]);
     }
 
-    /**
-     * Отображаем Акт инвентаризации по рабочему месту
-     * со списком устройств с которыми можно работать
-     * @param integer $id идентификатор/номер документа Акт Инвентаризации
-     * @return mixed
-     */
+	/**
+	 * Отображаем Акт инвентаризации по рабочему месту
+	 * со списком устройств с которыми можно работать
+	 * @param integer $id идентификатор/номер документа Акт Инвентаризации
+	 * @param null $id_wp
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id, $id_wp = null)
     {
         $model = $this->findModel($id);
@@ -312,7 +315,7 @@ class InventoryActsController extends Controller
         $modelAct->save();
         //die;
         $usr = User::findOne(['employee_id' => $modelAct->exec_employee_id]);
-        $err = Message::Create($usr->id, 'Подписать Акт инвентаризации №' . $modelAct->id, 1,
+        Message::Create($usr->id, 'Подписать Акт инвентаризации №' . $modelAct->id, 1,
             "Вы создали и сохранили документ ". Html::a('Акт инвентаризации №'. $modelAct->id, ['inventory-acts/view', 'id' => $id]) .". \r\n
             Теперь вам необходимо распечатать Акт, подписать и загрузить скан подписанного документа."
             );
@@ -320,10 +323,12 @@ class InventoryActsController extends Controller
         return $this->redirect(['inventory-acts/view', 'id' => $id, 'id_wp' => $id_wp]);
     }
 
-    /**
-     * Создаем документ pdf
-     * @return mixed
-     */
+	/**
+	 * Создаем документ pdf
+	 * @param $id
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionCreatePdf($id){
         $model = $this->findModel($id); //текущий акт инвентаризации
         $modelStatusArr = $model->arrayDevIDinTb(); //Получаем массив статусов текущего акта
