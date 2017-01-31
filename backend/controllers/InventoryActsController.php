@@ -317,7 +317,7 @@ class InventoryActsController extends Controller
             Теперь вам необходимо распечатать Акт, подписать и загрузить скан подписанного документа."
             );
 
-        return $this->redirect(['inventory-acts/view', 'id' => $id]);
+        return $this->redirect(['inventory-acts/view', 'id' => $id, 'id_wp' => $id_wp]);
     }
 
     /**
