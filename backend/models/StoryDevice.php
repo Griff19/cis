@@ -82,7 +82,7 @@ class StoryDevice extends ActiveRecord
      * Удаляем историю по идентификатору устройства
      * @param $id_dev
      */
-    public function delStory($id_dev){
+    public static function delStory($id_dev){
         StoryDevice::deleteAll(['id_device' => $id_dev]);
     }
 

@@ -202,6 +202,24 @@ class DtInvoicesController extends Controller
         return $this->redirect(['view', 'id' => $id]);
     }
 
+	/**
+	 * Устанавливаем статус для платежа
+	 * @param int $id Идентификаторм платежа
+	 * @param int $status Устанавливаемый статус
+	 * @return \yii\web\Response
+	 */
+	public function actionSetStatusPayment($id, $status) {
+
+		$model = DtInvoicesPayment::findOne($id);
+		if ($model->setStatusDoc($status));
+			//Yii::$app->session->setFlash('success', 'Статус изменен');
+		else
+			Yii::$app->session->setFlash('error', 'Новый статус не установлен');
+
+		return $this->actionView($model->dt_invoices_id);
+
+	}
+
     /**
      * Finds the DtInvoices model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

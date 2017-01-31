@@ -38,8 +38,12 @@ $key = md5('dt-invoices' . $model->id);
 echo Html::img('/admin/' . Images::getLinkfile($key), ['style' => 'width: 100%', 'alt' => 'Отсутствует изображение']);
 Modal::end();
 ?>
-<div class="dt-invoices-view">
 
+<div class="dt-invoices-view">
+	<?php \yii\widgets\Pjax::begin([
+		'options' => ['id' => $model->id],
+		'enablePushState' => false
+	])?>
 	<div class="row">
 		<div class="col-lg-6">
 			<h1> <?= Html::encode($this->title) ?></h1>
@@ -104,14 +108,18 @@ Modal::end();
 		'data-header' => 'Выбор устройства'])
 		: '';
 	?>
-	<?php //echo $this->render('../dt-enquiry-devices/index_invoices', ['dt_invoice_id' => $model->id, 'dataProvider' => $dt_ed_provider, 'searchModel' => $dt_ed_search]) ?>
+	<?php //echo $this->render('../dt-enquiry-devices/index_invoices', ['dt_invoice_id' => $model->id, 'dataProvider' => $dt_ed_provider, 'searchModel' => $dt_ed_search])?>
 	<?= $this->render('../dt-invoice-devices/index', ['modelDoc' => $model, 'dataProvider' => $dt_id_provider, 'searchModel' => $dt_id_search]) ?>
 	<?= $this->render('../dt-invoices-payment/index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
+
 	<br>
 	<?= $model->status == DtInvoices::DOC_NEW ?
 		Html::a('Закрыть счет', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
 		: '';
 	?>
 	Внимание! В закрытый счет нельзя вносить изменения.
+	<?php \yii\widgets\Pjax::end();?>
 </div>
+
+
 

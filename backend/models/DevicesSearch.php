@@ -21,7 +21,7 @@ class DevicesSearch extends Devices
     public function rules()
     {
         return [
-            [['id'], 'integer'],
+            [['id', 'parent_device_id'], 'integer'],
             [['type_id', 'workplace_id', 'brand', 'model', 'sn', 'dt_title'], 'string', 'max' => 255],
             [['specification'], 'string', 'max' => 512],
             [['imei1'], 'match', 'pattern' => '/[0-9]/', 'message' => 'это числовое значение'],
@@ -120,7 +120,8 @@ class DevicesSearch extends Devices
         $query->andFilterWhere([
             'd.id' => $this->id,
             'd.workplace_id' => $this->workplace_id,
-            'device_type.comp' => $this->dev_comp
+            'device_type.comp' => $this->dev_comp,
+			'parent_device_id' => $this->parent_device_id
         ]);
 
         $query->andFilterWhere(['like', 'LOWER(device_note)', mb_strtolower($this->device_note)])

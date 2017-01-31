@@ -5,8 +5,8 @@ use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Devices */
-/* @var $dt_mac boolean */
-/* @var $dt_imei boolean */
+/* @var $dt_mac boolean Отображать ли на форме поле MAC */
+/* @var $dt_imei boolean Отображать ли на формет поле IMEI */
 
 $this->title = 'Создать устройство';
 $this->params['breadcrumbs'][] = ['label' => 'Устройства', 'url' => ['index']];

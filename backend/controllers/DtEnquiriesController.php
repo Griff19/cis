@@ -33,7 +33,7 @@ class DtEnquiriesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view', 'pdf'],
+                        'actions' => ['index','view', 'pdf', 'set-status'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -265,6 +265,24 @@ class DtEnquiriesController extends Controller
             'provider' => $provider_di
         ]);
     }
+
+	/**
+	 * @param $id integer
+	 * @param $status integer
+	 * @param $mode integer
+	 * @return \yii\web\Response
+	 */
+	public function actionSetStatus($id, $status, $mode = 0) {
+		$model = $this->findModel($id);
+		$model->status = $status;
+		if ($model->save())
+			Yii::$app->session->setFlash('success', 'Заявка закрыта');
+		else
+			Yii::$app->session->setFlash('error', serialize($model->getErrors()));
+
+		if ($mode == 0)
+			return $this->redirect(['site/employee-it']);
+	}
 
     /**
      * Finds the DtEnquiries model based on its primary key value.

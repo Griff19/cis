@@ -5,14 +5,15 @@
 
 namespace backend\controllers;
 
-use Yii;
+use backend\models\DtInvoiceDevicesSearch;
+use backend\models\DtInvoices;
 use backend\models\Images;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use Yii;
 
 class DtInvoicesPaymentController extends Controller
 {
@@ -151,14 +152,7 @@ class DtInvoicesPaymentController extends Controller
         return $this->redirect(['view', 'id' => $id]);
     }
 
-	/**
-	 * Нужно рассмотреть смену статуса всего документа при смене статуса платежей.
-	 * Чтобы система сама определяла что счет уже полностью оплачен
-	 */
-//	public function checkStatus($model){
-//		$dt_invoice = DtInvoices::findOne($model->dt_invoices_id);
-//
-//	}
+
 
 	/**
 	 * Устанавливаем статус
@@ -169,15 +163,8 @@ class DtInvoicesPaymentController extends Controller
 	 * @throws NotFoundHttpException
 	 */
 	public function actionSetStatus($id, $status, $mode = 0){
-		$model = $this->findModel($id);
-		$model->scenario = 'update';
-		$model->status = $status;
-		if (!$model->save())
-			Yii::$app->session->setFlash('error', serialize($model->getErrors()));
-		if ($mode == 0)
-			return $this->redirect(['view', 'id' => $id]);
-		else
-			return $this->redirect(['dt-invoices/view', 'id' => $model->dt_invoices_id]);
+
+
 	}
 
     /**

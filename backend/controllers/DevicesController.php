@@ -86,13 +86,17 @@ class DevicesController extends Controller
         return parent::beforeAction($action);
     }
 
-    /**
-     * Список устройств.
-     * $mode = 'def' - стандартный вид
-     * $mode = 'wps' - выбираем устройство для рабочего места
-     * $mode = 'dvs' - выбираем устройство как комплектующее
-     * @return mixed
-     */
+	/**
+	 * Список устройств.
+	 * $mode = 'def' - стандартный вид
+	 * $mode = 'wps' - выбираем устройство для рабочего места
+	 * $mode = 'dvs' - выбираем устройство как комплектующее
+	 * @param string $mode
+	 * @param null $target
+	 * @param null $id_dev
+	 * @param null $id_wp
+	 * @return mixed
+	 */
     public function actionIndex($mode = 'def', $target = null, $id_dev = null, $id_wp = null)
     {
         $searchModel = new DevicesSearch();
@@ -151,11 +155,13 @@ class DevicesController extends Controller
         ]);
     }
 
-    /**
-     * Функция вызывает таблицу устройств, находящихся на складе
-     * для их резервирования за рабочим местом, указанным в документе "Заявка"
-     * @return string
-     */
+	/**
+	 * Функция вызывает таблицу устройств, находящихся на складе
+	 * для их резервирования за рабочим местом, указанным в документе "Заявка"
+	 * @param null $target
+	 * @param null $id_dev
+	 * @return string
+	 */
     public function actionIndexToEnquiry($target = null, $id_dev = null) {
         $searchModel = new DevicesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
@@ -309,9 +315,9 @@ class DevicesController extends Controller
 
     /**
      * Создание устройства из введенных документов
-     * @param $type_id тип устройства
-     * @param $id_wp идентификатор рабочего места
-     * @param $idid идентификатор
+     * @param $type_id integer тип устройства
+     * @param $id_wp integer идентификатор рабочего места
+     * @param $idid integer идентификатор
      * @return string|\yii\web\Response
      */
     public function actionCreateFromDoc($type_id, $idid, $id_wp = null){
@@ -340,7 +346,9 @@ class DevicesController extends Controller
                 'model' => $model,
                 'id_wp' => $id_wp,
                 'id_dev' => null,
-                'mode' => 'create'
+                'mode' => 'create',
+				'dt_mac' => $model->deviceType->mac,
+                'dt_imei' => $model->deviceType->imei
             ]);
         }
     }
@@ -430,12 +438,15 @@ class DevicesController extends Controller
         return $this->redirect(['workplaces/view', 'id' => $id_wp]);
     }
 
-    /**
-     * Редактирование устройства
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id, $id_wp = null, $param = null)
+	/**
+	 * Редактирование устройства
+	 * @param integer $id
+	 * @param null $id_wp
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 * @internal param null $param
+	 */
+    public function actionUpdate($id, $id_wp = null)
     {
         //parse_str($param, $arr);
         $query = Yii::$app->request->queryParams;
@@ -517,6 +528,7 @@ class DevicesController extends Controller
         $err = false; //обнаружены ошибки в работе;
         //$target = ArrayHelper::getValue(Yii::$app->request->queryParams, 'target');
         //var_dump($target); die;
+		/** @var Devices $model */
         $model = $this->findModel($id);
         $oldwp = $model->workplace_id; //старое рабочее место
         if ($oldwp == 127) {
@@ -535,7 +547,9 @@ class DevicesController extends Controller
         else
             throw new NotFoundHttpException('Осутствуе обязательный параметр "Идентификатор рабочего места"');
 
-        if (!$err) $model->save();
+        if (!$err)
+			if ($model->save())
+				Devices::updateAll(['workplace_id' => $id_wp],['parent_device_id' => $model->id]);
 
         $query = Yii::$app->request->queryParams;
         $target = ArrayHelper::getValue($query, 'target');

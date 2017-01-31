@@ -126,4 +126,33 @@ class DtInvoicesPayment extends ActiveRecord
     public function getEmployee() {
         return $this->hasOne(Employees::className(), ['id' => 'employee_id']);
     }
+
+	/**
+	 * @return bool
+	 *
+	 */
+	public function checkStatus() {
+		/** @var DtInvoices $dt_invoice */
+		$dt_invoice = DtInvoices::findOne($this->dt_invoices_id);
+		if ($this->status == self::PAY_OK)
+			if ($dt_invoice->summ <= ($dt_invoice->summPay + $this->summ))
+				if ($dt_invoice->saveDoc())
+					return true;
+		return false;
+	}
+
+	/**
+	 * @param $status
+	 * @return bool
+	 */
+	public function setStatusDoc($status) {
+		$this->scenario = 'update';
+		$this->status = $status;
+		if ($this->save()) {
+			$this->checkStatus();
+			return true;
+		}
+		else
+			return false;
+	}
 }

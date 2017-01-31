@@ -105,7 +105,8 @@ class SiteController extends Controller
         $provider_di = $search_di->search(Yii::$app->request->queryParams);
         //собираем данные по устройствам в документах "Счет"
         $search_did = new DtInvoiceDevicesSearch();
-        $provider_did = $search_did->search(Yii::$app->request->queryParams);
+        $provider_did = $search_did->searchToEmployee(Yii::$app->request->queryParams);
+		//$provider_did = $search_did->search(Yii::$app->request->queryParams);
         //собираем данные по устройствам в документах "Заявка на оборудование"
         $search_ded = new DtEnquiryDevicesSearch();
         $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);

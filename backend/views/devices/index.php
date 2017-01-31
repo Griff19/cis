@@ -39,7 +39,8 @@ if($target && $param) {
             echo Html::a('Комплектующие автоматом', ['autocomp'], ['class' => 'btn btn-success','data' => ['confirm' => "Произвести автоматическую установку комплектуюдщих \r\n для одиноких системников?"]]);
         ?>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Общий склад', ['devices/index?'. $query .'&DevicesSearch%5Bworkplace_id%5D=1'], ['class' => 'btn btn-default'])?>
-        <?= Html::a(Html::img('/admin/img/cross.png', ['style' => 'height: 14px; margin: 0px 1px 3px 0px;']) . ' Сбросить фильтр', ['devices/index?' . $query], ['class' => 'btn btn-default', 'style' => 'float:right;']) ?>
+		<?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['devices/index?'. $query .'&DevicesSearch%5Bworkplace_id%5D=130'], ['class' => 'btn btn-default'])?>
+		<?= Html::a(Html::img('/admin/img/cross.png', ['style' => 'height: 14px; margin: 0px 1px 3px 0px;']) . ' Сбросить фильтр', ['devices/index?' . $query], ['class' => 'btn btn-default', 'style' => 'float:right;']) ?>
     </p>
 
     <?php

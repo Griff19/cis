@@ -52,12 +52,17 @@ use yii\grid\GridView;
                     if ($model->status == DtEnquiryDevices::AWAITING_PAYMENT) {
                         return $status . ' ' .Html::a('(Согласовать)', ['dt-enquiries/index-agree', 'id' => $model->dt_enquiries_id], ['title' => 'Согласовать оплату']);
                     } elseif ($model->status == DtEnquiryDevices::PAID) {
-                        return $status . ' ' .Html::a('(Приходовать)', ['devices/create-from-doc',
-                            'type_id' => $model->type_id,
-                            'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
-                            'idid' => $model->id
-                        ], ['title' => 'Приходовать устройство']);
-                    } else {
+						return $status . ' ' . Html::a('(Приходовать)', ['devices/create-from-doc',
+							'type_id' => $model->type_id,
+							'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
+							'idid' => $model->id
+						], ['title' => 'Приходовать устройство']);
+					} elseif ($model->status == DtEnquiryDevices::DEBIT) {
+						return $status . ' ' .Html::a('(Закрыть заявку)', ['dt-enquiries/set-status',
+							'id' => $model->dt_enquiries_id,
+							'status' => \backend\models\DtEnquiries::DTE_COMPLETE],
+							['title' => 'Закрыть заявку и скрыть строку из списка']);
+					} else {
 						return $status;
 					}
                 },

@@ -20,6 +20,7 @@ use yii\grid\GridView;
     <p>
         <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить платеж', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -47,7 +48,10 @@ use yii\grid\GridView;
 						$str = '(Подтвердить)';
 						$title = 'Подтвердить прошедшую оплату';
 					}
-					return $status . (empty($str) ? '' : ' '. Html::a($str, ['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1], ['title' => $title]));
+					return $status . (empty($str) ? '' : ' '. Html::a($str, ['dt-invoices/set-status-payment',
+							'id' => $model->id,
+							'status' => $set],
+							['title' => $title]));
                 },
                 'format' => 'raw'
             ],
@@ -56,4 +60,5 @@ use yii\grid\GridView;
             ],
         ],
     ]); ?>
+
 </div>

@@ -17,6 +17,9 @@ use yii\grid\GridView;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+		'rowOptions' => function ($model) {
+			return ['class' => $model->status == \backend\models\DtEnquiries::DTE_COMPLETE ? 'success' : ''];
+		},
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 

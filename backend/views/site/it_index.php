@@ -34,7 +34,7 @@ use yii\widgets\Pjax;
 	</div>
 	<?php Pjax::begin(); ?>
 	<div class="row">
-<!--		lg - нужно для того чтобы две таблицы не наезжали друг на друга при сужении экрана -->
+	<?//lg - нужно для того чтобы две таблицы не наезжали друг на друга при сужении экрана ?>
 		<div class="col-lg-6">
 			<?= $this->render('../dt-enquiries/to_employee_it', ['searchModel' => $search_de, 'dataProvider' => $provider_de]) ?>
 		</div>

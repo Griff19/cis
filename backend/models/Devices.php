@@ -22,7 +22,7 @@ use yii\data\ActiveDataProvider;
  * @property integer workplace_id
  * @property integer parent_device_id
  * @property boolean dev_comp
- * @property mixed deviceType
+ * @property DeviceType deviceType
  * @property mixed fake_device помечает устройство как фейк
  * @property string fullWorkplace полное имя рабочего места
  */
