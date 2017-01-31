@@ -6,7 +6,7 @@ use Yii;
 use backend\models\Devices;
 use backend\models\Reports;
 use backend\models\StoryDevice;
-use backend\models\Tasks;
+use backend\models\Message;
 use backend\models\User;
 use backend\models\Workplaces;
 use backend\models\InventoryActs;
@@ -129,10 +129,10 @@ class InventoryActsController extends Controller
         $model->act_date = Yii::$app->formatter->asDate(new \DateTime(), 'yyyy-MM-dd');
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save())
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['view', 'id' => $model->id, 'id_wp' => $id_wp]);
             else {
                 Yii::$app->session->setFlash('error', Json::encode($model->errors));
-                return $this->redirect(['index']);
+                return $this->redirect(['index', 'id_wp' => $id_wp]);
             }
         } else {
             return $this->render('create', ['model' => $model]);
@@ -312,7 +312,7 @@ class InventoryActsController extends Controller
         $modelAct->save();
         //die;
         $usr = User::findOne(['employee_id' => $modelAct->exec_employee_id]);
-        $err = Tasks::Create($usr->id, 'Подписать Акт инвентаризации №' . $modelAct->id, 1,
+        $err = Message::Create($usr->id, 'Подписать Акт инвентаризации №' . $modelAct->id, 1,
             "Вы создали и сохранили документ ". Html::a('Акт инвентаризации №'. $modelAct->id, ['inventory-acts/view', 'id' => $id]) .". \r\n
             Теперь вам необходимо распечатать Акт, подписать и загрузить скан подписанного документа."
             );

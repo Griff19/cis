@@ -27,6 +27,7 @@ $exec = $model->execEmployee->snp;
 <br>
 <p>Устройства на рабочем месте:</p>
 <?php
+//набор колонок одинаков для всех, если надо то можно переоределить в каждой таблице
 $columns = [
     ['class' => 'yii\grid\SerialColumn'],
     //'sort',
@@ -45,7 +46,10 @@ $columns = [
     ['attribute' => 'sn',
         'header' => 'SN, MAC, imei',
         'value' => function ($model){
-            $return = ($model->sn ? $model->sn . ', ' : '')
+			$sn = $model->sn;
+			if (strtolower(substr($sn, 0, 2)) == 'sn')
+				$sn = '';
+            $return = ($sn ? $sn . ', ' : '')
                 . ($model->netints ? $model->netints[0]->mac : '')
                 . ($model->imei1 ? $model->imei1 : '');
             return $return;

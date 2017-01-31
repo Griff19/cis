@@ -8,10 +8,11 @@ use backend\models\InventoryActs;
 /* @var $this yii\web\View */
 /* @var $model backend\models\InventoryActs */
 /* @var $devProvider \yii\data\ActiveDataProvider */
+/* @var $id_wp integer */
 
 $this->title = 'Акт инвентаризации №'. $model->id;
 
-if ($id_wp) {
+if (isset($id_wp)) {
     $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['workplaces/index']];
     $this->params['breadcrumbs'][] = ['label' => 'Рабочее место №' . $model->workplace_id, 'url' => ['workplaces/view', 'id' => $model->workplace_id]];
     $this->params['breadcrumbs'][] = ['label' => 'Акты инвентаризации', 'url' => ['inventory-acts/index', 'id_wp' => $model->workplace_id]];

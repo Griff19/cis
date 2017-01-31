@@ -56,6 +56,16 @@ class InventoryActs extends \yii\db\ActiveRecord
         ];
     }
 
+	public function beforeSave($insert)
+	{
+		if (parent::beforeSave($insert)) {
+			$this->act_date = (new \DateTime($this->act_date))->format('Y-m-d');
+
+			return true;
+		} else {
+			return false;
+		}
+	}
     /**
      * @inheritdoc
      */
