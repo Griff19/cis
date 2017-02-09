@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 //$this->title = 'Mm Offers';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mmoffer-index">
+<div class="mmoffer-index" style="margin-top: 40px">
 
     <h3> Выдвинутые предложения </h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -22,6 +22,7 @@ use yii\widgets\Pjax;
 	<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+		'layout' => "{items}\n{pager}",
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

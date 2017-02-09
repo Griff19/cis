@@ -65,8 +65,11 @@ class MmDecisionController extends Controller
     {
         $model = new MmDecision();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+			$model->due_date = Yii::$app->formatter->asDate($model->due_date, 'y-MM-dd');
+			$model->save();
+			var_dump($model->getErrors()); die;
+			return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

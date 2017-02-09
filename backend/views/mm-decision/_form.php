@@ -28,11 +28,13 @@ $this->registerJs(
     <?= $form->field($model, 'content')->textarea([
 		'rows' => 3,
 		'placeholder' => 'Введите принятое решение...'
-	])->label('Решение:') ?>
+	])->label(false) ?>
 
-    <?= $form->field($model, 'due_date')->textInput() ?>
+    <?= $form->field($model, 'due_date')->widget('\yii\jui\DatePicker', [
+		'options' => ['class' => 'form-control']
+	]) ?>
 
-    <div class="form-group">
+    <div class="form-group" style="float: right">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить решение' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 

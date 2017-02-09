@@ -85,26 +85,35 @@ class MeetingMinutesController extends Controller
 		$mmd_model->mm_id = $id;
 
 		if ($mmp_model->load(Yii::$app->request->post()) && $mmp_model->save()) {
+			if ($mmp_model->employee_id)
+
 			$mmp_model = new MmParticipants();
 			$mmp_model->mm_id = $id;
 		}
 		if ($mma_model->load(Yii::$app->request->post())) {
-			$mma_model = new MmAgenda();
-			$mma_model->mm_id = $id;
-			if (!empty($mma_model->content))
+			if (!empty($mma_model->content)) {
 				$mma_model->save();
+
+				$mma_model = new MmAgenda();
+				$mma_model->mm_id = $id;
+			}
 		}
 		if ($mmo_model->load(Yii::$app->request->post())) {
-			$mmo_model = new MmOffer();
-			$mmo_model->mm_id = $id;
-			if (!empty($mmo_model->content))
+			if (!empty($mmo_model->content)) {
 				$mmo_model->save();
+
+				$mmo_model = new MmOffer();
+				$mmo_model->mm_id = $id;
+			}
 		}
 		if ($mmd_model->load(Yii::$app->request->post())) {
-			$mmd_model = new MmDecision();
-			$mmd_model->mm_id = $id;
-			if (!empty($mmd_model->content))
+			if (!empty($mmd_model->content)) {
+				$mmd_model->due_date = Yii::$app->formatter->asDate($mmd_model->due_date, 'y-MM-dd');
 				$mmd_model->save();
+
+				$mmd_model = new MmDecision();
+				$mmd_model->mm_id = $id;
+			}
 		}
 
 		$mmp_search = new MmParticipantsSearch();
@@ -148,8 +157,12 @@ class MeetingMinutesController extends Controller
     {
         $model = new MeetingMinutes();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+			$model->doc_date = Yii::$app->formatter->asDate($model->doc_date, 'y-MM-dd');
+
+			$model->save();
+
+			return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

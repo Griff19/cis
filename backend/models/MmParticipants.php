@@ -29,7 +29,9 @@ class MmParticipants extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mm_id', 'employee_id'], 'integer'],
+			[['mm_id', 'employee_id'], 'required', 'message' => '* Выберите сотрудника из списка!'],
+			[['mm_id', 'employee_id'], 'unique', 'targetAttribute' => ['mm_id', 'employee_id'], 'message' => '* Сотрудник уже добавлен!'],
+			[['mm_id', 'employee_id'], 'integer'],
 			['employee_name', 'string', 'max' => 255]
         ];
     }

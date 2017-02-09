@@ -31,10 +31,9 @@ $this->registerJs(
 			'onkeydown' => 'check_keys(event, this.form, "mmoffer", ' .$model->mm_id.');'
 		])->label(false); ?>
 
-		<div class="form-group">
+		<div class="form-group" style="float: right">
 			<?= Html::submitButton($model->isNewRecord ? 'Добавить предложение Ctrl+Enter' : 'Update', [
-				'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',
-				'style' => 'float: right'
+				'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
 			]) ?>
 		</div>
 

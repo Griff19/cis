@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\MeetingMinutes */
 
-$this->title = 'Create Meeting Minutes';
-$this->params['breadcrumbs'][] = ['label' => 'Meeting Minutes', 'url' => ['index']];
+$this->title = 'Создать новый протокол';
+$this->params['breadcrumbs'][] = ['label' => 'Протоколы встреч', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="meeting-minutes-create">

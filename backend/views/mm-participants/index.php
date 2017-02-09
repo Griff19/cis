@@ -25,13 +25,14 @@ use yii\widgets\Pjax;
 <?php Pjax::begin(['id' => 'mm_part_idx']); ?>
 	<?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
+		'layout' => "{items}\n{pager}",
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'mm_id',
-            'employee_id',
+            //'id',
+            //'mm_id',
+            //'employee_id',
 			['attribute' => 'employee_name',
 				'value' => 'employee.snp'
 			],

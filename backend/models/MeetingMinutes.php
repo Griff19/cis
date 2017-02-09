@@ -15,7 +15,8 @@ use Yii;
  */
 class MeetingMinutes extends \yii\db\ActiveRecord
 {
-    /**
+
+	/**
      * @inheritdoc
      */
     public static function tableName()
@@ -45,5 +46,7 @@ class MeetingMinutes extends \yii\db\ActiveRecord
             'doc_date' => 'Дата Док.',
         ];
     }
+
+
 
 }

@@ -14,34 +14,37 @@ $this->params['breadcrumbs'][] = ['label' => 'Протоколы встреч', 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="meeting-minutes-view">
+	<div class="row">
+		<div class="col-lg-6">
+			<h1><?= Html::encode($this->title) ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
+				<?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+				<?= Html::a('Удалить', ['delete', 'id' => $model->id], [
+					'class' => 'btn btn-danger',
+					'data' => [
+						'confirm' => 'Уверенны что хотите удалить этот документ?',
+						'method' => 'post',
+					],
+				]) ?>
+			</h1>
+			<?= DetailView::widget([
+				'model' => $model,
+				'attributes' => [
+					'id',
+					'doc_num',
+					'doc_date:date',
+				],
+			]) ?>
 
-    <p>
-        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Уверенны что хотите удалить этот документ?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+			<?= $this->render('../mm-agenda/index', ['modelDoc' => $model, 'dataProvider' => $mma_provider, 'searchModel' => $mma_search]) ?>
+			<?= $this->render('../mm-agenda/_form', ['model' => $mma_model]) ?>
+		</div>
+		<div class="col-lg-6">
+			<?= $this->render('../mm-participants/index', ['modelDoc' => $model, 'dataProvider' => $mmp_provider, 'searchModel' => $mmp_search])?>
+			<?= $this->render('../mm-participants/_form', ['model' => $mmp_model]) ?>
+		</div>
+	</div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'doc_num',
-            'doc_date:datetime',
-        ],
-    ]) ?>
-
-	<?= $this->render('../mm-participants/index', ['modelDoc' => $model, 'dataProvider' => $mmp_provider, 'searchModel' => $mmp_search])?>
-	<?= $this->render('../mm-participants/_form', ['model' => $mmp_model]) ?>
-
-	<?= $this->render('../mm-agenda/index', ['modelDoc' => $model, 'dataProvider' => $mma_provider, 'searchModel' => $mma_search]) ?>
-	<?= $this->render('../mm-agenda/_form', ['model' => $mma_model]) ?>
 
 	<?= $this->render('../mm-offer/index', ['modelDoc' => $model, 'dataProvider' => $mmo_provider, 'searchModel' => $mmo_search]) ?>
 	<?= $this->render('../mm-offer/_form', ['model' => $mmo_model]) ?>

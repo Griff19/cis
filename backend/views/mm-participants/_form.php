@@ -36,14 +36,14 @@ $this->registerJs(
 					$('#employee_id_hidd').val( ui.item.id );
 				}")
 			],
-			'options' => ['class' => 'form-control', 'size' => 40]
+			'options' => ['class' => 'form-control', 'size' => 40, 'placeholder' => 'Начните вводить фамилию...']
 		]
-) ?>
-    <?= $form->field($model, 'employee_id')->hiddenInput(['id' => 'employee_id_hidd'])->label(false) ?>
-<div class="form-group" style="vertical-align: top">
-	<?= Html::submitButton($model->isNewRecord ? 'Добавить участника' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-</div>
+	) ?>
 
+	<div class="form-group" style="vertical-align: top">
+		<?= Html::submitButton($model->isNewRecord ? 'Добавить участника' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	</div>
+	<?= $form->field($model, 'employee_id')->hiddenInput(['id' => 'employee_id_hidd'])->label(false) ?>
     <?php ActiveForm::end(); ?>
 <?php \yii\widgets\Pjax::end(); ?>
 </div>

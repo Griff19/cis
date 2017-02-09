@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="mmdecision-index">
+<div class="mmdecision-index" style="margin-top: 40px">
 
     <h3> Принятые решения </h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -23,6 +23,7 @@ use yii\widgets\Pjax;
 	<?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+		'layout' => "{items}\n{pager}",
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
