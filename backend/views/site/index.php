@@ -82,6 +82,10 @@ $this->title = 'My Yii Application';
                 <?= Html::a('Счета',['dt-invoices/index'],['class'=>'btn btn-default'])?>
                 <p>Документы счета</p>
             </div>
+			<div class="col-sm-3">
+				<?= Html::a('Протоколы встреч',['meeting-minutes/index'],['class'=>'btn btn-default'])?>
+				<p>Протоколы встреч</p>
+			</div>
         </div>
         <div class="row">
             <div class="col-sm-3">
@@ -108,7 +112,7 @@ $this->title = 'My Yii Application';
             </div>
             <div class="col-sm-3">
                 <?= Html::a('Страница сотрудника IT',['site/employee-it'],['class'=>'btn btn-default'])?>
-                <p></p>
+                <p>Основная рабочая страница сотрудника IT</p>
             </div>
         </div>
     </div>

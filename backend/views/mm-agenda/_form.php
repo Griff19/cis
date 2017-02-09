@@ -25,16 +25,20 @@ $this->registerJs(
 
 		<?php //echo $form->field($model, 'mm_id')->textInput() ?>
 
-		<?= $form->field($model, 'content')->textarea([
-			'rows' => 3,
-			'placeholder' => 'Введите новый пункт повестки...',
-			'onkeydown' => 'check_keys(event, this.form, "mmagenda", ' .$model->mm_id. ');'
-		])->label(false) ?>
+		<div class="input-group">
+			<?= $form->field($model, 'content')->textarea([
+				'rows' => 3,
+				'placeholder' => 'Введите новый пункт повестки...',
+				'style' => 'resize: none',
+				'onkeydown' => 'check_keys(event, this.form, "mmagenda", ' .$model->mm_id. ');'
 
-		<div class="form-group" style="float: right">
+			])->label(false) ?>
+			<span class="input-group-btn">
 			<?= Html::submitButton($model->isNewRecord ? 'Добавить повестку Ctrl+Enter' : 'Update', [
-				'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
+					'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',
+					'style' => 'padding: 20px 20px; top: 5px;'
 			]) ?>
+			</span>
 		</div>
 
 		<?php ActiveForm::end(); ?>

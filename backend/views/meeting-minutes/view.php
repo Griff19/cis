@@ -26,6 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						'method' => 'post',
 					],
 				]) ?>
+				<?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>PDF</b>',['meeting-minutes/pdf', 'id' => $model->id],[
+					'class' => 'btn btn-default',
+					'style' => 'padding: 3px 6px',
+					'title' => 'Открыть PDF'
+				]);?>
 			</h1>
 			<?= DetailView::widget([
 				'model' => $model,

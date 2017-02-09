@@ -23,25 +23,29 @@ $this->registerJs(
 
     <?php $form = ActiveForm::begin(['options' => [
 		'data-pjax' => true,
-		'class' => 'form-inline'
+		//'class' => 'form-inline'
 	]]); ?>
 
-    <?php //echo $form->field($model, 'mm_id')->textInput() ?>
-	<?= $form->field($model, 'employee_name')->widget(
-		'yii\jui\AutoComplete', [
-			'clientOptions' => [
-				'source' => Employees::arraySnpId(),
-				'minLength' => 2,
-				'select' => new JsExpression("function ( event, ui ) {
-					$('#employee_id_hidd').val( ui.item.id );
-				}")
-			],
-			'options' => ['class' => 'form-control', 'size' => 40, 'placeholder' => 'Начните вводить фамилию...']
-		]
-	) ?>
 
-	<div class="form-group" style="vertical-align: top">
-		<?= Html::submitButton($model->isNewRecord ? 'Добавить участника' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	<div class="input-group">
+		<?php // Html::activeLabel($model, 'employee_name'); ?>
+		<?= $form->field($model, 'employee_name')->widget(
+			'yii\jui\AutoComplete', [
+				'clientOptions' => [
+					'source' => Employees::arraySnpId(),
+					'minLength' => 2,
+					'select' => new JsExpression("function ( event, ui ) {
+						$('#employee_id_hidd').val( ui.item.id );
+					}")
+				],
+				'options' => ['class' => 'form-control', 'placeholder' => 'Начните вводить фамилию...']
+			]
+		)->label(false) ?>
+
+		<span class="input-group-btn">
+			<?= Html::submitButton($model->isNewRecord ? 'Добавить участника' : 'Сохранить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary',
+				'style' => 'top: 5px']) ?>
+		</span>
 	</div>
 	<?= $form->field($model, 'employee_id')->hiddenInput(['id' => 'employee_id_hidd'])->label(false) ?>
     <?php ActiveForm::end(); ?>

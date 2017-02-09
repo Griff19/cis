@@ -170,6 +170,47 @@ class MeetingMinutesController extends Controller
         }
     }
 
+
+	public function actionPdf($id)
+	{
+		$model = $this->findModel($id);
+		//устройства в счете
+		$mmp_search = new MmParticipantsSearch();
+		$mmp_provider = $mmp_search->search(Yii::$app->request->queryParams, $id);
+
+		$mma_search = new MmAgendaSearch();
+		$mma_provider = $mma_search->search(Yii::$app->request->queryParams, $id);
+
+		$mmo_search = new MmOfferSearch();
+		$mmo_provider = $mmo_search->search(Yii::$app->request->queryParams, $id);
+
+		$mmd_search = new MmDecisionSearch();
+		$mmd_provider = $mmd_search->search(Yii::$app->request->queryParams, $id);
+
+		$this->layout = 'pdf';
+		/** @var Pdf $pdf */
+		$pdf = Yii::$app->pdf;
+		$pdf->options = ['title' => 'Протокол №' . $model->doc_num];
+
+		$pdf->content = $this->render('pdf', [
+			'model' => $model,
+
+			'mmp_search' => $mmp_search,
+			'mmp_provider' => $mmp_provider,
+
+			'mma_search' => $mma_search,
+			'mma_provider' => $mma_provider,
+
+			'mmo_search' => $mmo_search,
+			'mmo_provider' => $mmo_provider,
+
+			'mmd_search' => $mmd_search,
+			'mmd_provider' => $mmd_provider
+
+		]);
+		return $pdf->render();
+	}
+
     /**
      * Updates an existing MeetingMinutes model.
      * If update is successful, the browser will be redirected to the 'view' page.
