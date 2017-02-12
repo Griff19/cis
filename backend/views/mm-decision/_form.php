@@ -20,6 +20,7 @@ $this->registerJs(
 <?php \yii\widgets\Pjax::begin(['id' => 'mmdecision_frm']); ?>
     <?php $form = ActiveForm::begin(['options' => [
 		'id' => 'form-mmdecision',
+
 		'data-pjax' => true
 	]]); ?>
 
@@ -30,13 +31,14 @@ $this->registerJs(
 		'placeholder' => 'Введите принятое решение...'
 	])->label(false) ?>
 
-    <?= $form->field($model, 'due_date')->widget('\yii\jui\DatePicker', [
-		'options' => ['class' => 'form-control']
-	]) ?>
 
-    <div class="form-group" style="float: right">
-        <?= Html::submitButton($model->isNewRecord ? 'Добавить решение' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    </div>
+	<?php
+		echo Html::activeLabel($model, 'due_date') . ' ';
+		echo $form->field($model, 'due_date', ['options' => ['style' => 'display: inline-block']])->widget('\yii\jui\DatePicker', [
+			'options' => ['class' => 'form-control']])->label(false) . ' ';
+		echo Html::submitButton($model->isNewRecord ? 'Добавить решение' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
+	?>
+
 
     <?php ActiveForm::end(); ?>
 <?php \yii\widgets\Pjax::end(); ?>

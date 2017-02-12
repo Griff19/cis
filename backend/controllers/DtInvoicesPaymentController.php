@@ -33,9 +33,10 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
+	 * Не используется
      * Lists all DtInvoicesPayment models.
      * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new DtInvoicesPaymentSearch();
@@ -45,7 +46,7 @@ class DtInvoicesPaymentController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
+    }*/
 
     /**
      * Displays a single DtInvoicesPayment model.
@@ -71,10 +72,7 @@ class DtInvoicesPaymentController extends Controller
         $model->status = DtInvoicesPayment::PAY_AGREED;
 
         if ($model->load(Yii::$app->request->post())) {
-            //$model->agreed_date = (new \DateTime ($model->agreed_date))->format('yyyy-mm-dd');
-            //$invoice = DtInvoices::findOne($model->dt_invoices_id);
-            //$invoice->status = DtInvoices::DOC_SAVE;
-            //$invoice->save();
+
 			$model->save();
             return $this->redirect(['dt-invoices/view', 'id' => $id]);
         } else {
@@ -83,6 +81,24 @@ class DtInvoicesPaymentController extends Controller
             ]);
         }
     }
+
+	public function actionPdf($status) {
+
+		$searchModel = new DtInvoicesPaymentSearch();
+		$dataProvider = $searchModel->searchPayments(Yii::$app->request->queryParams, $status);
+
+		$type = $status == DtInvoicesPayment::PAY_AGREED ? 'на оплату' : 'на согласование';
+		$this->layout = 'pdf';
+		/** @var Pdf $pdf */
+		$pdf = Yii::$app->pdf;
+		$pdf->options = ['title' => 'Ведомость' ];
+
+		$pdf->content = $this->render('pdf', [
+			'dataProvider' => $dataProvider,
+			'type' => $type
+		]);
+		return $pdf->render();
+	}
 
     /**
      * Updates an existing DtInvoicesPayment model.
@@ -163,7 +179,7 @@ class DtInvoicesPaymentController extends Controller
 	 * @throws NotFoundHttpException
 	 */
 	public function actionSetStatus($id, $status, $mode = 0){
-
+	//todo: Доработать установку статуса
 
 	}
 

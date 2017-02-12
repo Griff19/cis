@@ -17,7 +17,10 @@ use yii\grid\GridView;
 ?>
 <div class="dt-invoices-payment-index">
 
-    <h3> Манипуляции с платежами: </h3>
+    <h3> Манипуляции с платежами:
+		<?= Html::a('Ведомость на согласование', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_WAITING], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
+		<?= Html::a('Ведомость на оплату', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_AGREED], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
+	</h3>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -53,7 +56,6 @@ use yii\grid\GridView;
 					return (empty($str) ? '' : Html::a($str,
 						['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1],
 						['class' => $class . ' btn-sm', 'title' => $title]));
-
 				}
 			]
         ],

@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
 use Yii;
 use backend\models\DtInvoiceDevicesSearch;
@@ -133,6 +134,19 @@ class SiteController extends Controller
     public function actionIt(){
         return $this->render('it_index');
     }
+
+	/**
+	 * Устанавливаем статус платежа
+	 * @param int $id Идентификатор платежа
+	 * @param int $status Устанавливаемый статус платежа
+	 */
+	public function actionSetStatusPayment($id, $status){
+		$model = DtInvoicesPayment::findOne($id);
+		$model->status = $status;
+		$model->save();
+
+		return 0;
+	}
 
     /**
      * Страница с формой поиска рабочих мест и сотрудников

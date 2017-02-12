@@ -36,16 +36,17 @@ class DtInvoicesPaymentSearch extends DtInvoicesPayment
     }
 
 	/**
-	 * Готовим провайдер с данными по оплатам счетов
+	 * Готовим провайдер с данными по оплатам счетов в общем и для конкретного счета
 	 * @param array $params
-	 * @param null $id
+	 * @param null $id Идентификатор документа "Счет"
 	 * @return ActiveDataProvider
 	 */
     public function search($params, $id = null)
     {
-        $query = DtInvoicesPayment::find()->where(['dt_invoices_id' => $id]);
-
-        // add conditions that should always apply here
+        if ($id > 0)
+			$query = DtInvoicesPayment::find()->where(['dt_invoices_id' => $id]);
+		else
+			$query = DtInvoicesPayment::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -73,13 +74,17 @@ class DtInvoicesPaymentSearch extends DtInvoicesPayment
     }
 
 	/**
+	 * Отбор данных по всем платежам
+	 * Связан с документом счет
 	 * @param $params
+	 * @param int $status Статус платежа, позволяет отобрать конкретные данные для Ведомости
 	 * @return ActiveDataProvider
 	 */
-	public function searchPayments($params){
-		$query = DtInvoicesPayment::find();
-
-		// add conditions that should always apply here
+	public function searchPayments($params, $status = 0){
+		if ($status > 0)
+			$query = DtInvoicesPayment::find()->where(['dt_invoices_payment.status' => $status]);
+		else
+			$query = DtInvoicesPayment::find();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,

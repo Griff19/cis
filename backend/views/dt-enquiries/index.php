@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'employee_id',
-            'create_date',
-            'do_date',
-            'create_time',
+            'create_date:date',
+            'do_date:date',
+            'create_time:datetime',
             //'workplace_id',
 
             ['class' => 'yii\grid\ActionColumn'],
