@@ -32,6 +32,18 @@ class DtEnquiries extends ActiveRecord
     public $employee_name; //используем для автоподстановки и сортировки
 
     /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        $this->create_date = Yii::$app->formatter->asDate($this->create_date, 'yyyy-MM-dd');
+        $this->do_date = Yii::$app->formatter->asDate($this->do_date, 'yyyy-MM-dd');
+
+        return parent::beforeSave($insert);
+    }
+
+    /**
      * @return array
      */
     public static function arrStatusString(){

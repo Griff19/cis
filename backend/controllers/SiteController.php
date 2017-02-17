@@ -41,7 +41,7 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['admin', 'admin_workplace', 'employee-it'],
+                        'actions' => ['admin', 'admin_workplace', 'employee-it', 'set-status-payment'],
                         'allow' => true,
                         'roles' => ['it']
                     ],
@@ -135,17 +135,21 @@ class SiteController extends Controller
         return $this->render('it_index');
     }
 
-	/**
-	 * Устанавливаем статус платежа
-	 * @param int $id Идентификатор платежа
-	 * @param int $status Устанавливаемый статус платежа
-	 */
+    /**
+     * Устанавливаем статус платежа
+     *
+     * @param int $id Идентификатор платежа
+     * @param int $status Устанавливаемый статус платежа
+     * @return \yii\web\Response
+     */
 	public function actionSetStatusPayment($id, $status){
 		$model = DtInvoicesPayment::findOne($id);
+		$model->scenario = 'update';
 		$model->status = $status;
-		$model->save();
+		if (!$model->save())
+            Yii::$app->session->setFlash('error', serialize($model->getErrors()));
 
-		return 0;
+		return $this->actionEmployeeIt();
 	}
 
     /**

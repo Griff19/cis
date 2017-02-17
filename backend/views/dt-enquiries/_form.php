@@ -32,12 +32,12 @@ use yii\web\JsExpression;
     <?= $form->field($model, 'employee_id')->hiddenInput(['id' => 'employee_id_hidd'])->label(false) ?>
 
     <?php echo $form->field($model, 'create_date')->widget(DatePicker::className(), [
-        'dateFormat' => 'yyyy-MM-dd',
+        'dateFormat' => 'dd.MM.yyyy',
         'options' => ['class' => 'form-control']
     ]) ?>
 
     <?= $form->field($model, 'do_date')->widget(DatePicker::className(), [
-        'dateFormat' => 'yyyy-MM-dd',
+        'dateFormat' => 'dd.MM.yyyy',
         'options' => ['class' => 'form-control']
     ]) ?>
 
@@ -47,7 +47,9 @@ use yii\web\JsExpression;
     ])->label(false)?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Редактировать', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Редактировать',
+            ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']
+        ) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

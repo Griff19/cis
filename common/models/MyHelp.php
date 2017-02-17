@@ -1,8 +1,6 @@
 <?php
 namespace common\models;
 
-use Yii;
-
 /**
  * Class MyHelp
  * @property string strArray
@@ -10,27 +8,21 @@ use Yii;
  */
 class MyHelp
 {
-    public $strArray = '';
-
-    /**
-     * @param $arr
-     * @return string
-     */
-    public function arrayToString($arr){
-        var_dump($arr);
-        echo 'тип1: ' . gettype($arr);
-        if (gettype($arr) == "array")
-            foreach ($arr as $item){
-                echo 'тип2: ' . gettype($arr);
-                if (gettype($item) == "array")
-                    $this->arrayToString($item);
-                else $this->strArray .= ' ' . $item;
+    public static function getItem($array, $index = 0)
+    {
+        if (gettype($array) == 'array') {
+            $a = 0;
+            $res = null;
+            foreach ($array as $item) {
+                $a++;
+                if ($a == $index)
+                    $res = $item;
             }
+
+            return $res;
+        }
         else {
-            $this->strArray .= ' ' . $arr;
-            echo 'Знач: ' . $this->strArray;
-            return $this->strArray;
+            return $array;
         }
     }
-
 }

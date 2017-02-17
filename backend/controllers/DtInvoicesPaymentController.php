@@ -168,8 +168,6 @@ class DtInvoicesPaymentController extends Controller
         return $this->redirect(['view', 'id' => $id]);
     }
 
-
-
 	/**
 	 * Устанавливаем статус
 	 * @param $id
@@ -179,8 +177,15 @@ class DtInvoicesPaymentController extends Controller
 	 * @throws NotFoundHttpException
 	 */
 	public function actionSetStatus($id, $status, $mode = 0){
-	//todo: Доработать установку статуса
 
+        $model = $this->findModel($id);
+        $model->scenario = 'update';
+        $model->status = $status;
+        if (!$model->save())
+            Yii::$app->session->setFlash('payment_error', serialize($model->getErrors()));
+
+        $controller = new SiteController('site', $this->module);
+        return $controller->actionEmployeeIt();
 	}
 
     /**

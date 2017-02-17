@@ -8,6 +8,7 @@
 use backend\models\DtInvoicesPayment;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\models\MyHelp;
 
 /* @var $this yii\web\View */
 /* @var $modelDoc \backend\models\DtInvoices */
@@ -21,6 +22,7 @@ use yii\grid\GridView;
 		<?= Html::a('Ведомость на согласование', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_WAITING], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
 		<?= Html::a('Ведомость на оплату', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_AGREED], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
 	</h3>
+    <span class="alert-danger"><?= Yii::$app->session->getFlash('payment_error') ?></span>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -54,10 +56,13 @@ use yii\grid\GridView;
 						$class = 'btn btn-success';
  					}
 					return (empty($str) ? '' : Html::a($str,
-						['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1],
-						['class' => $class . ' btn-sm', 'title' => $title]));
+						//['set-status-payment', 'id' => $model->id, 'status' => $set, 'mode' => 1],
+                        ['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1],
+						['class' => $class . ' btn-sm', 'title' => $title]
+                    ));
 				}
 			]
         ],
     ]); ?>
+
 </div>

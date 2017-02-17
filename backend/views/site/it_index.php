@@ -32,7 +32,7 @@ use yii\widgets\Pjax;
 			<p>Заявки на оборудование</p>
 		</div>
 	</div>
-	<?php Pjax::begin(); ?>
+    <?php Pjax::begin(['enablePushState' => false])?>
 	<div class="row">
 	<?//lg - нужно для того чтобы две таблицы не наезжали друг на друга при сужении экрана ?>
 		<div class="col-lg-6">
@@ -49,7 +49,7 @@ use yii\widgets\Pjax;
 	//таблица устройств в счете "Устройства, требующиие оплату"
 	echo $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did, 'dataProvider' => $provider_did]);
 	//таблица платежей по счету "Манипуляции с платежами"
-	echo $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]);
+    echo $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]);
 	?>
-	<?php Pjax::end(); ?>
+    <?php Pjax::end()?>
 </div>

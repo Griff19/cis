@@ -124,4 +124,8 @@ Modal::end();
 	else
 		echo Html::a('Отменить сохранение', ['un-save', 'id' => $model->id], ['class' => 'btn btn-success'])
 	?>
+    <p>
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+        Сохраненная заявка отправляется в дальнейшую обработку и не может быть изменена.
+    </p>
 </div>
