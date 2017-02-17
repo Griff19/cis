@@ -127,7 +127,7 @@ class DtEnquiries extends ActiveRecord
 
     /**
      * Связь с таблицей устройств
-     * @return ActiveRecord
+     * @return \yii\db\ActiveQuery
      */
     public function getEnquiryDevices(){
         return $this->hasMany(DtEnquiryDevices::className(), ['dt_enquiries_id' => 'id']);
@@ -135,7 +135,7 @@ class DtEnquiries extends ActiveRecord
 
     /**
      * Связь с документом "Счет"
-     * @return ActiveRecord
+     * @return \yii\db\ActiveQuery
      */
     public function getInvoices(){
         return $this->hasMany(DtInvoices::className(), ['id' => 'dt_inv_id'])->via('enquiryDevices');

@@ -4,7 +4,7 @@ use yii\bootstrap\Html;
 use yii\bootstrap\Modal;
 /**
  * @var $this \yii\web\View
- * @var $model backend\models\DtEnquiries *
+ * @var $model backend\models\DtEnquiries
  */
 $this->registerAssetBundle('backend\assets\ModalAsset');
 
@@ -40,11 +40,15 @@ Modal::end();
 		'create_time:datetime',
 	]
 ])?>
-<h3> Счета по заявке </h3>
+<h3> Счета по заявке: </h3>
 <p> Следующие документы необходимо отнести на подпись финансовому директору или лицу,
 	исполняющему его обязанности: </p>
 <?= \yii\grid\GridView::widget([
-	'dataProvider' => $provider,
+	/**
+     * @var $provider \yii\data\ActiveDataProvider Отобранные данные по счетам
+     * @see \backend\models\DtInvoicesSearch::search()
+     */
+    'dataProvider' => $provider,
 	'columns' => [
 		'id',
 		'doc_number',

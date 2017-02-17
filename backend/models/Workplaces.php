@@ -45,7 +45,7 @@ class Workplaces extends \yii\db\ActiveRecord
     {
         return [
             [['room_id', 'branch_id'], 'required'],
-            [['room_id', 'branch_id', 'voip'], 'integer'],
+            [['room_id', 'branch_id', 'voip'], 'integer', 'message' => 'Необходимо заполнить {attribute}'],
             [['workplaces_title'], 'string', 'max' => 255],
             //['ip', 'ip'],
             [['mu'], 'boolean'],

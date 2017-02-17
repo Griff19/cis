@@ -15,7 +15,7 @@ use yii\grid\GridView;
 ?>
 <div class="dt-invoice-devices-index">
 
-    <h3>Устройства, требующие оплаты</h3>
+    <h3>Устройства, требующие оплаты:</h3>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

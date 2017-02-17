@@ -13,7 +13,7 @@ use backend\models\DtEnquiryWorkplaces;
 /* @var $ids_wp[] integer массив идентификаторов рабочих мест */
 ?>
 <div class="dt-enquiry-devices-index">
-    <h3>Устройства, требующие покупки</h3>
+    <h3>Устройства, требующие покупки:</h3>
     <?php Pjax::begin();
     ?>
     <?php
