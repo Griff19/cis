@@ -22,7 +22,7 @@ use yii\grid\GridView;
 //            ['class' => 'yii\grid\SerialColumn'],
             'id',
             'doc_number',
-            'doc_date',
+            'doc_date:date',
             //'d_partners_id',
             ['attribute' => 'partner.name_partner', 'label' => 'Контрагент'],
             'summ',

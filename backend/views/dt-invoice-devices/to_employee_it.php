@@ -3,8 +3,10 @@
  * Таблица устройств, отраженных в документах "Счет"
  * Выводится в представлении site/employee-it (site\it_index.php)
  */
+
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -12,14 +14,27 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->registerAssetBundle('backend\assets\ModalAsset');
+Modal::begin([
+    'header' => '<h4 id = "modalHeader"></h4>',
+    'id' => 'modal',
+    'size' => 'modal-lg'
+]);
+echo '<div id="modalContent"></div>';
+Modal::end();
+
 ?>
 <div class="dt-invoice-devices-index">
 
-    <h3>Устройства, требующие оплаты:</h3>
+    <h3>Устройства, требующие оплаты:
+        <?= Html::a('Ведомость на согласование', ['dt-invoice-devices/pdf'],
+            ['class' => 'btn btn-default', 'data-method' => 'post'])?>
+    </h3>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'layout' => '{items}',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -49,8 +64,14 @@ use yii\grid\GridView;
                 'value' => function ($model) {
                     /** @var \backend\models\DtInvoiceDevices $model */
                     $status = $model->status ? $model->statusString : '-';
-                    if ($model->status == DtEnquiryDevices::AWAITING_PAYMENT) {
-                        return $status . ' ' .Html::a('(Согласовать)', ['dt-enquiries/index-agree', 'id' => $model->dt_enquiries_id], ['title' => 'Согласовать оплату']);
+                    if ($model->status == DtEnquiryDevices::WAITING_AGREE) {
+                        return $status . ' ' .Html::a('(Согласован!)', '#', [
+                                'id' => 'linkModal',
+                                'data-target' => '/admin/dt-invoices-payment/create?id='
+                                    . $model->dt_invoices_id
+                                    . '&is_modal=true&idid='
+                                    . $model->id,
+                                'data-header' => 'Фиксация согласованного платежа']);
                     } elseif ($model->status == DtEnquiryDevices::PAID) {
 						return $status . ' ' . Html::a('(Приходовать)', ['devices/create-from-doc',
 							'type_id' => $model->type_id,

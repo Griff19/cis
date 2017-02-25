@@ -6,7 +6,6 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -28,9 +27,10 @@ class DtEnquiryDevices extends ActiveRecord
     const RESERVED = 1; //зарезервировано
     const NEED_BUY = 2; //требуется покупка
     const REQUEST_INVOICE = 3; //запросить счет
-    const AWAITING_PAYMENT = 4; //ожидает оплаты
-    const PAID = 5; //куплено
-    const DEBIT = 6; //приходовано
+    const WAITING_AGREE = 4; //ожидает согласования
+    const AWAITING_PAYMENT = 5; //ожидает оплаты
+    const PAID = 6; //куплено
+    const DEBIT = 7; //приходовано
 
     /**
      * Готовим массив строк статуса
@@ -42,6 +42,7 @@ class DtEnquiryDevices extends ActiveRecord
             self::NEED_BUY => 'Требуется покупка',
             self::REQUEST_INVOICE => 'Запросить счет',
             self::AWAITING_PAYMENT => 'Ожидает оплаты',
+            self::WAITING_AGREE => 'Ожидает согласования',
             self::PAID => 'Куплено',
             self::DEBIT => 'Оприходовано'
         ];

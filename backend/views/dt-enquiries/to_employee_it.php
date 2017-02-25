@@ -30,8 +30,8 @@ use yii\grid\GridView;
                 },
                 'format' => 'raw'
             ],
-            'create_date',
-            'do_date',
+            'create_date:date',
+            'do_date:date',
             ['attribute' => 'employee_name',
                 'value' => 'employee.snp'
             ],

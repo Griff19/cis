@@ -43,6 +43,19 @@ class DtInvoices extends ActiveRecord
     }
 
     /**
+     * @param bool $insert
+     * @return bool
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->doc_date = Yii::$app->formatter->asDate($this->doc_date, 'yyyy-MM-dd');
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Определяем строковые значения статуса
      * @return array
      */
@@ -144,7 +157,7 @@ class DtInvoices extends ActiveRecord
 				DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
 			}
 			DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $this->id]);
-			$this->status = DtInvoices::DOC_SAVE;
+			$this->status = DtInvoices::DOC_CLOSED;
 			$this->save();
 		}
 		return true;

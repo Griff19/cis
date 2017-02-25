@@ -8,7 +8,6 @@
 use backend\models\DtInvoicesPayment;
 use yii\helpers\Html;
 use yii\grid\GridView;
-use common\models\MyHelp;
 
 /* @var $this yii\web\View */
 /* @var $modelDoc \backend\models\DtInvoices */
@@ -19,8 +18,8 @@ use common\models\MyHelp;
 <div class="dt-invoices-payment-index">
 
     <h3> Манипуляции с платежами:
-		<?= Html::a('Ведомость на согласование', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_WAITING], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
-		<?= Html::a('Ведомость на оплату', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_AGREED], ['class' => 'btn btn-default', 'data-method' => 'post'])?>
+		<?= Html::a('Ведомость на оплату', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_AGREED],
+            ['class' => 'btn btn-default', 'data-method' => 'post'])?>
 	</h3>
     <span class="alert-danger"><?= Yii::$app->session->getFlash('payment_error') ?></span>
     <?= GridView::widget([
@@ -29,13 +28,20 @@ use common\models\MyHelp;
         'rowOptions' => function ($model) {
             return ['class' => $model->status != DtInvoicesPayment::PAY_OK ? : 'success'];
         },
+        'layout' => '{items}',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			['attribute' => 'dt_invoices_id',
 				'label' => 'Счет',
 				'value' => function ($model) {
-					return 'Счет №' . $model->dtInvoice->id . ' ' . $model->dtInvoice->doc_number;
-				}
+                    /** @var $model DtInvoicesPayment */
+					return Html::a(
+                        'Счет №' . $model->dtInvoice->id
+                        . ' ' . $model->dtInvoice->doc_number
+                        . ' (' . $model->dtInvoice->summ . '/'. $model->dtInvoice->summPay .')',
+                        ['dt-invoices/view', 'id' => $model->dtInvoice->id]);
+				},
+                'format' => 'raw',
 			],
             'agreed_date:date',
             'summ',

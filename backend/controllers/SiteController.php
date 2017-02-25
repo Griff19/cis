@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\DtInvoiceDevices;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
 use Yii;
@@ -41,7 +42,9 @@ class SiteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['admin', 'admin_workplace', 'employee-it', 'set-status-payment'],
+                        'actions' => ['admin', 'admin_workplace', 'employee-it', 'set-status-payment',
+                            'set-status-invoice-dev'
+                        ],
                         'allow' => true,
                         'roles' => ['it']
                     ],
@@ -97,7 +100,8 @@ class SiteController extends Controller
      * Основная страница сотрудника отдела IT
      * @return string
      */
-    public function actionEmployeeIt(){
+    public function actionEmployeeIt()
+    {
         //собираем документы "Заявка на оборудование"
         $search_de = new DtEnquiriesSearch();
         $provider_de = $search_de->search(Yii::$app->request->queryParams);
@@ -107,13 +111,13 @@ class SiteController extends Controller
         //собираем данные по устройствам в документах "Счет"
         $search_did = new DtInvoiceDevicesSearch();
         $provider_did = $search_did->searchToEmployee(Yii::$app->request->queryParams);
-		//$provider_did = $search_did->search(Yii::$app->request->queryParams);
+        //$provider_did = $search_did->search(Yii::$app->request->queryParams);
         //собираем данные по устройствам в документах "Заявка на оборудование"
         $search_ded = new DtEnquiryDevicesSearch();
         $provider_ded = $search_ded->searchDevices(Yii::$app->request->queryParams);
-		//собираем данные по оплатам счетов
-		$search_dip = new DtInvoicesPaymentSearch(['scenario' => 'to_employee']);
-		$provider_dip = $search_dip->searchPayments(Yii::$app->request->queryParams);
+        //собираем данные по оплатам счетов
+        $search_dip = new DtInvoicesPaymentSearch(['scenario' => 'to_employee']);
+        $provider_dip = $search_dip->searchPayments(Yii::$app->request->queryParams);
         return $this->render('it_index', [
             'search_de' => $search_de,
             'provider_de' => $provider_de,
@@ -123,41 +127,60 @@ class SiteController extends Controller
             'provider_did' => $provider_did,
             'search_ded' => $search_ded,
             'provider_ded' => $provider_ded,
-			'search_dip' => $search_dip,
-			'provider_dip' => $provider_dip
+            'search_dip' => $search_dip,
+            'provider_dip' => $provider_dip
         ]);
     }
 
     /**
      * Генерируем страницу для сотрудника ит-отдела
      */
-    public function actionIt(){
+    public function actionIt()
+    {
         return $this->render('it_index');
     }
 
     /**
      * Устанавливаем статус платежа
-     *
      * @param int $id Идентификатор платежа
      * @param int $status Устанавливаемый статус платежа
-     * @return \yii\web\Response
+     * @return string
      */
-	public function actionSetStatusPayment($id, $status){
-		$model = DtInvoicesPayment::findOne($id);
-		$model->scenario = 'update';
-		$model->status = $status;
-		if (!$model->save())
+    public function actionSetStatusPayment($id, $status)
+    {
+        $model = DtInvoicesPayment::findOne($id);
+        $model->scenario = 'update';
+        $model->status = $status;
+        if (!$model->save())
             Yii::$app->session->setFlash('error', serialize($model->getErrors()));
 
-		return $this->actionEmployeeIt();
-	}
+        return $this->actionEmployeeIt();
+    }
+
+    /**
+     * Устанавливаем статус устройства в документе "Счет"
+     * @param int $idid Идентификатор устройства в документе "Счет"
+     * @param int $status Устанавливаемый статус устройства
+     * @return string
+     */
+    public function actionSetStatusInvoiceDev($idid, $status)
+    {
+        //$payment
+        $model = DtInvoiceDevices::findOne($idid);
+        $model->status = $status;
+        if (!$model->save())
+            Yii::$app->session->setFlash('error', serialize($model->getErrors()));
+
+        return $this->actionEmployeeIt();
+    }
 
     /**
      * Страница с формой поиска рабочих мест и сотрудников
      * @param int $tab
      * @return string
      */
-    public function actionAdmin_workplace($tab = 1){
+    public function actionAdmin_workplace($tab = 1)
+    {
         $workplaceSearch = new AdminWorkplacesSearch();
         $workplaceProvider = $workplaceSearch->search(Yii::$app->request->queryParams);
 

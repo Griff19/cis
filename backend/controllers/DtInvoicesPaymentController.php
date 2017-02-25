@@ -5,11 +5,12 @@
 
 namespace backend\controllers;
 
-use backend\models\DtInvoiceDevicesSearch;
-use backend\models\DtInvoices;
+use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoiceDevices;
 use backend\models\Images;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
+use kartik\mpdf\Pdf;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,20 +34,19 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
-	 * Не используется
+     * Не используется
      * Lists all DtInvoicesPayment models.
      * @return mixed
 
     public function actionIndex()
-    {
-        $searchModel = new DtInvoicesPaymentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }*/
+     * {
+     * $searchModel = new DtInvoicesPaymentSearch();
+     * $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+     * return $this->render('index', [
+     * 'searchModel' => $searchModel,
+     * 'dataProvider' => $dataProvider,
+     * ]);
+     * }*/
 
     /**
      * Displays a single DtInvoicesPayment model.
@@ -61,44 +61,64 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
-     * Вводим оплату по документу "Счет"
-     * @param $id int идентификатор документа "Счет"
-     * @return mixed
+     * @param $id
+     * @param bool $is_modal
+     * @param int $idid
+     * @return string|\yii\web\Response
      */
-    public function actionCreate($id)
+    public function actionCreate($id, $is_modal = false, $idid = 0)
     {
         $model = new DtInvoicesPayment();
         $model->dt_invoices_id = $id;
         $model->status = DtInvoicesPayment::PAY_AGREED;
 
         if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                /** @var DtInvoiceDevices $model_id */
+                $model_id = DtInvoiceDevices::findOne($idid);
+                $model_ed = DtEnquiryDevices::findOne($model_id->dt_enquiry_devices_id);
 
-			$model->save();
-            return $this->redirect(['dt-invoices/view', 'id' => $id]);
+                $model_id->status = DtEnquiryDevices::AWAITING_PAYMENT;
+                $model_ed->status = DtEnquiryDevices::AWAITING_PAYMENT;
+
+                if ($model_id->save()) Yii::$app->session->setFlash('error', serialize($model_id->getErrors()));
+                if ($model_ed->save()) Yii::$app->session->setFlash('error', serialize($model_ed->getErrors()));
+            }
+
+            if ($is_modal)
+                return $this->redirect(['site/employee-it']);
+            else
+                return $this->redirect(['dt-invoices/view', 'id' => $id]);
         } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            if (Yii::$app->request->isAjax)
+                return $this->renderAjax('create', ['model' => $model]);
+            else
+                return $this->render('create', ['model' => $model]);
         }
     }
 
-	public function actionPdf($status) {
+    /**
+     * @param $status
+     * @return mixed
+     */
+    public function actionPdf($status)
+    {
 
-		$searchModel = new DtInvoicesPaymentSearch();
-		$dataProvider = $searchModel->searchPayments(Yii::$app->request->queryParams, $status);
+        $searchModel = new DtInvoicesPaymentSearch();
+        $dataProvider = $searchModel->searchPayments(Yii::$app->request->queryParams, $status);
 
-		$type = $status == DtInvoicesPayment::PAY_AGREED ? 'на оплату' : 'на согласование';
-		$this->layout = 'pdf';
-		/** @var Pdf $pdf */
-		$pdf = Yii::$app->pdf;
-		$pdf->options = ['title' => 'Ведомость' ];
+        $type = 'на оплату';
+        $this->layout = 'pdf';
+        /** @var Pdf $pdf */
+        $pdf = Yii::$app->pdf;
+        $pdf->options = ['title' => 'Ведомость'];
 
-		$pdf->content = $this->render('pdf', [
-			'dataProvider' => $dataProvider,
-			'type' => $type
-		]);
-		return $pdf->render();
-	}
+        $pdf->content = $this->render('pdf', [
+            'dataProvider' => $dataProvider,
+            'type' => $type
+        ]);
+        return $pdf->render();
+    }
 
     /**
      * Updates an existing DtInvoicesPayment model.
@@ -139,10 +159,11 @@ class DtInvoicesPaymentController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionAgree($id){
+    public function actionAgree($id)
+    {
         $model = $this->findModel($id);
         $key = md5('dt-invoices-payment' . $id);
-        if (Images::getLinkfile($key)){
+        if (Images::getLinkfile($key)) {
             $model->status = DtInvoicesPayment::PAY_AGREED;
             if (!$model->save())
                 Yii::$app->session->setFlash('error', 'Не удалось сохранить платеж с новым статусом');
@@ -151,7 +172,7 @@ class DtInvoicesPaymentController extends Controller
             return $this->redirect(['view', 'id' => $id]);
         }
 
-        return $this->redirect(['dt-invoices/view','id' => $model->dt_invoices_id]);
+        return $this->redirect(['dt-invoices/view', 'id' => $model->dt_invoices_id]);
 
     }
 
@@ -161,22 +182,23 @@ class DtInvoicesPaymentController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionDisagree($id){
+    public function actionDisagree($id)
+    {
         $model = $this->findModel($id);
         $model->status = DtInvoicesPayment::PAY_WAITING;
         $model->save();
         return $this->redirect(['view', 'id' => $id]);
     }
 
-	/**
-	 * Устанавливаем статус
-	 * @param $id
-	 * @param $status
-	 * @param int $mode
-	 * @return \yii\web\Response
-	 * @throws NotFoundHttpException
-	 */
-	public function actionSetStatus($id, $status, $mode = 0){
+    /**
+     * Устанавливаем статус
+     * @param $id
+     * @param $status
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionSetStatus($id, $status)
+    {
 
         $model = $this->findModel($id);
         $model->scenario = 'update';
@@ -186,10 +208,9 @@ class DtInvoicesPaymentController extends Controller
 
         $controller = new SiteController('site', $this->module);
         return $controller->actionEmployeeIt();
-	}
+    }
 
     /**
-     *
      * @param integer $id
      * @return DtInvoicesPayment the loaded model
      * @throws NotFoundHttpException if the model cannot be found

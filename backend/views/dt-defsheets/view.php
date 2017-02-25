@@ -9,12 +9,13 @@ use backend\models\DtDefsheets;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtDefsheets */
-$this->registerAssetBundle('backend\assets\ModalAsset');
+
 
 $this->title = 'Акт списания №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Акты списания', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 //Модальное окно для правки сотрудника
+$this->registerAssetBundle('backend\assets\ModalAsset');
 Modal::begin([
     'header' => '<h4 id = modalHeader></h4>',
     'id' => 'modal',

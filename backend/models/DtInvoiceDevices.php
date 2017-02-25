@@ -6,7 +6,6 @@
 
 namespace backend\models;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**
@@ -21,6 +20,7 @@ use yii\db\ActiveRecord;
  * @property integer $dt_enquiry_devices_id
  * @property DtEnquiries dtEnquiry
  * @property DtEnquiryDevices dtEnquiryDevice
+ * @property DtInvoices dtInvoice
  */
 class DtInvoiceDevices extends ActiveRecord
 {
@@ -45,27 +45,41 @@ class DtInvoiceDevices extends ActiveRecord
         ];
     }
 
-	/**
-	 * Получаем строку статуса. Массив строк получаем из аналогичной модели "Устройства в заявке на оборудование"
-	 * @return string
-	 */
-	public function getStatusString(){
-		$arr = DtEnquiryDevices::arrStatusString();
-		return $arr[$this->status];
-	}
+    /**
+     * Получаем строку статуса. Массив строк получаем из аналогичной модели "Устройства в заявке на оборудование"
+     * @return string
+     */
+    public function getStatusString()
+    {
+        $arr = DtEnquiryDevices::arrStatusString();
+        return $arr[$this->status];
+    }
 
     /**
+     * Связь с документом "Заявка"
      * @return \yii\db\ActiveQuery
      */
-    public function getDtEnquiry() {
+    public function getDtEnquiry()
+    {
         return $this->hasOne(DtEnquiries::className(), ['id' => 'dt_enquiries_id']);
     }
 
     /**
+     * Связь со строкой в документе "Заявка"
      * @return \yii\db\ActiveQuery
      */
-    public function getDtEnquiryDevice() {
+    public function getDtEnquiryDevice()
+    {
         return $this->hasOne(DtEnquiryDevices::className(), ['id' => 'dt_enquiry_devices_id']);
+    }
+
+    /**
+     * Связь с документом "Счет"
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDtInvoice()
+    {
+        return $this->hasOne(DtInvoices::className(), ['id' => 'dt_invoices_id']);
     }
 
     /**

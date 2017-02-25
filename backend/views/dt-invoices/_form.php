@@ -19,7 +19,7 @@ use yii\web\JsExpression;
     <?= $form->field($model, 'doc_number')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'doc_date')->widget(DatePicker::className(), [
-        'dateFormat' => 'yyyy-MM-dd',
+        'dateFormat' => 'dd.MM.yyyy',
         'options' => ['class' => 'form-control']
     ]) ?>
 

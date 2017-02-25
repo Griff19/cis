@@ -10,11 +10,12 @@ use yii\web\JsExpression;
 /* @var $this yii\web\View */
 /* @var $model backend\models\DtInvoicesPayment */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $append string Определяет открывать ли виджет в модальном окне */
 ?>
 
-<div class="dt-invoices-payment-form">
+<div class="dt-invoices-payment-form" id = 'pay_form'>
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['options' => ['id' => 'form_pay']]); ?>
     <h4>Документ № <?= $model->dt_invoices_id ?></h4>
     <?php //echo $form->field($model, 'dt_invoices_id')->textInput() ?>
 
@@ -26,16 +27,20 @@ use yii\web\JsExpression;
     ?>
 
     <?= $form->field($model, 'summ')->textInput() ?>
-
-    <?= $form->field($model, 'employee_name')->widget(
-        AutoComplete::className(), [
-            'clientOptions' => [
-                'source' => Employees::arraySnpId(),
-                'minLength' => 3,
-                'select' => new JsExpression("function ( event, ui ){
+    <?php
+        $clientOptions = [
+            'source' => Employees::arraySnpId(),
+            'minLength' => 3,
+            'appendTo' => '#pay_form',
+            'select' => new JsExpression("function ( event, ui ){
                     $('#employee_id_hidd').val( ui.item.id );
                 }")
-            ],
+        ];
+
+    ?>
+    <?= $form->field($model, 'employee_name')->widget(
+        AutoComplete::className(), [
+            'clientOptions' => $clientOptions,
             'options' => ['class' => 'form-control']
         ]
     ) ?>

@@ -2,14 +2,12 @@
 
 namespace backend\controllers;
 
+use kartik\mpdf\Pdf;
 use Yii;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoices;
-use backend\models\DtInvoicesPaymentSearch;
-use backend\models\DtEnquiryDevicesSearch;
-
 use backend\models\DtInvoiceDevices;
-use app\models\DtInvoiceDevicesSearch;
+use backend\models\DtInvoiceDevicesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,9 +61,13 @@ class DtInvoiceDevicesController extends Controller
 
     /**
      * Добавляем новое устройство в табличную часть документа Счет
+     * @param $dt_invoices_id
+     * @param $id
      * @return mixed
+     * @internal param $dt_enquiries_id
+     * @internal param $type_id
      */
-    public function actionCreate($dt_invoices_id, $dt_enquiries_id, $type_id, $id)
+    public function actionCreate($dt_invoices_id, $id)
     {
         /* @var $deviceEnquiry DtEnquiryDevices */
         $deviceEnquiry = DtEnquiryDevices::find()->where(['id' => $id])->one();
@@ -96,7 +98,8 @@ class DtInvoiceDevicesController extends Controller
      * @param $dt_invoices_id
      * @return string|\yii\web\Response
      */
-    public function actionAdd($dt_invoices_id){
+    public function actionAdd($dt_invoices_id)
+    {
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
         $model->status = DtEnquiryDevices::AWAITING_PAYMENT;
@@ -110,18 +113,20 @@ class DtInvoiceDevicesController extends Controller
      * Редактировать устройство в документе счет. В данном контексте тебуется сменить только статус
      * @param integer $id
      * @return mixed
-     */
+     *
     public function actionUpdate($id)
     {
 
     }
+     */
 
     /**
      * @param $id
      * @return int
      * @throws NotFoundHttpException
      */
-    public function actionSetStatus($id){
+    public function actionSetStatus($id)
+    {
         $model = $this->findModel($id);
         if ($model->status == DtEnquiryDevices::DEBIT) return 0;
         /**
@@ -143,7 +148,9 @@ class DtInvoiceDevicesController extends Controller
         }
         $model->save();
         $modelEnquiry->save();
+        return true;
     }
+
     /**
      * Удаляем строку устройства из табличной части документа "Счет"
      * При успешном удалении меняем статус в строке документа "Заявка"
@@ -167,7 +174,27 @@ class DtInvoiceDevicesController extends Controller
     }
 
     /**
-     *
+     * @return mixed
+     */
+    public function actionPdf()
+    {
+        $searchModel = new DtInvoiceDevicesSearch();
+        $dataProvider = $searchModel->searchToEmployee(Yii::$app->request->queryParams);
+
+        $type = 'на согласование';
+        $this->layout = 'pdf';
+        /** @var Pdf $pdf */
+        $pdf = Yii::$app->pdf;
+        $pdf->options = ['title' => 'Ведомость'];
+
+        $pdf->content = $this->render('pdf', [
+            'dataProvider' => $dataProvider,
+            'type' => $type
+        ]);
+        return $pdf->render();
+    }
+
+    /**
      * @param integer $id
      * @return DtInvoiceDevices the loaded model
      * @throws NotFoundHttpException if the model cannot be found

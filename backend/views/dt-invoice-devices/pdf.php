@@ -1,10 +1,10 @@
 <?php
 /**
- * Ведомость на олату и согласование платежей
+ * Ведомость на согласование платежей
  *
  */
 
-use backend\models\DtInvoicesPayment;
+use backend\models\DeviceType;
 use yii\grid\GridView;
 
 /* @var $dataProvider yii\data\ActiveDataProvider
@@ -14,10 +14,12 @@ use yii\grid\GridView;
 ?>
 <div class="dt-invoices-payment-index">
 	<h3> Ведомость <?= $type ?></h3>
+    <p>Начальник отдела информатизации:________________________________________________________</p>
+    <p>Финансовый директор:____________________________________________________________________</p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'tableOptions' => ['class' => 'table table-striped table-condensed', 'style' => 'font-size: 12px'],
-
+        'layout' => '{items}',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			['attribute' => 'dt_invoices_id',
@@ -26,8 +28,11 @@ use yii\grid\GridView;
 					return 'Счет №' . $model->dtInvoice->id . ' ' . $model->dtInvoice->doc_number;
 				}
 			],
-			['attribute' => 'agreed_date', 'header' => 'Дата', 'format' => 'date'],
-            ['attribute' => 'summ', 'header' => 'Сумма'],
+			['attribute' => 'type_id', 'header' => 'Тип',
+                'value' => function ($model) {
+                return DeviceType::getTitle($model->type_id);
+            }],
+            ['attribute' => 'price', 'header' => 'Сумма'],
             //['attribute' => 'employee.snp', 'header' => 'Согласовавший'],
             ['attribute' => 'status', 'header' => 'Статус', 'value' => 'statusString'],
 			['class' => 'yii\grid\Column', 'header' => 'Подпись']

@@ -34,7 +34,7 @@ class DtInvoiceDevicesSearch extends DtInvoiceDevices
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Выбираем устройства, привязанные к документу "Счет" по id
      * @param array $params
      * @return ActiveDataProvider
      */
