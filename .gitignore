@@ -31,3 +31,4 @@ phpunit.phar
 /phpunit.xml
 
 err_log.txt
+/.idea/vcs.xml

@@ -38,7 +38,8 @@ class DtEnquiries extends ActiveRecord
     public function beforeSave($insert)
     {
         $this->create_date = Yii::$app->formatter->asDate($this->create_date, 'yyyy-MM-dd');
-        $this->do_date = Yii::$app->formatter->asDate($this->do_date, 'yyyy-MM-dd');
+        if ($this->do_date)
+            $this->do_date = Yii::$app->formatter->asDate($this->do_date, 'yyyy-MM-dd');
 
         return parent::beforeSave($insert);
     }
