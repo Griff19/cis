@@ -11,13 +11,13 @@ use yii\grid\Column;
 /* @var $searchModel backend\models\DevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Устройства';
+$this->title = 'Устройства на складе';
 $this->params['breadcrumbs'][] = $this->title;
 
 $param = Yii::$app->request->queryParams;
 $target = ArrayHelper::getValue($param, 'target');
 $mess = '';
-if ($target == 'dt-enquiry-devices/create2') $mess = 'Выберите устройство которое необходимо заменить';
+if ($target == 'dt-enquiry-devices/create2') $mess = 'Выберите устройство которое необходимо установить';
 if($target && $param) $query = Yii::$app->request->queryString; else $query = null;
 //var_dump($query);
 ?>
@@ -73,8 +73,10 @@ if($target && $param) $query = Yii::$app->request->queryString; else $query = nu
         'rowOptions' => function (Devices $model) {
             $res = '';
 
-            if ($model->fake_device == 1)
+            if ($model->fake_device == Devices::DEVICE_FAKE)
                 $res = ['class' => 'info'];
+            else if ($model->fake_device == Devices::DEVICE_RESERVED)
+                $res = ['class' => 'danger'];
             return $res;
         },
         'columns' => $cols,

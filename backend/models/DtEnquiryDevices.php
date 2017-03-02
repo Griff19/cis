@@ -24,6 +24,7 @@ use yii\db\ActiveRecord;
  */
 class DtEnquiryDevices extends ActiveRecord
 {
+    const DEV_DEFAULT = 0; //
     const RESERVED = 1; //зарезервировано
     const NEED_BUY = 2; //требуется покупка
     const REQUEST_INVOICE = 3; //запросить счет
@@ -38,6 +39,7 @@ class DtEnquiryDevices extends ActiveRecord
      */
     public static function arrStatusString(){
         return [
+            self::DEV_DEFAULT => 'Установлено',
             self::RESERVED => 'Зарезервировано',
             self::NEED_BUY => 'Требуется покупка',
             self::REQUEST_INVOICE => 'Запросить счет',
@@ -105,4 +107,6 @@ class DtEnquiryDevices extends ActiveRecord
     public function getDtEnquiry() {
         return $this->hasOne(DtEnquiries::className(), ['id' => 'dt_enquiries_id']);
     }
+
+
 }

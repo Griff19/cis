@@ -138,7 +138,7 @@ class DtEnquiryDevicesController extends Controller
     /**
      * Добавляем строку в табличную часть документа Заявка на оборудование
      * Устройство выбирается из списка устройств на рабочих местах
-     * @param $id
+     * @param $id Devices Идентификатор выбраного устройства
      * @param $param
      * @return string|\yii\web\Response
      */
@@ -150,17 +150,20 @@ class DtEnquiryDevicesController extends Controller
             $param = Yii::$app->request->queryString;
         parse_str($param, $arr);
         $id_doc = $arr['id_doc'];
-        $dev_id = ArrayHelper::getValue($arr, 'dev_id');
+        //$dev_id = ArrayHelper::getValue($arr, 'dev_id');
         $id_def = ArrayHelper::getValue($arr, 'id_def');
         $model = new DtEnquiryDevices();
         $device = Devices::findOne($id);
 
         $model->dt_enquiries_id = $id_doc;
         $model->type_id = $device->type_id;
+
+        $dew = DtEnquiryWorkplaces::findOne(['dt_enquiries_id' => $model->dt_enquiries_id]);
+        $model->workplace_id = $dew->workplace_id;
         //нужно отразить в акте списания что устройство на замену подобрано
         //сменить статус
-        /* @var $dev_def DtDefsheetDevices */
 
+        /* @var $dev_def DtDefsheetDevices */
         $dev_def = DtDefsheetDevices::findOne(['id_def' => $id_def]);
 
         if ($device->parent_device_id)
@@ -183,15 +186,12 @@ class DtEnquiryDevicesController extends Controller
         if ($id_doc > 0){
             return $this->redirect(['dt-enquiries/view', 'id' => $id_doc]);
         } else {
-            return $this->render('create', [
-                'model' => $model
-            ]);
+            return $this->render('create', ['model' => $model]);
         }
     }
 
     /**
-     * Updates an existing DtEnquiryDevices model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
      * @return mixed
      */

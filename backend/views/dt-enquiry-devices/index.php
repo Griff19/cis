@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use backend\models\DtEnquiryWorkplaces;
+use backend\models\DtEnquiryDevices;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DtEnquiriyDevicesSearch */
@@ -38,11 +39,12 @@ use backend\models\DtEnquiryWorkplaces;
         'dt_enquiries_id',
         'dt_def_dev_id',
         ['attribute' => 'workplace_id',
-            'value' => function ($model) use ($modelDoc) {
+            'value' => function (DtEnquiryDevices $model) use ($modelDoc) {
                 if ($modelDoc->status == 0) {
                     $str = $model->workplace_id ? $model->workplace_id : 0;
                     return Html::dropDownList('rm', $str, ArrayHelper::map(DtEnquiryWorkplaces::arrWpIds($model->dt_enquiries_id), 'workplace_id', 'workplace_id'),
                         ['class' => 'form-control',
+                            'id' => 'wp_sel',
                             'title' => 'Выберите рабочее место для устройства...',
                             'onchange' => '$.post("/admin/dt-enquiries/set-device-wp?id='.$model->id.'&id_wp="+$(this).val())'
                         ]
@@ -60,7 +62,19 @@ use backend\models\DtEnquiryWorkplaces;
             }
         ],
         'parent_device_id',
-        'statusString',
+        ['attribute' => 'statusString',
+            'value' => function (DtEnquiryDevices $model) {
+                $str = '';
+                 if ($model->status == DtEnquiryDevices::RESERVED)
+                    $str = ' ' . Html::tag('span', '(Установить)',
+                            ['onclick' => '$.post("/admin/dt-enquiries/set-device-on-wp?ded_id='.$model->id.'&wp_id="+$("#wp_sel").val())',
+                                'class' => 'click',
+                                'title' => 'Отметить что устройство установили на рабочее место'
+                            ]);
+                return $model->statusString . $str;
+            },
+            'format' => 'raw',
+        ],
         ['attribute' => 'dt_inv_id',
             'value' => function ($model){
                 $res = null;

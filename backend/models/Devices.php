@@ -32,6 +32,10 @@ class Devices extends \yii\db\ActiveRecord
     const SCENARIO_UPDATE = 'update';
     const SCENARIO_NOSN = 'nosn';
 
+    const DEVICE_DEF = 0; //обычное устройство
+    const DEVICE_FAKE = 1; //фейк устройство
+    const DEVICE_RESERVED = 2; //зарезервировано
+
     public $branch_id;
     public $room_id;
     public $count;

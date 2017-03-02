@@ -4,6 +4,7 @@
  */
 namespace backend\controllers;
 
+use backend\models\Devices;
 use Yii;
 use backend\models\Message;
 use backend\models\DtEnquiryDevices;
@@ -33,7 +34,7 @@ class DtEnquiriesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view', 'pdf', 'set-status'],
+                        'actions' => ['index','view', 'pdf', 'set-status', 'set-device-on-wp'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -283,6 +284,27 @@ class DtEnquiriesController extends Controller
 		if ($mode == 0)
 			return $this->redirect(['site/employee-it']);
 	}
+
+    /**
+     * Устанавливаем зарезервированное устройство на ребочее место
+     * @param $ded_id
+     * @param $wp_id
+     * @return \yii\web\Response
+     */
+	public function actionSetDeviceOnWp($ded_id, $wp_id)
+    {
+        $ded = DtEnquiryDevices::findOne($ded_id);
+        $ded->status = 0;
+        $ded->workplace_id = $wp_id;
+        $ded->note = '';
+        $ded->save();
+        $device = Devices::findOne($ded->device_id);
+        $device->fake_device = Devices::DEVICE_DEF;
+        $device->setTowp($wp_id);
+
+        return $this->redirect(['view', 'id' => $ded->dt_enquiries_id]);
+
+    }
 
     /**
      * Finds the DtEnquiries model based on its primary key value.
