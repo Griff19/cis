@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\DtEnquiryWorkplaces;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DtEnquiryWorkplacesSearch */
@@ -23,8 +24,18 @@ use yii\grid\GridView;
     $columns = [
         ['class' => 'yii\grid\SerialColumn'],
         'dt_enquiries_id',
-        'workplace_id',
-        'workplace.workplaces_title',
+        ['attribute' => 'workplace_id',
+            'value' => function (DtEnquiryWorkplaces $model) {
+                return Html::a($model->workplace_id, ['workplaces/view', 'id' => $model->workplace_id]);
+            },
+            'format' => 'raw',
+        ],
+        ['attribute' => 'workplace.workplaces_title',
+            'value' => function (DtEnquiryWorkplaces $model) {
+                return Html::a($model->workplace->workplaces_title, ['workplaces/view', 'id' => $model->workplace_id]);
+            },
+            'format' => 'raw',
+        ],
         ['class' => '\yii\grid\Column',
             'header' => 'Ответственный',
             'content' => function($model) {
