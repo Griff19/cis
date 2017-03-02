@@ -6,6 +6,7 @@ use yii\widgets\Pjax;
 use yii\helpers\ArrayHelper;
 use backend\models\DtEnquiryWorkplaces;
 use backend\models\DtEnquiryDevices;
+use backend\models\DtEnquiries;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DtEnquiriyDevicesSearch */
@@ -65,12 +66,9 @@ use backend\models\DtEnquiryDevices;
         ['attribute' => 'statusString',
             'value' => function (DtEnquiryDevices $model) {
                 $str = '';
-                 if ($model->status == DtEnquiryDevices::RESERVED)
-                    $str = ' ' . Html::tag('span', '(Установить)',
-                            ['onclick' => '$.post("/admin/dt-enquiries/set-device-on-wp?ded_id='.$model->id.'&wp_id="+$("#wp_sel").val())',
-                                'class' => 'click',
-                                'title' => 'Отметить что устройство установили на рабочее место'
-                            ]);
+                 if ($model->status == DtEnquiryDevices::RESERVED && $model->dtEnquiry->status == DtEnquiries::DTE_SAVED)
+                    $str = '' . Html::a('(Установить)', ['set-device-on-wp', 'ded_id' => $model->id, 'wp_id' => $model->workplace_id],
+                            ['title' => 'Пометить как установленное на выбраное РМ. Сменить статус']);
                 return $model->statusString . $str;
             },
             'format' => 'raw',
