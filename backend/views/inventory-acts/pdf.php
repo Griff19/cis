@@ -19,13 +19,14 @@ $exec = $model->execEmployee->snp;
 ?>
 
 <h3> Акт инвентаризации №<?= $model->id ?> от <?= $model->act_date ?></h3>
-<p>РМ №<?= $model->workplace->id ?>
-    Помещение:<?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?></p>
-<p>Ответственный: <?= $owner ?> (<?= $model->ownerEmployee->job_title ?>)</p>
+<p>
+    РМ №<?= $model->workplace->id ?><br/>
+    Помещение:<?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?><br/>
+    Ответственный: <?= $owner ?> (<?= $model->ownerEmployee->job_title ?>)<br/>
 <?php if ($oldModel) { ?>
-    <p>Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?></p>
+    Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?><br/>
 <?php } ?>
-<p>Инвентаризацию провел: <?= $exec ?></p>
+    Инвентаризацию провел: <?= $exec ?></p>
 <br>
 <h4>Устройства на рабочем месте:</h4>
 <?php
