@@ -22,9 +22,9 @@ $exec = $model->execEmployee->snp;
     РМ №<?= $model->workplace->id ?><br/>
     Помещение:<?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?><br/>
     Ответственный: <?= $owner ?> (<?= $model->ownerEmployee->job_title ?>)<br/>
-<?php if ($oldModel) { ?>
-    Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?><br/>
-<?php } ?>
+    <?php if ($oldModel) { ?>
+        Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?><br/>
+    <?php } ?>
     Инвентаризацию провел: <?= $exec ?>
 </p>
 <h4>Устройства на рабочем месте:</h4>
@@ -90,38 +90,44 @@ if ($devProvider)
 ?>
 <?php
 echo '<h4>Устройства, перемещенные на другие рабочие места:</h4>';
-if (isset($consModelProvider->models)) {
-    echo GridView::widget([
-        'dataProvider' => $consModelProvider,
-        'layout' => '{items}',
-        'tableOptions' => $options,
-        //'rowOptions' =>
-        'columns' => $columns,
-    ]);
-} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
+if ($consModelProvider) {
+    if ($consModelProvider->count > 0) {
+        echo GridView::widget([
+            'dataProvider' => $consModelProvider,
+            'layout' => '{items}',
+            'tableOptions' => $options,
+            //'rowOptions' =>
+            'columns' => $columns,
+        ]);
+    } else echo '<p style = "font-size: 9px">Не найдено...</p>';
+} else echo '<p style = "font-size: 9px">Не найдено...</p>';?>
 <?php
 echo '<h4>Добавленные устройства:</h4>';
-if (isset($newDevProvider->models)) {
-    echo GridView::widget([
-        'dataProvider' => $newDevProvider,
-        'layout' => '{items}',
-        'tableOptions' => $options,
-        //'rowOptions' =>
-        'columns' => $columns,
-    ]);
-} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
+if ($newDevProvider) {
+    if ($newDevProvider->count > 0) {
+        echo GridView::widget([
+            'dataProvider' => $newDevProvider,
+            'layout' => '{items}',
+            'tableOptions' => $options,
+            //'rowOptions' =>
+            'columns' => $columns,
+        ]);
+    } else echo '<p style = "font-size: 9px">Не найдено...</p>';
+} else echo '<p style = "font-size: 9px">Не найдено...</p>';?>
 
 <?php
 echo '<h4>Потеряные устройства:</h4>';
-if (isset($lostDevProvider->models)) {
-    echo GridView::widget([
-        'dataProvider' => $lostDevProvider,
-        'layout' => '{items}',
-        'tableOptions' => $options,
-        //'rowOptions' =>
-        'columns' => $columns,
-    ]);
-} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
+if ($lostDevProvider) {
+    if ($lostDevProvider->count > 0) {
+        echo GridView::widget([
+            'dataProvider' => $lostDevProvider,
+            'layout' => '{items}',
+            'tableOptions' => $options,
+            //'rowOptions' =>
+            'columns' => $columns,
+        ]);
+    } else echo '<p style = "font-size: 9px">Не найдено...</p>';
+} else echo '<p style = "font-size: 9px">Не найдено...</p>';?>
 <br>
 <p>Ответственный: ______________ <?= $owner ?></p>
 <p>Инвентаризацию провел: ______________ <?= $exec ?></p>
