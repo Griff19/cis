@@ -38,7 +38,7 @@ class InventoryActsController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view', 'create', 'delete', 'save', 'create-tb', 'create-pdf', 'agree'],
+                        'actions' => ['index', 'view', 'create', 'delete', 'save', 'create-tb', 'create-pdf', 'agree'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -59,11 +59,11 @@ class InventoryActsController extends Controller
         ];
     }
 
-	/**
-	 * Список актов инвентаризации.
-	 * @param null $id_wp
-	 * @return mixed
-	 */
+    /**
+     * Список актов инвентаризации.
+     * @param null $id_wp
+     * @return mixed
+     */
     public function actionIndex($id_wp = null)
     {
         $searchModel = new InventoryActsSearch();
@@ -76,22 +76,24 @@ class InventoryActsController extends Controller
         ]);
     }
 
-	/**
-	 * Отображаем Акт инвентаризации по рабочему месту
-	 * со списком устройств с которыми можно работать
-	 * @param integer $id идентификатор/номер документа Акт Инвентаризации
-	 * @param null $id_wp
-	 * @return mixed
-	 * @throws NotFoundHttpException
-	 */
+    /**
+     * Отображаем Акт инвентаризации по рабочему месту
+     * со списком устройств с которыми можно работать
+     * @param integer $id идентификатор/номер документа Акт Инвентаризации
+     * @param null $id_wp
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
     public function actionView($id, $id_wp = null)
     {
         $model = $this->findModel($id);
 
         $iatSearch = new InventoryActsTbSearch();
         $iatProvider = $iatSearch->search(Yii::$app->request->queryParams);
-
-        $devProvider = Reports::getInventoryData($model->workplace_id);
+        if ($model->status == InventoryActs::DOC_NEW)
+            $devProvider = Reports::getInventoryData($model->workplace_id);
+        else
+            $devProvider = $iatSearch->searchAll(Yii::$app->request->queryParams, $id);
 
         return $this->render('view', [
             'model' => $model,
@@ -113,7 +115,7 @@ class InventoryActsController extends Controller
             ->andWhere(['<=', 'status', 2])->count();
         if ($count > 0) {
             Yii::$app->session->setFlash('error', 'Имеется не завершенный документ. Завершите или удалите его.');
-            return $this->redirect(['index', 'id_wp' => $id_wp])    ;
+            return $this->redirect(['index', 'id_wp' => $id_wp]);
         }
         $model = new InventoryActs();
         if ($id_wp) {
@@ -155,8 +157,8 @@ class InventoryActsController extends Controller
      */
     public function actionCreateTb($act_id, $dev_id, $id_wp = null, $aux = null, $status)
     {
-        if (InventoryActsTb::CreateTb($act_id, $dev_id, $id_wp, $aux, $status)) {}
-        else Yii::$app->session->setFlash('error', 'Ошибка обработки строки таблицы!');
+        if (InventoryActsTb::CreateTb($act_id, $dev_id, $id_wp, $aux, $status)) {
+        } else Yii::$app->session->setFlash('error', 'Ошибка обработки строки таблицы!');
 
         $model = InventoryActs::findOne($act_id);
         $iatSearch = new InventoryActsTbSearch();
@@ -199,12 +201,12 @@ class InventoryActsController extends Controller
         parse_str(Yii::$app->request->queryString, $arr);
 
         $model = $this->findModel($id);
-        if (InventoryActsTb::deleteAll(['act_id' => $id])) {}
-        else
+        if (InventoryActsTb::deleteAll(['act_id' => $id])) {
+        } else
             Yii::$app->session->setFlash('error', 'Возникла ошибка при удалении строк документа');
 
-        if ($model->delete()) {}
-        else
+        if ($model->delete()) {
+        } else
             Yii::$app->session->setFlash('error', 'Возникла ошибка при удалении документа');
 
         $id_wp = ArrayHelper::getValue($arr, 'id_wp');
@@ -219,7 +221,8 @@ class InventoryActsController extends Controller
      * @param $id_wp
      * @return string
      */
-    public function actionDevices($id_wp){
+    public function actionDevices($id_wp)
+    {
         $dataProvider = Reports::getInventoryData($id_wp);
         return $this->render('devices', [
             'dataProvider' => $dataProvider,
@@ -233,10 +236,11 @@ class InventoryActsController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionSave($id){
+    public function actionSave($id)
+    {
         /* @var $modelTb InventoryActsTb */
         /* @var $device Devices */
-        /* @var $new_dev Devices*/
+        /* @var $new_dev Devices */
         //Yii::$app->session->setFlash('info', 'Запуск сохранения');
         $err = '';
         $suc = '';
@@ -247,7 +251,7 @@ class InventoryActsController extends Controller
         $devices = Devices::getIdsOnwp($id_wp)->models;
 
         //var_dump($modelsTb->models); die;
-        foreach ($devices as $device_arr){
+        foreach ($devices as $device_arr) {
             //текущее устройство на рабочем месте
             $device = Devices::findOne($device_arr['id']);
             //строка в акте инвентаризации
@@ -256,9 +260,9 @@ class InventoryActsController extends Controller
             if ($modelTb) {
                 if ($modelTb->status == InventoryActs::MISSING_DEV) {
                     if ($device->setTowp(130))
-                        $suc .= 'Успех! Устройство перемещено в пропавшие '. $device_arr['id'] .'<br>';
+                        $suc .= 'Успех! Устройство перемещено в пропавшие ' . $device_arr['id'] . '<br>';
                     else
-                        $err .= 'Ошибка! Ошибка перемещения устройства ' . $modelTb->device_id .' на РМ №130<br>';
+                        $err .= 'Ошибка! Ошибка перемещения устройства ' . $modelTb->device_id . ' на РМ №130<br>';
                 } elseif ($modelTb->status == InventoryActs::REPLACE_DEV) {
                     $new_dev = Devices::findOne($modelTb->aux);
                     $new_dev->workplace_id = $id_wp; //перемещаем на рабочее место
@@ -268,21 +272,22 @@ class InventoryActsController extends Controller
                     $device->parent_device_id = null; //снимаем с родителя
 
                     if ($device->save()) {
-                        $suc .= 'Успех! Устройство заменено '. $device_arr['id'] .'<br>';
+                        $suc .= 'Успех! Устройство заменено ' . $device_arr['id'] . '<br>';
                         if ($new_dev->save())
-                            $suc .= 'Успех! Устройство '. $new_dev->id .' перемещено на РМ №' . $modelAct->workplace_id .'<br>';
+                            $suc .= 'Успех! Устройство ' . $new_dev->id . ' перемещено на РМ №' . $modelAct->workplace_id . '<br>';
                         else
-                            $err .= 'Ошибка! Ошибка перемещения '. $new_dev->id .' на РМ №'. $modelAct->workplace_id .'<br>';
+                            $err .= 'Ошибка! Ошибка перемещения ' . $new_dev->id . ' на РМ №' . $modelAct->workplace_id . '<br>';
                     } else
-                        $err .= 'Ошибка! Ошибка замены '. $device->id .'<br>';
+                        $err .= 'Ошибка! Ошибка замены ' . $device->id . '<br>';
                 } elseif ($modelTb->status == InventoryActs::ADDITION_DEV) {//добавленное устройство
                     $device->fake_device = 0;
 
                     if ($device->save())
-                        $suc .= 'Успех! Устройство '. $device_arr['id'] .' добавлено на РМ №' . $id_wp .'<br>';
+                        $suc .= 'Успех! Устройство ' . $device_arr['id'] . ' добавлено на РМ №' . $id_wp . '<br>';
                     else
-                        $err .= 'Ошибка! Ошибка добавления нового устройства ' . $device->id .'<br>';
-                } elseif ($modelTb->status == InventoryActs::DEVICE_OK) {}
+                        $err .= 'Ошибка! Ошибка добавления нового устройства ' . $device->id . '<br>';
+                } elseif ($modelTb->status == InventoryActs::DEVICE_OK) {
+                }
             } else {
                 $modelTb = new InventoryActsTb();
                 $modelTb->act_id = $modelAct->id;
@@ -291,46 +296,47 @@ class InventoryActsController extends Controller
                 //$model->aux = $aux;
                 $modelTb->status = InventoryActs::DEVICE_OK;
                 if ($modelTb->save())
-                    $suc .= 'Успех! Проверено устройство '. $device_arr['id'] .'<br>';
+                    $suc .= 'Успех! Проверено устройство ' . $device_arr['id'] . '<br>';
                 else
-                    $err .= 'Ошибка! Не удалось добавить устройство в акт ' . $device_arr['id'] .'<br>';
+                    $err .= 'Ошибка! Не удалось добавить устройство в акт ' . $device_arr['id'] . '<br>';
             }
         }
         $modelsTb = InventoryActsTb::find()->where(['act_id' => $id])->all();
         foreach ($modelsTb as $model) {
             /* @var $model InventoryActsTb */
-            if (!in_array($model->device_id, $devices)){
-                if ($model->status == InventoryActs::REPLACE_DEV){
+            if (!in_array($model->device_id, $devices)) {
+                if ($model->status == InventoryActs::REPLACE_DEV) {
                     $device = Devices::findOne($model->device_id);
                     if ($device->setTowp($id_wp))
-                        $suc .= 'Успех! Устройство '. $device->id .' перемещено.<br>';
+                        $suc .= 'Успех! Устройство ' . $device->id . ' перемещено.<br>';
                     else
-                        $err .= 'Ошибка! Устройство ' . $device->id .' не перемещено.<br>';
+                        $err .= 'Ошибка! Устройство ' . $device->id . ' не перемещено.<br>';
                 }
             }
         }
 
-        Yii::$app->session->setFlash('info', $err .'<br>'. $suc);
+        Yii::$app->session->setFlash('info', $err . '<br>' . $suc);
 
         $modelAct->status = InventoryActs::DOC_SAVED;
         $modelAct->save();
         //die;
         $usr = User::findOne(['employee_id' => $modelAct->exec_employee_id]);
         Message::Create($usr->id, 'Подписать Акт инвентаризации №' . $modelAct->id, 1,
-            "Вы создали и сохранили документ ". Html::a('Акт инвентаризации №'. $modelAct->id, ['inventory-acts/view', 'id' => $id]) .". \r\n
+            "Вы создали и сохранили документ " . Html::a('Акт инвентаризации №' . $modelAct->id, ['inventory-acts/view', 'id' => $id]) . ". \r\n
             Теперь вам необходимо распечатать Акт, подписать и загрузить скан подписанного документа."
-            );
+        );
 
         return $this->redirect(['inventory-acts/view', 'id' => $id, 'id_wp' => $id_wp]);
     }
 
-	/**
-	 * Создаем документ pdf
-	 * @param $id
-	 * @return mixed
-	 * @throws NotFoundHttpException
-	 */
-    public function actionCreatePdf($id){
+    /**
+     * Создаем документ pdf
+     * @param integer $id Идентификатор документа "Акт инвентаризации"
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
+    public function actionCreatePdf($id)
+    {
         $model = $this->findModel($id); //текущий акт инвентаризации
         $modelStatusArr = $model->arrayDevIDinTb(); //Получаем массив статусов текущего акта
 
@@ -341,7 +347,15 @@ class InventoryActsController extends Controller
         if ($oldModel)
             $oldModelArray = $oldModel->arrayDevIDinTb(); //получаем  массив статусов из старого акта, ид в ключах массива
         $arr_dev = [];
-        foreach (Reports::getInventoryData($model->workplace_id)->models as $model_dev){
+
+        // если документ уже сохранен то берем информацию из сохраненных данных
+        // если новый то - данные берутся на текущий момент
+        if ($model->status == InventoryActs::DOC_NEW)
+            $provider_devices = Reports::getInventoryData($model->workplace_id)->models;
+        else
+            $provider_devices = InventoryActsTbSearch::searchAll($id)->models;
+
+        foreach ($provider_devices as $model_dev) {
             if ($modelStatusArr[$model_dev['id']] == InventoryActs::MISSING_DEV) continue;
             $arr_dev[] = Devices::findOne($model_dev['id']);
         }
@@ -350,7 +364,6 @@ class InventoryActsController extends Controller
             'allModels' => $arr_dev, //текущий список устройств на рабочем месте
             'pagination' => false,
         ]);
-
 
         //получаем по ид модели устройств в старом акте инвентаризации
         $arr = []; //массив для хранения моделей устройств последней инвентаризации
@@ -377,7 +390,8 @@ class InventoryActsController extends Controller
                 $story_dev = StoryDevice::getStoryWp($model->workplace_id, $id, $oldModel->act_date);
                 if ($story_dev)
                     if (ArrayHelper::getValue($modelStatusArr, $id) != InventoryActs::MISSING_DEV &&
-                        ArrayHelper::getValue($modelStatusArr, $id) != InventoryActs::DEVICE_OK)
+                        ArrayHelper::getValue($modelStatusArr, $id) != InventoryActs::DEVICE_OK
+                    )
                         $arrCons[] = Devices::findOne($story_dev[0]['id_device']);
             }
 
@@ -392,7 +406,7 @@ class InventoryActsController extends Controller
             ]);
         }
         //Получаем потеряные утройства, проверяя статус строк в документе
-        foreach ($iatProvider->models as $strTable){
+        foreach ($iatProvider->models as $strTable) {
             //var_dump($strTable);
             if ($strTable->status == InventoryActs::MISSING_DEV) {
                 $lostDev[] = Devices::findOne($strTable->device_id);
@@ -432,7 +446,8 @@ class InventoryActsController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionAgree($id){
+    public function actionAgree($id)
+    {
         $model = $this->findModel($id);
         if ($model->status == InventoryActs::DOC_PRINTED) {
             $model->status = InventoryActs::DOC_AGREE;

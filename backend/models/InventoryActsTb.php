@@ -80,5 +80,8 @@ class InventoryActsTb extends \yii\db\ActiveRecord
         }
     }
 
-
+    public function getDevices()
+    {
+        return $this->hasOne(Devices::className(), ['id' => 'device_id']);
+    }
 }

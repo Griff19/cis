@@ -73,4 +73,40 @@ class InventoryActsTbSearch extends InventoryActsTb
 
         return $dataProvider;
     }
+
+    /**
+     * @param $id
+     * @return ActiveDataProvider
+     */
+    public static function searchAll($id)
+    {
+        $query = Devices::find()
+            ->select([
+                'id' => 'd.id',
+                'type_id' => 'd.type_id',
+                'brand' => 'd.brand',
+                'model' => 'd.model',
+                'sn' => 'd.sn',
+                'specification' => 'd.specification',
+                'imei1' => 'd.imei1',
+                'parent_device_id' => 'd.parent_device_id',
+                'device_note' => 'd.device_note',
+                'workplace_id' => 'd.workplace_id',
+                'fake_device' => 'd.fake_device'
+            ])
+            ->from(['d' => 'devices'])
+            ->leftJoin('inventory_acts_tb', 'd.id = inventory_acts_tb.device_id')
+            ->where(['inventory_acts_tb.act_id' => $id])
+            ->groupBy('d.id, d.brand, d.model,	d.sn,	d.specification,	d.imei1,'
+                .'d.parent_device_id,	d.workplace_id');
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        return $dataProvider;
+    }
 }

@@ -10,7 +10,6 @@
  */
 
 use yii\grid\GridView;
-//use yii\grid\Column;
 use backend\models\InventoryActs;
 use backend\models\DeviceType;
 
@@ -18,7 +17,7 @@ $owner = $model->ownerEmployee->snp;
 $exec = $model->execEmployee->snp;
 ?>
 
-<h3> Акт инвентаризации №<?= $model->id ?> от <?= $model->act_date ?></h3>
+<h3> Акт инвентаризации №<?= $model->id ?> от <?= Yii::$app->formatter->asDate($model->act_date, 'dd.MM.yyyy') ?></h3>
 <p>
     РМ №<?= $model->workplace->id ?><br/>
     Помещение:<?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?><br/>
@@ -26,8 +25,8 @@ $exec = $model->execEmployee->snp;
 <?php if ($oldModel) { ?>
     Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?><br/>
 <?php } ?>
-    Инвентаризацию провел: <?= $exec ?></p>
-<br>
+    Инвентаризацию провел: <?= $exec ?>
+</p>
 <h4>Устройства на рабочем месте:</h4>
 <?php
 //набор колонок одинаков для всех, если надо то можно переоределить в каждой таблице
@@ -91,7 +90,7 @@ if ($devProvider)
 ?>
 <?php
 echo '<h4>Устройства, перемещенные на другие рабочие места:</h4>';
-if ($consModelProvider->models) {
+if ($consModelProvider) {
     echo GridView::widget([
         'dataProvider' => $consModelProvider,
         'layout' => '{items}',
@@ -102,7 +101,7 @@ if ($consModelProvider->models) {
 } else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
 <?php
 echo '<h4>Добавленные устройства:</h4>';
-if ($newDevProvider->models) {
+if ($newDevProvider) {
     echo GridView::widget([
         'dataProvider' => $newDevProvider,
         'layout' => '{items}',
@@ -114,7 +113,7 @@ if ($newDevProvider->models) {
 
 <?php
 echo '<h4>Потеряные устройства:</h4>';
-if ($lostDevProvider->models) {
+if ($lostDevProvider) {
     echo GridView::widget([
         'dataProvider' => $lostDevProvider,
         'layout' => '{items}',
