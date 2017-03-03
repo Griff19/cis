@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="modal-body">
                 <?php
                 $key = md5('inventory_act' . $model->id);
-                echo Html::img('/admin/' . Images::getLinkfile($key), ['alt' => 'Отсутствует изображение']);
+                echo Html::img('/admin/' . Images::getLinkfile($key), ['alt' => 'Отсутствует изображение', 'width' => '100%']);
                 ?>
             </div>
 
