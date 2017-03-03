@@ -1,4 +1,7 @@
 <?php
+/**
+ * Контроллер документа "Акт инвентаризации".
+ */
 
 namespace backend\controllers;
 
@@ -23,9 +26,6 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 
-/**
- * InventoryActsController implements the CRUD actions for InventoryActs model.
- */
 class InventoryActsController extends Controller
 {
     /**
