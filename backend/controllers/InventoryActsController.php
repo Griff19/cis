@@ -92,6 +92,7 @@ class InventoryActsController extends Controller
         $iatProvider = $iatSearch->search(Yii::$app->request->queryParams);
 
         $devProvider = Reports::getInventoryData($model->workplace_id);
+
         return $this->render('view', [
             'model' => $model,
             'iatSearch' => $iatSearch,
@@ -334,11 +335,11 @@ class InventoryActsController extends Controller
         $modelStatusArr = $model->arrayDevIDinTb(); //Получаем массив статусов текущего акта
 
         $iatSearch = new InventoryActsTbSearch(); //поиск табличной части акта инвентаризации
-        $iatProvider = $iatSearch->search(Yii::$app->request->queryParams, InventoryActs::MISSING_DEV); //набор строк табличной части текущего акта
+        $iatProvider = $iatSearch->search(Yii::$app->request->queryParams, InventoryActs::MISSING_DEV);
 
-        $oldModel = (new InventoryActs())->getLastAct($model->workplace_id);
+        $oldModel = (new InventoryActs())->getLastAct($model->workplace_id, $id);
         if ($oldModel)
-            $oldModelArray = $oldModel->arrayDevIDinTb(); //получаем  массив статусов, ид в ключах массива
+            $oldModelArray = $oldModel->arrayDevIDinTb(); //получаем  массив статусов из старого акта, ид в ключах массива
         $arr_dev = [];
         foreach (Reports::getInventoryData($model->workplace_id)->models as $model_dev){
             if ($modelStatusArr[$model_dev['id']] == InventoryActs::MISSING_DEV) continue;

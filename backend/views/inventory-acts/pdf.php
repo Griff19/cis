@@ -27,7 +27,7 @@ $exec = $model->execEmployee->snp;
 <?php } ?>
 <p>Инвентаризацию провел: <?= $exec ?></p>
 <br>
-<p>Устройства на рабочем месте:</p>
+<h4>Устройства на рабочем месте:</h4>
 <?php
 //набор колонок одинаков для всех, если надо то можно переоределить в каждой таблице
 $columns = [
@@ -89,7 +89,7 @@ if ($devProvider)
 //}
 ?>
 <?php
-echo '<p>Устройства, перемещенные на другие рабочие места:</p>';
+echo '<h4>Устройства, перемещенные на другие рабочие места:</h4>';
 if ($consModelProvider->models) {
     echo GridView::widget([
         'dataProvider' => $consModelProvider,
@@ -98,9 +98,9 @@ if ($consModelProvider->models) {
         //'rowOptions' =>
         'columns' => $columns,
     ]);
-} else echo 'Не найдено...' ?>
+} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
 <?php
-echo '<p>Добавленные устройства:</p>';
+echo '<h4>Добавленные устройства:</h4>';
 if ($newDevProvider->models) {
     echo GridView::widget([
         'dataProvider' => $newDevProvider,
@@ -109,10 +109,10 @@ if ($newDevProvider->models) {
         //'rowOptions' =>
         'columns' => $columns,
     ]);
-} else echo 'Не найдено...' ?>
+} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
 
 <?php
-echo '<p>Потеряные устройства:</p>';
+echo '<h4>Потеряные устройства:</h4>';
 if ($lostDevProvider->models) {
     echo GridView::widget([
         'dataProvider' => $lostDevProvider,
@@ -121,7 +121,7 @@ if ($lostDevProvider->models) {
         //'rowOptions' =>
         'columns' => $columns,
     ]);
-} else echo 'Не найдено...' ?>
+} else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
 <br>
 <p>Ответственный: ______________ <?= $owner ?></p>
 <p>Инвентаризацию провел: ______________ <?= $exec ?></p>

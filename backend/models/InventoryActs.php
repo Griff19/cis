@@ -35,6 +35,7 @@ class InventoryActs extends \yii\db\ActiveRecord
 
     public $employee_name; //имя сотрудника, проводящего инвентаризацию
     public $owner_name; //имя владельца рабочего места, ответственный
+
     /**
      * @inheritdoc
      */
@@ -56,16 +57,17 @@ class InventoryActs extends \yii\db\ActiveRecord
         ];
     }
 
-	public function beforeSave($insert)
-	{
-		if (parent::beforeSave($insert)) {
-			$this->act_date = (new \DateTime($this->act_date))->format('Y-m-d');
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->act_date = (new \DateTime($this->act_date))->format('Y-m-d');
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @inheritdoc
      */
@@ -88,51 +90,61 @@ class InventoryActs extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOwnerEmployee(){
+    public function getOwnerEmployee()
+    {
         return $this->hasOne(Employees::className(), ['id' => 'owner_employee_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getExecEmployee(){
+    public function getExecEmployee()
+    {
         return $this->hasOne(Employees::className(), ['id' => 'exec_employee_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getWorkplace(){
+    public function getWorkplace()
+    {
         return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
     }
 
     /**
-     * Получаем массив статусов утройтв в таблце акта инвентаризации. Ключи элементов = id устройств
+     * Получаем массив статусов утройтв в таблце акта инвентаризации [id => status]
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function arrayDevIDinTb(){
+    public function arrayDevIDinTb()
+    {
         $arrId = [];
         $arrs = InventoryActsTb::find()->select('device_id, status')->where(['act_id' => $this->id])
             ->orderBy('device_id')->asArray()->all();
-        foreach ($arrs as $arr){
-            $arrId[$arr['device_id']] =  $arr['status'];
+        foreach ($arrs as $arr) {
+            $arrId[$arr['device_id']] = $arr['status'];
         }
         return $arrId;
     }
 
-   public function getActsTable(){
-       return $this->hasMany(InventoryActsTb::className(), ['act_id' => 'id'])
-           ->orderBy('device_id');
-   }
+    /**
+     * @return $this
+     */
+    public function getActsTable()
+    {
+        return $this->hasMany(InventoryActsTb::className(), ['act_id' => 'id'])
+            ->orderBy('device_id');
+    }
 
     /**
      * @param $id_wp
      * @return $this
      */
-    public function getLastAct($id_wp){
+    public function getLastAct($id_wp, $id)
+    {
         return $this->find()
             ->where(['workplace_id' => $id_wp])
             ->andWhere(['status' => self::DOC_AGREE])
+            ->andWhere(['NOT', 'id=' . $id])
             ->orderBy(['act_date' => SORT_DESC])
             ->limit(1)
             ->one();
