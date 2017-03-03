@@ -90,7 +90,7 @@ if ($devProvider)
 ?>
 <?php
 echo '<h4>Устройства, перемещенные на другие рабочие места:</h4>';
-if ($consModelProvider) {
+if (isset($consModelProvider->models)) {
     echo GridView::widget([
         'dataProvider' => $consModelProvider,
         'layout' => '{items}',
@@ -101,7 +101,7 @@ if ($consModelProvider) {
 } else echo '<p style = "font-size: 9px">Не найдено...</p>' ?>
 <?php
 echo '<h4>Добавленные устройства:</h4>';
-if ($newDevProvider) {
+if (isset($newDevProvider->models)) {
     echo GridView::widget([
         'dataProvider' => $newDevProvider,
         'layout' => '{items}',
@@ -113,7 +113,7 @@ if ($newDevProvider) {
 
 <?php
 echo '<h4>Потеряные устройства:</h4>';
-if ($lostDevProvider) {
+if (isset($lostDevProvider->models)) {
     echo GridView::widget([
         'dataProvider' => $lostDevProvider,
         'layout' => '{items}',
