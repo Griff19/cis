@@ -269,6 +269,7 @@ class DevicesController extends Controller
                     $model->sn = 'SN' . $model->id;
                     $model->save();
                 }
+                Yii::$app->session->setFlash('success', '<b>'. $model->sn .'</b> устройство успешно добавлено');
             } else {
                 Yii::$app->session->setFlash('error', serialize($model->errors));
             }

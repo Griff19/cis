@@ -9,9 +9,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * MmOfferController implements the CRUD actions for MmOffer model.
- */
 class MmOfferController extends Controller
 {
     /**
@@ -101,9 +98,12 @@ class MmOfferController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $mm_id = $model->mm_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['meeting-minutes/view', 'id' => $mm_id]);
+
     }
 
     /**

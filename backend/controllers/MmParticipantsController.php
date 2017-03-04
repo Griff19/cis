@@ -9,9 +9,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * MmParticipantsController implements the CRUD actions for MmParticipants model.
- */
 class MmParticipantsController extends Controller
 {
     /**
@@ -102,11 +99,10 @@ class MmParticipantsController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-		$model->delete();
+		$mm_id = $model->mm_id;
+        $model->delete();
 
-		$controller = new MeetingMinutesController('meeting-minutes', $this->module);
-		return $controller->actionView($model->mm_id);
-        //return $this->redirect(['index']);
+        return $this->redirect(['meeting-minutes/view', 'id' => $mm_id]);
     }
 
     /**

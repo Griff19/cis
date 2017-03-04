@@ -28,9 +28,9 @@ $this->registerJs(
 
     <?= $form->field($model, 'content')->textarea([
 		'rows' => 3,
-		'placeholder' => 'Введите принятое решение...'
+        'style' => 'resize: none',
+		'placeholder' => 'Введите принятое решение и дату исполнения...'
 	])->label(false) ?>
-
 
 	<?php
 		echo Html::activeLabel($model, 'due_date') . ' ';
@@ -38,7 +38,6 @@ $this->registerJs(
 			'options' => ['class' => 'form-control']])->label(false) . ' ';
 		echo Html::submitButton($model->isNewRecord ? 'Добавить решение' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'])
 	?>
-
 
     <?php ActiveForm::end(); ?>
 <?php \yii\widgets\Pjax::end(); ?>

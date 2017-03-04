@@ -104,9 +104,11 @@ class MmDecisionController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $mm_id = $model->mm_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['meeting-minutes/view', 'id' => $mm_id]);
     }
 
     /**
