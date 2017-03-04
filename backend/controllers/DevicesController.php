@@ -81,22 +81,23 @@ class DevicesController extends Controller
         ];
     }
 
-    public function beforeAction($action) {
+    public function beforeAction($action)
+    {
         $this->enableCsrfValidation = ($action->id !== 'autocreate');
         return parent::beforeAction($action);
     }
 
-	/**
-	 * Список устройств.
-	 * $mode = 'def' - стандартный вид
-	 * $mode = 'wps' - выбираем устройство для рабочего места
-	 * $mode = 'dvs' - выбираем устройство как комплектующее
-	 * @param string $mode
-	 * @param null $target
-	 * @param null $id_dev
-	 * @param null $id_wp
-	 * @return mixed
-	 */
+    /**
+     * Список устройств.
+     * $mode = 'def' - стандартный вид
+     * $mode = 'wps' - выбираем устройство для рабочего места
+     * $mode = 'dvs' - выбираем устройство как комплектующее
+     * @param string $mode
+     * @param null $target
+     * @param null $id_dev
+     * @param null $id_wp
+     * @return mixed
+     */
     public function actionIndex($mode = 'def', $target = null, $id_dev = null, $id_wp = null)
     {
         $searchModel = new DevicesSearch();
@@ -130,7 +131,8 @@ class DevicesController extends Controller
      * @param null $target
      * @return string
      */
-    public function actionIndexComp($target = null){
+    public function actionIndexComp($target = null)
+    {
         $searchModel = new DevicesSearch();
         $dataProvider = $searchModel->searchComp(Yii::$app->request->queryParams);
         return $this->render('index_comp', [
@@ -146,7 +148,8 @@ class DevicesController extends Controller
      * @param $id
      * @return string
      */
-    public function actionViewTableComp($id) {
+    public function actionViewTableComp($id)
+    {
         $searchModel = new DevicesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0, $id);
         return $this->renderAjax('view_table_comp', [
@@ -155,14 +158,15 @@ class DevicesController extends Controller
         ]);
     }
 
-	/**
-	 * Функция вызывает таблицу устройств, находящихся на складе
-	 * для их резервирования за рабочим местом, указанным в документе "Заявка"
-	 * @param null $target
-	 * @param null $id_dev
-	 * @return string
-	 */
-    public function actionIndexToEnquiry($target = null, $id_dev = null) {
+    /**
+     * Функция вызывает таблицу устройств, находящихся на складе
+     * для их резервирования за рабочим местом, указанным в документе "Заявка"
+     * @param null $target
+     * @param null $id_dev
+     * @return string
+     */
+    public function actionIndexToEnquiry($target = null, $id_dev = null)
+    {
         $searchModel = new DevicesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 1);
 
@@ -180,6 +184,7 @@ class DevicesController extends Controller
     /**
      * Выводим подробную информацию об устройстве вместе с данными из таблицы parameters
      * @param integer $id
+     * @param int $id_wp Идентификатор рабочего места
      * @return mixed
      */
     public function actionView($id, $id_wp = 0)
@@ -214,8 +219,8 @@ class DevicesController extends Controller
      * @param $scenario
      * @return array
      */
-    public function actionValidation($scenario){
-
+    public function actionValidation($scenario)
+    {
         $model = new Devices(['scenario' => $scenario]);
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -232,7 +237,7 @@ class DevicesController extends Controller
      * @param $param
      * @return mixed
      */
-    public function actionCreate($param =  null)
+    public function actionCreate($param = null)
     {
         /* @var $model Devices */
         parse_str(Yii::$app->request->queryString, $arr);
@@ -263,13 +268,13 @@ class DevicesController extends Controller
                         $net->mac = $model->device_mac;
                         $net->save();
                     }
-                    StoryDevice::addStory($id_wp, $model->id, StoryDevice::EVENT_CREATE, ''. $target .' '. $target_id);
+                    StoryDevice::addStory($id_wp, $model->id, StoryDevice::EVENT_CREATE, '' . $target . ' ' . $target_id);
                 }
                 if ($model->chekMode) {
                     $model->sn = 'SN' . $model->id;
                     $model->save();
                 }
-                Yii::$app->session->setFlash('success', '<b>'. $model->sn .'</b> устройство успешно добавлено');
+                Yii::$app->session->setFlash('success', '<b>' . $model->sn . '</b> устройство успешно добавлено');
             } else {
                 Yii::$app->session->setFlash('error', serialize($model->errors));
             }
@@ -282,19 +287,19 @@ class DevicesController extends Controller
                 InventoryActsTb::CreateTb($act_id, $model->id, $id_wp, null, $status);
                 //$query = 'act_id='. $act_id .'&id_wp='. $id_wp. '&dev_id='. $model->id . '&status=' . $status;
                 $target = 'inventory-acts/view';
-                $query = 'id=' .$act_id;
+                $query = 'id=' . $act_id;
             }
             if ($target == 'devices/addtowp') {
                 $target = 'workplaces/view';
-                $query = 'id='. $id_wp;
+                $query = 'id=' . $id_wp;
             }
             if ($target == 'devices/addcomp') {
                 $target = 'devices/view';
-                $query = 'id='. $target_id;
+                $query = 'id=' . $target_id;
             }
 
             if ($target) {
-                return $this->redirect('/admin/'. $target .'?'. $query);
+                return $this->redirect('/admin/' . $target . '?' . $query);
             } elseif ($id_dev > 0) { //при выборе комплектующего отправляем пользователя на страницу устройства
                 return $this->redirect(['devices/view', 'id' => $id_dev]);
             } elseif ($id_wp > 0) {
@@ -321,13 +326,14 @@ class DevicesController extends Controller
      * @param $idid integer идентификатор
      * @return string|\yii\web\Response
      */
-    public function actionCreateFromDoc($type_id, $idid, $id_wp = null){
+    public function actionCreateFromDoc($type_id, $idid, $id_wp = null)
+    {
         $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
         $model->type_id = $type_id;
         $model->workplace_id = $id_wp;
         //Значение $type_id сохраняем в сессию чтобы форма подстроила зависимые поля
         Yii::$app->session->set('type_id', $type_id);
-        if ($model->load(Yii::$app->request->post())){
+        if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 /** @var DtInvoiceDevices $did */
                 $did = DtInvoiceDevices::findOne($idid);
@@ -348,7 +354,7 @@ class DevicesController extends Controller
                 'id_wp' => $id_wp,
                 'id_dev' => null,
                 'mode' => 'create',
-				'dt_mac' => $model->deviceType->mac,
+                'dt_mac' => $model->deviceType->mac,
                 'dt_imei' => $model->deviceType->imei
             ]);
         }
@@ -361,7 +367,8 @@ class DevicesController extends Controller
      * @param $value
      * @return \yii\web\Response
      */
-    public function actionChangeByAttr($label, $value){
+    public function actionChangeByAttr($label, $value)
+    {
         /* @var $new_model Devices */
         if ($label != 'device_mac') {
             $new_model = Devices::findOne([$label => $value]);
@@ -373,14 +380,14 @@ class DevicesController extends Controller
 
         $target = ArrayHelper::getValue($arr, 'target');
 
-        if ($target == 'new-dev'){
+        if ($target == 'new-dev') {
             $act_id = ArrayHelper::getValue($arr, 'act_id');
             InventoryActsTb::CreateTb($act_id, $new_model->id, $new_model->workplace_id, null, InventoryActs::REPLACE_DEV);
         }
 
         $str = mb_strtoupper($label) . ' = ' . $value;
         Yii::$app->session->setFlash('success', 'Выбрано устройство по введенным данным: ' . $str);
-        if ($target == 'new-dev'){
+        if ($target == 'new-dev') {
             return $this->redirect(['inventory-acts/view', 'id' => $act_id]);
         } else {
             return $this->redirect(['devices/view', 'id' => $new_model->id]);
@@ -393,45 +400,46 @@ class DevicesController extends Controller
      * @param $id_wp
      * @return \yii\web\Response
      */
-    public function actionAutocreate($id_wp){
+    public function actionAutocreate($id_wp)
+    {
         $param = Yii::$app->request->post();
 
-        if (array_key_exists('sys', $param)){
+        if (array_key_exists('sys', $param)) {
             $model = new Devices();
             $model->workplace_id = $id_wp;
             $model->type_id = 1; //использовать константы в дальнейшем
             $model->device_note = '(auto)';
-            if ($model->save()){
+            if ($model->save()) {
                 StoryDevice::addStory($id_wp, $model->id, 1);
                 //addStory($id_wp, $model->id, 1);
             }
         }
-        if (array_key_exists('mon', $param)){
+        if (array_key_exists('mon', $param)) {
             $model = new Devices();
             $model->workplace_id = $id_wp;
             $model->type_id = 2;
             $model->device_note = '(auto)';
-            if ($model->save()){
+            if ($model->save()) {
                 StoryDevice::addStory($id_wp, $model->id, 1);
                 //addStory($id_wp, $model->id, 1);
             }
         }
-        if (array_key_exists('tel', $param)){
+        if (array_key_exists('tel', $param)) {
             $model = new Devices();
             $model->workplace_id = $id_wp;
             $model->type_id = 3;
             $model->device_note = '(auto)';
-            if ($model->save()){
+            if ($model->save()) {
                 StoryDevice::addStory($id_wp, $model->id, 1);
                 //addStory($id_wp, $model->id, 1);
             }
         }
-        if (array_key_exists('ibp', $param)){
+        if (array_key_exists('ibp', $param)) {
             $model = new Devices();
             $model->workplace_id = $id_wp;
             $model->type_id = 5;
             $model->device_note = '(auto)';
-            if ($model->save()){
+            if ($model->save()) {
                 StoryDevice::addStory($id_wp, $model->id, 1);
                 //addStory($id_wp, $model->id, 1);
             }
@@ -439,14 +447,14 @@ class DevicesController extends Controller
         return $this->redirect(['workplaces/view', 'id' => $id_wp]);
     }
 
-	/**
-	 * Редактирование устройства
-	 * @param integer $id
-	 * @param null $id_wp
-	 * @return mixed
-	 * @throws NotFoundHttpException
-	 * @internal param null $param
-	 */
+    /**
+     * Редактирование устройства
+     * @param integer $id
+     * @param null $id_wp
+     * @return mixed
+     * @throws NotFoundHttpException
+     * @internal param null $param
+     */
     public function actionUpdate($id, $id_wp = null)
     {
         //parse_str($param, $arr);
@@ -464,12 +472,12 @@ class DevicesController extends Controller
         else
             $model->scenario = Devices::SCENARIO_UPDATE;
 
-        $oldwp  = $model->workplace_id;
+        $oldwp = $model->workplace_id;
 
         if ($id_wp) $model->workplace_id = $id_wp;
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()){
-                if ($oldwp !== $model->workplace_id){
+            if ($model->save()) {
+                if ($oldwp !== $model->workplace_id) {
                     StoryDevice::addStory($oldwp, $id, StoryDevice::EVENT_OUT, 'Перемещение на РМ №' . $model->workplace_id);
                     StoryDevice::addStory($model->workplace_id, $id, StoryDevice::EVENT_IN, 'Перемещение с РМ №' . $oldwp);
                 }
@@ -501,7 +509,8 @@ class DevicesController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionDelfromwp($id, $id_wp){
+    public function actionDelfromwp($id, $id_wp)
+    {
         $model = $this->findModel($id);
         if ($model->workplace_id == 1)
             $model->workplace_id = null;
@@ -525,11 +534,12 @@ class DevicesController extends Controller
      * @throws NotFoundHttpException
      * @internal param $id_wp
      */
-    public function actionAddtowp($id, $id_wp = null, $param = null){
+    public function actionAddtowp($id, $id_wp = null, $param = null)
+    {
         $err = false; //обнаружены ошибки в работе;
         //$target = ArrayHelper::getValue(Yii::$app->request->queryParams, 'target');
         //var_dump($target); die;
-		/** @var Devices $model */
+        /** @var Devices $model */
         $model = $this->findModel($id);
         $oldwp = $model->workplace_id; //старое рабочее место
         if ($oldwp == 127) {
@@ -539,7 +549,7 @@ class DevicesController extends Controller
             Yii::$app->session->setFlash('error', 'Сначала нужно снять устройство с другого родителя');
             $err = true;
         }
-        if ($param){
+        if ($param) {
             parse_str($param, $arr);
             $id_wp = (int)$arr['target_id'];
         }
@@ -549,15 +559,15 @@ class DevicesController extends Controller
             throw new NotFoundHttpException('Осутствуе обязательный параметр "Идентификатор рабочего места"');
 
         if (!$err)
-			if ($model->save())
-				Devices::updateAll(['workplace_id' => $id_wp],['parent_device_id' => $model->id]);
+            if ($model->save())
+                Devices::updateAll(['workplace_id' => $id_wp], ['parent_device_id' => $model->id]);
 
         $query = Yii::$app->request->queryParams;
         $target = ArrayHelper::getValue($query, 'target');
         if ($target) {
             $target_id = ArrayHelper::getValue($query, 'target_id');
-            StoryDevice::addStory($oldwp, $id, StoryDevice::EVENT_OUT, 'Перемещение по документу №' . $target_id . ' на РМ №' . $id_wp . ' ' .$target);
-            StoryDevice::addStory($id_wp, $id, StoryDevice::EVENT_IN, 'Перемещение по документу №' . $target_id . ' c РМ №' . $oldwp . ' ' .$target);
+            StoryDevice::addStory($oldwp, $id, StoryDevice::EVENT_OUT, 'Перемещение по документу №' . $target_id . ' на РМ №' . $id_wp . ' ' . $target);
+            StoryDevice::addStory($id_wp, $id, StoryDevice::EVENT_IN, 'Перемещение по документу №' . $target_id . ' c РМ №' . $oldwp . ' ' . $target);
             return $this->redirect([$target, 'id' => $target_id]);
         } else {
             StoryDevice::addStory($oldwp, $id, StoryDevice::EVENT_OUT, 'Перемещение на РМ №' . $id_wp);
@@ -576,7 +586,8 @@ class DevicesController extends Controller
      * @internal param int $id_dev идентификатор родителя
      * @internal param int $id_wp идентификатор рабочего места кудв вернуться после исполнения
      */
-    public function actionAddcomp($id, $param = null){
+    public function actionAddcomp($id, $param = null)
+    {
         parse_str($param, $arr);
         $id_dev = $arr['id_dev'];
         $id_wp = $arr['id_wp'];
@@ -586,10 +597,9 @@ class DevicesController extends Controller
         $model->workplace_id = $id_wp;
         if ($model->save()) {
             Yii::$app->session->setFlash('success', 'Комплектующее добавлено');
-            StoryDevice::addStory($id_wp, $id, StoryDevice::EVENT_IN, 'Установка комплектующего на '. $id_dev);
-            StoryDevice::addStory($oldWp, $id, StoryDevice::EVENT_OUT, 'Установка комплектующего на '. $id_dev .'. РМ №'. $id_wp);
-        }
-        else
+            StoryDevice::addStory($id_wp, $id, StoryDevice::EVENT_IN, 'Установка комплектующего на ' . $id_dev);
+            StoryDevice::addStory($oldWp, $id, StoryDevice::EVENT_OUT, 'Установка комплектующего на ' . $id_dev . '. РМ №' . $id_wp);
+        } else
             Yii::$app->session->setFlash('error', 'Ошибка добавления комплектующего');
 
         if ($id_dev > 0)
@@ -599,18 +609,19 @@ class DevicesController extends Controller
     }
 
     /**
-     * @param int $id_dev  идентификатор родителя
+     * @param int $id_dev идентификатор родителя
      * @param int $id_comp идентификатор комплектующего
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionDelcomp($id_dev, $id_comp) {
+    public function actionDelcomp($id_dev, $id_comp)
+    {
         $model = $this->findModel($id_comp);
         $oldWp = $model->workplace_id;
         $model->parent_device_id = null;
         $model->workplace_id = 1; //не забываем вернуть снятое комплектующее на склад
-        StoryDevice::addStory($oldWp, $id_comp, StoryDevice::EVENT_OUT, 'Снимаем комплектующее с '. $id_dev);
-        StoryDevice::addStory(1, $id_comp, StoryDevice::EVENT_IN, 'Сняли комплектующее с '. $id_dev .' с РМ №'. $oldWp);
+        StoryDevice::addStory($oldWp, $id_comp, StoryDevice::EVENT_OUT, 'Снимаем комплектующее с ' . $id_dev);
+        StoryDevice::addStory(1, $id_comp, StoryDevice::EVENT_IN, 'Сняли комплектующее с ' . $id_dev . ' с РМ №' . $oldWp);
         $model->save();
 
         return $this->redirect(['devices/view', 'id' => $id_dev]);
@@ -623,7 +634,7 @@ class DevicesController extends Controller
      */
     public function actionDelete($id)
     {
-        if($this->findModel($id)->delete()){
+        if ($this->findModel($id)->delete()) {
             StoryDevice::delStory($id);
             Netints::deleteAll(['device_id' => $id]);
         }
@@ -633,12 +644,15 @@ class DevicesController extends Controller
     /**
      * Автоматически добавляем комплектующие
      */
-    public function actionAutocomp() {
+    public function actionAutocomp()
+    {
         $models = Devices::findAll(['type_id' => 1]);
         $arr = [373, 363, 262, 202, 146];
         $valid = false;
-        $i = 0; $v = 0; $n = 0;
-        foreach ($models as $model){
+        $i = 0;
+        $v = 0;
+        $n = 0;
+        foreach ($models as $model) {
             if (in_array($model->id, $arr)) continue;
             $count_comp = Devices::find()->where(['parent_device_id' => $model->id])->count();
             //echo $model->id . ' ' . $count_comp . '<br>';
@@ -650,7 +664,7 @@ class DevicesController extends Controller
             $comp->device_note = 'Блок питания';
             $comp->workplace_id = 119;
             $comp->parent_device_id = $model->id;
-            if ($comp->validate()){
+            if ($comp->validate()) {
                 $comp->save();
                 $valid = true;
                 $v++;
@@ -666,7 +680,7 @@ class DevicesController extends Controller
                 if ($comp->save()) {
                     $net = new Netints(); //создаем сетевой интефейс со значениями по умолчанию
                     $net->device_id = $comp->id;
-                    if ($net->validate()){
+                    if ($net->validate()) {
                         $n++;
                         $net->save();
                     }
@@ -678,7 +692,7 @@ class DevicesController extends Controller
             $comp->device_note = 'Процессор';
             $comp->workplace_id = 119;
             $comp->parent_device_id = $model->id;
-            if ($comp->validate()){
+            if ($comp->validate()) {
                 $comp->save();
                 $v++;
             }
@@ -688,7 +702,7 @@ class DevicesController extends Controller
             $comp->device_note = 'DDR';
             $comp->workplace_id = 119;
             $comp->parent_device_id = $model->id;
-            if ($comp->validate()){
+            if ($comp->validate()) {
                 $comp->save();
                 $v++;
             }
@@ -698,7 +712,7 @@ class DevicesController extends Controller
             $comp->device_note = 'SSD';
             $comp->workplace_id = 119;
             $comp->parent_device_id = $model->id;
-            if ($comp->validate()){
+            if ($comp->validate()) {
                 $comp->save();
                 $v++;
             }
@@ -706,14 +720,15 @@ class DevicesController extends Controller
             $comp = null;
         }
         if ($valid) Yii::$app->session->setFlash('success', 'Обработка прошла успешно! Добавлено ' . $v . ' устройств. '
-        . $n . ' сетевых интерфейсов для ' . $i . 'устройств');
+            . $n . ' сетевых интерфейсов для ' . $i . 'устройств');
         return $this->redirect(['index']);
     }
 
     /**
      * @return string
      */
-    public function actionFindDevice(){
+    public function actionFindDevice()
+    {
         $deviceSearch = new DevicesSearch();
         $deviceProvider = $deviceSearch->search(Yii::$app->request->queryParams);
 
@@ -728,7 +743,8 @@ class DevicesController extends Controller
      * @param string $term значение вводимое в поле Бренд на форме
      * @return Json
      */
-    public function actionGetBrands($term){
+    public function actionGetBrands($term)
+    {
         $type_id = Yii::$app->session->get('type_id');
         //$brands = Devices::arrayBrands($type_id, $term);
         $brands = Devices::arrBrands($type_id, $term);
@@ -741,7 +757,8 @@ class DevicesController extends Controller
      * @param string $term значение вводимое в поле Модель на форме
      * @return Json
      */
-    public function actionGetModels($term){
+    public function actionGetModels($term)
+    {
         $type_id = Yii::$app->session->get('type_id');
         $brand = Yii::$app->session->get('brand');
         $models = Devices::arrayModels($type_id, $brand, $term);
@@ -753,7 +770,8 @@ class DevicesController extends Controller
      * @param string $term значение вводимое в поле Модель на форме
      * @return Json
      */
-    public function actionGetSpecifications($term){
+    public function actionGetSpecifications($term)
+    {
         $type_id = Yii::$app->session->get('type_id');
         $specifications = Devices::arrSpecifications($type_id, $term);
         echo Json::encode($specifications);
@@ -765,7 +783,8 @@ class DevicesController extends Controller
      * @param $type_id
      * @return bool
      */
-    public function actionSetTypeId($type_id){
+    public function actionSetTypeId($type_id)
+    {
         Yii::$app->session->set('type_id', $type_id);
         $model = DeviceType::findOne($type_id);
         return Json::encode($model);
@@ -775,7 +794,8 @@ class DevicesController extends Controller
      * @param string $model строка в формате encodeURIComponent()
      * @return string
      */
-    public function actionSetSpecificationAuto($model){
+    public function actionSetSpecificationAuto($model)
+    {
         $type_id = Yii::$app->session->get('type_id');
         $brand = Yii::$app->session->get('brand');
 
