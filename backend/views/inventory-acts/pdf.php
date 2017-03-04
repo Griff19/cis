@@ -101,6 +101,7 @@ if ($consModelProvider) {
         ]);
     } else echo '<p style = "font-size: 9px">Не найдено...</p>';
 } else echo '<p style = "font-size: 9px">Не найдено...</p>';?>
+
 <?php
 echo '<h4>Добавленные устройства:</h4>';
 if ($newDevProvider) {
