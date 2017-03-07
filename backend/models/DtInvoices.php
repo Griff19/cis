@@ -29,6 +29,7 @@ class DtInvoices extends ActiveRecord
 {
     const DOC_DEL = 0; //удаленный документ
     const DOC_NEW = 1; //новый, не сохраненный документ
+    //const DOC_PROCESS = 2;
     const DOC_SAVE = 2; //сохраненный документ
     const DOC_CLOSED = 3; //счет закрыт
 
@@ -63,7 +64,7 @@ class DtInvoices extends ActiveRecord
         return [
             self::DOC_DEL => 'Удален',
             self::DOC_NEW => 'Новый',
-            self::DOC_SAVE => 'В обработке',
+            self::DOC_SAVE => 'В&nbsp;Обработке',
             self::DOC_CLOSED => 'Закрыт'
         ];
     }

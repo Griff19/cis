@@ -113,7 +113,12 @@ class DtEnquiryDevicesController extends Controller
         $model->type_id = $type;
         if (empty($model->workplace_id)) {
             $arr = DtEnquiryWorkplaces::arrWpIds($id_doc);
-            $model->workplace_id = $arr[0]['workplace_id'];
+            if ($arr)
+                $model->workplace_id = $arr[0]['workplace_id'];
+            else {
+                Yii::$app->session->setFlash('error', 'Необходимо добавить рабочее место');
+                return $this->redirect(['dt-enquiries/view', 'id' => $id_doc]);
+            }
         }
 
         //$model->note = 'Требуется покупка';

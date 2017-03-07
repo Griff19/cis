@@ -4,6 +4,7 @@
  */
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\DtEnquiries;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DtEnquiriesSearch */
@@ -37,7 +38,8 @@ use yii\grid\GridView;
             ],
             ['attribute' => 'status',
                 'value' => 'statusString',
-                'filter' => \backend\models\DtEnquiries::arrStatusString()
+                'format' => 'raw',
+                'filter' => DtEnquiries::arrStatusString()
             ],
 //            ['class' => 'yii\grid\ActionColumn',
 //                'controller' => 'dt-enquiries'

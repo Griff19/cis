@@ -75,7 +75,11 @@ Modal::end();
 					'id',
 					'doc_number',
 					'doc_date:date',
-					'partner.brand',
+					['attribute' => 'partner.brand',
+                        'value' => Html::a($model->partner->brand, ['d-partners/view', 'id' => $model->d_partners_id],
+                            ['title' => 'Подробности о контрагенте...']),
+                        'format' => 'raw',
+                    ],
 					'delivery_type',
 					'summ',
 					'summPay',
@@ -114,7 +118,7 @@ Modal::end();
 	<?= $this->render('../dt-invoices-payment/index', ['modelDoc' => $model, 'dataProvider' => $dt_ip_provider, 'searchModel' => $dt_ip_search]) ?>
 
 	<br>
-	<?= $model->status == DtInvoices::DOC_NEW ?
+	<?= $model->status != DtInvoices::DOC_CLOSED ?
 		Html::a('Закрыть счет', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
 		: '';
 	?>

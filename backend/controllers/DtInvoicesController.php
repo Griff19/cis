@@ -51,13 +51,13 @@ class DtInvoicesController extends Controller
         ]);
     }
 
-	/**
-	 * Открыть документ.
-	 * @param integer $id
-	 * @param int $mode
-	 * @return mixed
-	 * @throws NotFoundHttpException
-	 */
+    /**
+     * Открыть документ.
+     * @param integer $id
+     * @param int $mode
+     * @return mixed
+     * @throws NotFoundHttpException
+     */
     public function actionView($id, $mode = 0)
     {
         $dt_id_search = new DtInvoiceDevicesSearch();
@@ -98,14 +98,15 @@ class DtInvoicesController extends Controller
      * @return mixed
      * @throws NotFoundHttpException
      */
-    public function actionCreatePdf($id){
+    public function actionCreatePdf($id)
+    {
         $model = $this->findModel($id);
-		//устройства в счете
-		$dt_id_search = new DtInvoiceDevicesSearch();
-		$dt_id_provider = $dt_id_search->search(Yii::$app->request->queryParams, $id);
-		//оплаты по счету
-		$dt_ip_search = new DtInvoicesPaymentSearch();
-		$dt_ip_provider = $dt_ip_search->search(Yii::$app->request->queryParams, $id);
+        //устройства в счете
+        $dt_id_search = new DtInvoiceDevicesSearch();
+        $dt_id_provider = $dt_id_search->search(Yii::$app->request->queryParams, $id);
+        //оплаты по счету
+        $dt_ip_search = new DtInvoicesPaymentSearch();
+        $dt_ip_provider = $dt_ip_search->search(Yii::$app->request->queryParams, $id);
 
         $this->layout = 'pdf';
         /** @var Pdf $pdf */
@@ -115,8 +116,8 @@ class DtInvoicesController extends Controller
         //$pdf->content = "Содержимое";
         $pdf->content = $this->render('pdf', [
             'model' => $model,
-			'dt_id_provider' => $dt_id_provider,
-			'dt_ip_provider' => $dt_ip_provider
+            'dt_id_provider' => $dt_id_provider,
+            'dt_ip_provider' => $dt_ip_provider
         ]);
         return $pdf->render();
     }
@@ -169,12 +170,12 @@ class DtInvoicesController extends Controller
         if ($model->delete()) {
             /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
             $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $model->id]);
-            foreach ($did_models as $did_model){
+            foreach ($did_models as $did_model) {
                 DtEnquiryDevices::updateAll(
-					['status' => DtEnquiryDevices::REQUEST_INVOICE,
-						'dt_inv_id' => null
-					],
-					['id' => $did_model->dt_enquiry_devices_id]);
+                    ['status' => DtEnquiryDevices::REQUEST_INVOICE,
+                        'dt_inv_id' => null
+                    ],
+                    ['id' => $did_model->dt_enquiry_devices_id]);
             }
             DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
             DtInvoicesPayment::deleteAll(['dt_invoices_id' => $model->id]);
@@ -190,35 +191,41 @@ class DtInvoicesController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionSave($id) {
+    public function actionSave($id, $mode = 0)
+    {
         /** @var DtInvoices $model модель документа "Счет" */
         $model = $this->findModel($id);
 
-		if ($model->saveDoc())
-			Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
-		else
-			Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
+        if ($model->saveDoc())
+            Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
+        else
+            Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
 
-        return $this->redirect(['view', 'id' => $id]);
+        if ($mode == 1) {
+            $controller = new SiteController('site', $this->module);
+            return $controller->actionEmployeeIt();
+        } else
+            return $this->redirect(['view', 'id' => $id]);
     }
 
-	/**
-	 * Устанавливаем статус для платежа
-	 * @param int $id Идентификаторм платежа
-	 * @param int $status Устанавливаемый статус
-	 * @return \yii\web\Response
-	 */
-	public function actionSetStatusPayment($id, $status) {
+    /**
+     * Устанавливаем статус для платежа
+     * @param int $id Идентификаторм платежа
+     * @param int $status Устанавливаемый статус
+     * @return \yii\web\Response
+     */
+    public function actionSetStatusPayment($id, $status)
+    {
 
-		$model = DtInvoicesPayment::findOne($id);
-		if ($model->setStatusDoc($status));
-			//Yii::$app->session->setFlash('success', 'Статус изменен');
-		else
-			Yii::$app->session->setFlash('error', 'Новый статус не установлен');
+        $model = DtInvoicesPayment::findOne($id);
+        if ($model->setStatusDoc($status)) ;
+        //Yii::$app->session->setFlash('success', 'Статус изменен');
+        else
+            Yii::$app->session->setFlash('error', 'Новый статус не установлен');
 
-		return $this->actionView($model->dt_invoices_id);
+        return $this->actionView($model->dt_invoices_id);
 
-	}
+    }
 
     /**
      * Finds the DtInvoices model based on its primary key value.

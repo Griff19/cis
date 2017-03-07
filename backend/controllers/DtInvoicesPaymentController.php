@@ -7,6 +7,7 @@ namespace backend\controllers;
 
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
+use backend\models\DtInvoices;
 use backend\models\Images;
 use backend\models\DtInvoicesPayment;
 use backend\models\DtInvoicesPaymentSearch;
@@ -61,6 +62,7 @@ class DtInvoicesPaymentController extends Controller
     }
 
     /**
+     * Добавляем новый платеж по счету
      * @param $id
      * @param bool $is_modal
      * @param int $idid
@@ -76,13 +78,20 @@ class DtInvoicesPaymentController extends Controller
             if ($model->save()) {
                 /** @var DtInvoiceDevices $model_id */
                 $model_id = DtInvoiceDevices::findOne($idid);
+                /** @var DtEnquiryDevices $model_ed */
                 $model_ed = DtEnquiryDevices::findOne($model_id->dt_enquiry_devices_id);
+                /** @var DtInvoices $dt_invoices */
+                $dt_invoices = DtInvoices::findOne($model->dt_invoices_id);
 
+                $dt_invoices->status = DtInvoices::DOC_SAVE;
                 $model_id->status = DtEnquiryDevices::AWAITING_PAYMENT;
                 $model_ed->status = DtEnquiryDevices::AWAITING_PAYMENT;
-
-                if ($model_id->save()) Yii::$app->session->setFlash('error', serialize($model_id->getErrors()));
-                if ($model_ed->save()) Yii::$app->session->setFlash('error', serialize($model_ed->getErrors()));
+                $err = '';
+                if (!$model_id->save()) $err = serialize($model_id->getErrors());
+                if (!$model_ed->save()) $err = serialize($model_ed->getErrors());
+                if (!$dt_invoices->save()) $err = serialize($dt_invoices->getErrors());
+                if ($err)
+                    Yii::$app->session->setFlash('error', $err);
             }
 
             if ($is_modal)

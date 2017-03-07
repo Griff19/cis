@@ -22,7 +22,10 @@ use yii\web\JsExpression;
         'dateFormat' => 'dd.MM.yyyy',
         'options' => ['class' => 'form-control']
     ]) ?>
-
+    <?= Html::a(Html::tag('span','',['class' => 'glyphicon glyphicon-plus']). 'Ввести нового контрагента',
+        ['d-partners/create', 'target' => 'dt-invoices/create'],
+        ['style' => 'float: right']
+        )?>
     <?= $form->field($model, 'd_partners_name')->widget(
         AutoComplete::className(), [
             'clientOptions' => [

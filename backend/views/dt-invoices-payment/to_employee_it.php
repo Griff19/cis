@@ -37,35 +37,42 @@ use yii\grid\GridView;
                     /** @var $model DtInvoicesPayment */
 					return Html::a(
                         'Счет №' . $model->dtInvoice->id
-                        . ' ' . $model->dtInvoice->doc_number
-                        . ' (' . $model->dtInvoice->summ . '/'. $model->dtInvoice->summPay .')',
+                        . ' ' . $model->dtInvoice->doc_number,
                         ['dt-invoices/view', 'id' => $model->dtInvoice->id]);
 				},
                 'format' => 'raw',
 			],
             'agreed_date:date',
-            'summ',
+            ['attribute' => 'summ',
+                'label' => 'Сумма / Оплачено',
+                'value' => function ($model) {
+                    return $model->dtInvoice->summ . 'р. / '. $model->dtInvoice->summPay . 'р.';
+                }
+            ],
             ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
             ['attribute' => 'status', 'value' => 'statusString'],
 			['class' => 'yii\grid\Column',
 				'header' => 'Действия',
 				'content' => function ($model) {
+                    /** @var $model DtInvoicesPayment */
 					if ($model->status == DtInvoicesPayment::PAY_AGREED) {
-						$set = DtInvoicesPayment::PAY_REFER;
-						$str = 'Отправить';
-						$title = 'Отправить бухгалтеру на оплату';
-						$class = 'btn btn-primary';
-					}elseif ($model->status == DtInvoicesPayment::PAY_REFER) {
-						$set = DtInvoicesPayment::PAY_OK;
-						$str = 'Подтвердить';
-						$title = 'Подтвердить прошедшую оплату';
-						$class = 'btn btn-success';
- 					}
-					return (empty($str) ? '' : Html::a($str,
-						//['set-status-payment', 'id' => $model->id, 'status' => $set, 'mode' => 1],
-                        ['dt-invoices-payment/set-status', 'id' => $model->id, 'status' => $set, 'mode' => 1],
-						['class' => $class . ' btn-sm', 'title' => $title]
-                    ));
+						$a = Html::a('Отправить', ['dt-invoices-payment/set-status',
+                            'id' => $model->id,
+                            'status' => DtInvoicesPayment::PAY_REFER,
+                            'mode' => 1],
+                            ['class' => 'btn btn-primary btn-sm', 'title' => 'Отправить бухгалтеру на оплату']
+                        );
+					} elseif ($model->status == DtInvoicesPayment::PAY_REFER) {
+						$a = Html::a('Подтвердить', ['dt-invoices-payment/set-status',
+                            'id' => $model->id,
+                            'status' => DtInvoicesPayment::PAY_OK,
+                            'mode' => 1],
+                            ['class' => 'btn btn-success btn-sm', 'title' => 'Подтвердить прошедшую оплату']
+                        );
+ 					} elseif ($model->dtInvoice->summ <= $model->dtInvoice->summPay) {
+					    $a = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->dt_invoices_id], ['class' => 'btn btn-warning btn-sm']);
+                    }
+					return $a;
 				}
 			]
         ],

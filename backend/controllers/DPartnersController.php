@@ -68,16 +68,19 @@ class DPartnersController extends Controller
     }
 
     /**
-     * Creates a new DPartners model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Создаем нового контрагента
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($target = '')
     {
         $model = new DPartners();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            if ($model->save())
+                if ($target)
+                    return $this->redirect([$target]);
+                else
+                    return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,

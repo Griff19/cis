@@ -50,7 +50,7 @@ class DtEnquiries extends ActiveRecord
     public static function arrStatusString(){
         return [
             self::DTE_NEW => 'Новый',
-            self::DTE_SAVED => 'В обработке',
+            self::DTE_SAVED => "В&nbsp;Обработке",
             self::DTE_COMPLETE => 'Обработан',
             self::DTE_CLOSED => 'Закрыт'
         ];

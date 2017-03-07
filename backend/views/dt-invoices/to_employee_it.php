@@ -5,32 +5,50 @@
  */
 
 use yii\grid\GridView;
+use yii\helpers\Html;
+use backend\models\DtInvoices;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\DtInvoicesSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel backend\models\DtInvoicesSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ */
 
 ?>
 <div class="dt-invoices-index">
 
-    <h3> Текущие счета </h3>
+    <h3> Текущие счета: </h3>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            'doc_number',
-            'doc_date:date',
+            //'id',
+            ['attribute' => 'doc_number',
+                'value' => function ($model) {
+                    /** @var $model DtInvoices */
+                    return Html::a('Счет №' . $model->doc_number . ' от ' . $model->docDate,
+                        ['dt-invoices/view', 'id' => $model->id]);
+                },
+                'format' => 'raw',
+            ],
+            //'doc_date:date',
             //'d_partners_id',
             ['attribute' => 'partner.name_partner', 'label' => 'Контрагент'],
             'summ',
 			['attribute' => 'summPay', 'label' => 'Оплачено'],
 //            'delivery_type',
             ['attribute' => 'status',
-                'value' => 'statusString',
-                'filter' => \backend\models\DtInvoices::arrStatusString()
+                'value' => function ($model) {
+                    /** @var $model \backend\models\DtInvoices */
+                    $str = '';
+                    if ($model->summ <= $model->summPay && $model->status != DtInvoices::DOC_CLOSED)
+                        $str = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->id, 'mode' => 1], ['title' => 'Провести закрытие счета']);
+                    return $model->statusString . ' ' .$str;
+                },
+                'format' => 'raw',
+                'filter' => DtInvoices::arrStatusString()
             ],
 //            ['class' => 'yii\grid\ActionColumn'],
         ],
