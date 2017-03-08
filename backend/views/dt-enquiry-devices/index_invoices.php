@@ -24,7 +24,6 @@ use backend\models\DtEnquiryWorkplaces;
         'options' => ['id' => 'ded1'],
         //'enablePushState' => false
     ]);
-    echo Yii::getVersion();
     ?>
 
     <?= GridView::widget([

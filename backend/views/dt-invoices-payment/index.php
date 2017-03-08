@@ -20,18 +20,9 @@ use yii\grid\GridView;
     <p>
         <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить платеж', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
-
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'rowOptions' => function ($model) {
-            return ['class' => $model->status != DtInvoicesPayment::PAY_AGREED ? : 'success'];
-        },
-        'columns' => [
+    <?php
+        $cols = [
             ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            //'dt_invoices_id',
             'agreed_date:date',
             'summ',
             ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
@@ -40,25 +31,36 @@ use yii\grid\GridView;
                     $status = $model->statusString;
 
                     if ($model->status == DtInvoicesPayment::PAY_AGREED) {
-						$set = DtInvoicesPayment::PAY_REFER;
-						$str = '(Отправить)';
-						$title = 'Отправить бухгалтеру на оплату';
-					}elseif ($model->status == DtInvoicesPayment::PAY_REFER) {
-						$set = DtInvoicesPayment::PAY_OK;
-						$str = '(Подтвердить)';
-						$title = 'Подтвердить прошедшую оплату';
-					}
-					return $status . (empty($str) ? '' : ' '. Html::a($str, ['dt-invoices/set-status-payment',
-							'id' => $model->id,
-							'status' => $set],
-							['title' => $title]));
+                        $set = DtInvoicesPayment::PAY_REFER;
+                        $str = '(Отправить)';
+                        $title = 'Отправить бухгалтеру на оплату';
+                    }elseif ($model->status == DtInvoicesPayment::PAY_REFER) {
+                        $set = DtInvoicesPayment::PAY_OK;
+                        $str = '(Подтвердить)';
+                        $title = 'Подтвердить прошедшую оплату';
+                    }
+                    return $status . (empty($str) ? '' : ' '. Html::a($str, ['dt-invoices/set-status-payment',
+                                'id' => $model->id,
+                                'status' => $set],
+                                ['title' => $title]));
                 },
                 'format' => 'raw'
             ],
             ['class' => 'yii\grid\ActionColumn',
                 'controller' => 'dt-invoices-payment',
             ],
-        ],
+        ];
+        //если документ закрыт то убираем колонку действий
+        if ($modelDoc->status == DtInvoices::DOC_CLOSED)
+            array_pop($cols);
+    ?>
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'rowOptions' => function ($model) {
+            return ['class' => $model->status != DtInvoicesPayment::PAY_AGREED ? : 'success'];
+        },
+        'columns' => $cols,
     ]); ?>
 
 </div>

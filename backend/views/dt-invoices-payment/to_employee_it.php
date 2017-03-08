@@ -6,6 +6,7 @@
  */
 
 use backend\models\DtInvoicesPayment;
+use backend\models\DtInvoices;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -37,7 +38,8 @@ use yii\grid\GridView;
                     /** @var $model DtInvoicesPayment */
 					return Html::a(
                         'Счет №' . $model->dtInvoice->id
-                        . ' ' . $model->dtInvoice->doc_number,
+                        . ' ' . $model->dtInvoice->doc_number
+                        . ' (' . $model->dtInvoice->summ . 'р.)',
                         ['dt-invoices/view', 'id' => $model->dtInvoice->id]);
 				},
                 'format' => 'raw',
@@ -46,7 +48,8 @@ use yii\grid\GridView;
             ['attribute' => 'summ',
                 'label' => 'Сумма / Оплачено',
                 'value' => function ($model) {
-                    return $model->dtInvoice->summ . 'р. / '. $model->dtInvoice->summPay . 'р.';
+                    /** @var $model DtInvoicesPayment */
+                    return $model->summ . 'р. / '. $model->dtInvoice->summPay . 'р.';
                 }
             ],
             ['attribute' => 'employee.snp', 'label' => 'Согласовавший'],
@@ -54,6 +57,7 @@ use yii\grid\GridView;
 			['class' => 'yii\grid\Column',
 				'header' => 'Действия',
 				'content' => function ($model) {
+                    $a = '';
                     /** @var $model DtInvoicesPayment */
 					if ($model->status == DtInvoicesPayment::PAY_AGREED) {
 						$a = Html::a('Отправить', ['dt-invoices-payment/set-status',
@@ -69,7 +73,7 @@ use yii\grid\GridView;
                             'mode' => 1],
                             ['class' => 'btn btn-success btn-sm', 'title' => 'Подтвердить прошедшую оплату']
                         );
- 					} elseif ($model->dtInvoice->summ <= $model->dtInvoice->summPay) {
+ 					} elseif ($model->dtInvoice->summ <= $model->dtInvoice->summPay && $model->dtInvoice->status != DtInvoices::DOC_CLOSED) {
 					    $a = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->dt_invoices_id], ['class' => 'btn btn-warning btn-sm']);
                     }
 					return $a;
