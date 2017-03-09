@@ -37,8 +37,7 @@ use yii\grid\GridView;
 				'value' => function ($model) {
                     /** @var $model DtInvoicesPayment */
 					return Html::a(
-                        'Счет №' . $model->dtInvoice->id
-                        . ' ' . $model->dtInvoice->doc_number
+                        $model->dtInvoice->summary
                         . ' (' . $model->dtInvoice->summ . 'р.)',
                         ['dt-invoices/view', 'id' => $model->dtInvoice->id]);
 				},

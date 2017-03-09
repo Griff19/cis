@@ -6,6 +6,7 @@
 
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
+use backend\models\DtInvoiceDevices;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -41,7 +42,8 @@ Modal::end();
             ['attribute' => 'dt_invoices_id',
                 'label' => 'Док. Счет',
                 'value' => function ($model) {
-                    return Html::a('Счет №' . $model->dt_invoices_id, ['dt-invoices/view', 'id' => $model->dt_invoices_id]);
+                    /** @var $model DtInvoiceDevices */
+                    return Html::a($model->dtInvoice->summary, ['dt-invoices/view', 'id' => $model->dt_invoices_id]);
                 },
                 'format' => 'raw'
             ],

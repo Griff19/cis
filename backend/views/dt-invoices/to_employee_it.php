@@ -23,34 +23,29 @@ use backend\models\DtInvoices;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-            //'id',
             ['attribute' => 'doc_number',
                 'value' => function ($model) {
                     /** @var $model DtInvoices */
-                    return Html::a('Счет №' . $model->doc_number . ' от ' . $model->docDate,
+                    return Html::a($model->summary,
                         ['dt-invoices/view', 'id' => $model->id]);
                 },
                 'format' => 'raw',
             ],
-            //'doc_date:date',
-            //'d_partners_id',
             ['attribute' => 'partner.name_partner', 'label' => 'Контрагент'],
             'summ',
 			['attribute' => 'summPay', 'label' => 'Оплачено'],
-//            'delivery_type',
             ['attribute' => 'status',
                 'value' => function ($model) {
                     /** @var $model \backend\models\DtInvoices */
                     $str = '';
                     if ($model->summ <= $model->summPay && $model->status != DtInvoices::DOC_CLOSED)
-                        $str = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->id, 'mode' => 1], ['title' => 'Провести закрытие счета']);
+                        $str = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->id, 'mode' => 1],
+                            ['title' => 'Провести закрытие счета']);
                     return $model->statusString . ' ' .$str;
                 },
                 'format' => 'raw',
                 'filter' => DtInvoices::arrStatusString()
             ],
-//            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

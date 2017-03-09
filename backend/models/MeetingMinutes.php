@@ -6,17 +6,18 @@
 
 namespace backend\models;
 
-use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * @property integer $id
  * @property string $doc_num
  * @property string $doc_date
  */
-class MeetingMinutes extends \yii\db\ActiveRecord
+class MeetingMinutes extends ActiveRecord
 {
-
-	/**
+	const DOC_NEW = 0;
+	const DOC_SAVE = 1;
+    /**
      * @inheritdoc
      */
     public static function tableName()
@@ -33,6 +34,11 @@ class MeetingMinutes extends \yii\db\ActiveRecord
             [['doc_date'], 'safe'],
             [['doc_num'], 'string', 'max' => 255],
         ];
+    }
+
+    public function setStatus($status)
+    {
+
     }
 
     /**

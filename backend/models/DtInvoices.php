@@ -23,7 +23,7 @@ use yii\db\ActiveRecord;
  * @property DtInvoiceDevices invoiceDevices
  * @property DPartners $partner
  * @property string docDate
- *
+ * @property string summary Краткая информация о счете
  */
 class DtInvoices extends ActiveRecord
 {
@@ -60,7 +60,8 @@ class DtInvoices extends ActiveRecord
      * Определяем строковые значения статуса
      * @return array
      */
-    public static function arrStatusString(){
+    public static function arrStatusString()
+    {
         return [
             self::DOC_DEL => 'Удален',
             self::DOC_NEW => 'Новый',
@@ -73,7 +74,8 @@ class DtInvoices extends ActiveRecord
      * Возвращает строку статуса по номеру
      * @return mixed
      */
-    public function getStatusString() {
+    public function getStatusString()
+    {
         $arr = self::arrStatusString();
         return $arr[$this->status];
     }
@@ -116,14 +118,16 @@ class DtInvoices extends ActiveRecord
      * Форматируем дату
      * @return string
      */
-    public function getDocDate(){
+    public function getDocDate()
+    {
         return Yii::$app->formatter->asDate($this->doc_date);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoiceDevices(){
+    public function getInvoiceDevices()
+    {
         return $this->hasMany(DtInvoiceDevices::className(), ['dt_invoices_id' => 'id']);
     }
 
@@ -131,7 +135,8 @@ class DtInvoices extends ActiveRecord
      * Связь с моделью "Контрагенты"
      * @return \yii\db\ActiveQuery
      */
-    public function getPartner(){
+    public function getPartner()
+    {
         return $this->hasOne(DPartners::className(), ['id' => 'd_partners_id']);
     }
 
@@ -139,28 +144,39 @@ class DtInvoices extends ActiveRecord
      * Сумма всех оплат по счету
      * @return mixed
      */
-    public function getSummPay(){
+    public function getSummPay()
+    {
         return DtInvoicesPayment::find()->where(['dt_invoices_id' => $this->id, 'status' => DtInvoicesPayment::PAY_OK])->sum('summ');
     }
 
-	/**
-	 * "Сохраняем" документ изменяя все связанные статусы
-	 * @return bool
-	 */
-	public function saveDoc(){
+    /**
+     * Краткая информация о счете
+     * @return string
+     */
+    public function getSummary()
+    {
+        return 'Счет ' . $this->id . ' №' . $this->doc_number . ' от ' . $this->docDate;
+    }
 
-		if ($this->summ > $this->summPay) {
-			return false;
-		} else {
-			/** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
-			$did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $this->id]);
-			foreach ($did_models as $did_model) {
-				DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
-			}
-			DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $this->id]);
-			$this->status = DtInvoices::DOC_CLOSED;
-			$this->save();
-		}
-		return true;
-	}
+    /**
+     * "Сохраняем" документ изменяя все связанные статусы
+     * @return bool
+     */
+    public function saveDoc()
+    {
+
+        if ($this->summ > $this->summPay) {
+            return false;
+        } else {
+            /** @var DtInvoiceDevices[] $did_models устройства в документе "Счет" */
+            $did_models = DtInvoiceDevices::findAll(['dt_invoices_id' => $this->id]);
+            foreach ($did_models as $did_model) {
+                DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['id' => $did_model->dt_enquiry_devices_id]);
+            }
+            DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $this->id]);
+            $this->status = DtInvoices::DOC_CLOSED;
+            $this->save();
+        }
+        return true;
+    }
 }
