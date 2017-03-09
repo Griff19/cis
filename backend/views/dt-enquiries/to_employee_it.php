@@ -27,7 +27,7 @@ use backend\models\DtEnquiries;
             ['attribute' => 'id',
                 'label' => 'Док №',
                 'value' => function($model) {
-                    return Html::a('Заявка №'. $model->id, ['dt-enquiries/view', 'id' => $model->id]);
+                    return Html::a('Заявка №'. $model->id, ['dt-enquiries/view', 'id' => $model->id], ['data-method' => 'post']);
                 },
                 'format' => 'raw'
             ],
