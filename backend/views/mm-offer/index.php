@@ -1,39 +1,40 @@
 <?php
 
-use yii\helpers\Html;
+use backend\models\MeetingMinutes;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\MmOfferSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
 
-//$this->title = 'Mm Offers';
-//$this->params['breadcrumbs'][] = $this->title;
+/**
+ * @var $this yii\web\View
+ * @var $searchModel backend\models\MmOfferSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ * @var $modelDoc MeetingMinutes;
+ */
+
 ?>
 <div class="mmoffer-index" style="margin-top: 40px">
 
     <h3> Выдвинутые предложения </h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?php //echo Html::a('Create Mm Offer', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(['id' => 'mmoffer_idx']); ?>
-	<?= GridView::widget([
+    <?php
+    $columns = [
+        ['class' => 'yii\grid\SerialColumn'],
+
+        'content:ntext',
+
+        ['class' => 'yii\grid\ActionColumn',
+            'controller' => 'mm-offer',
+            'template' => '{delete}'
+        ],
+    ];
+    if ($modelDoc->status == MeetingMinutes::DOC_SAVE)
+        array_pop($columns);
+
+    Pjax::begin(['id' => 'mmoffer_idx']); ?>
+    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-		'layout' => "{items}\n{pager}",
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            //'id',
-            //'mm_id',
-            'content:ntext',
-
-            ['class' => 'yii\grid\ActionColumn',
-				'controller' => 'mm-offer',
-				'template' => '{delete}'
-			],
-        ],
+        'layout' => "{items}\n{pager}",
+        'columns' => $columns,
     ]); ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?></div>

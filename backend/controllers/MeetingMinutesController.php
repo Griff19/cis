@@ -230,6 +230,15 @@ class MeetingMinutesController extends Controller
         }
     }
 
+    public function actionSave($id)
+    {
+        $model = MeetingMinutes::findOne($id);
+        $model->status = MeetingMinutes::DOC_SAVE;
+        $model->save();
+
+        return $this->redirect(['view', 'id' => $id]);
+    }
+
     /**
      * Deletes an existing MeetingMinutes model.
      * If deletion is successful, the browser will be redirected to the 'index' page.

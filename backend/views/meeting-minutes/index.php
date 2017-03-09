@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use backend\models\MeetingMinutes;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\MeetingMinutesSearch */
@@ -28,7 +29,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'doc_num',
             'doc_date:date',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                        'update' => function ($url, $model) {
+                            return $model->status == MeetingMinutes::DOC_SAVE ? '' :
+                                Html::a(Html::tag('span','',['class' => 'glyphicon glyphicon-pencil']), $url);
+                        }
+                ],
+            ],
         ],
-    ]); ?>
+    ]) ?>
 </div>

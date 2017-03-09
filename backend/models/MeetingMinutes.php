@@ -12,7 +12,9 @@ use yii\db\ActiveRecord;
  * @property integer $id
  * @property string $doc_num
  * @property string $doc_date
+ * @property integer $status
  */
+
 class MeetingMinutes extends ActiveRecord
 {
 	const DOC_NEW = 0;
@@ -36,11 +38,6 @@ class MeetingMinutes extends ActiveRecord
         ];
     }
 
-    public function setStatus($status)
-    {
-
-    }
-
     /**
      * @inheritdoc
      */
@@ -50,9 +47,7 @@ class MeetingMinutes extends ActiveRecord
             'id' => 'ID',
             'doc_num' => 'Док. №',
             'doc_date' => 'Дата Док.',
+            'status' => 'Статус'
         ];
     }
-
-
-
 }
