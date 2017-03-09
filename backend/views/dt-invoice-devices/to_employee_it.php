@@ -43,7 +43,7 @@ Modal::end();
                 'label' => 'Док. Счет',
                 'value' => function ($model) {
                     /** @var $model DtInvoiceDevices */
-                    return Html::a($model->dtInvoice->summary, ['dt-invoices/view', 'id' => $model->dt_invoices_id]);
+                    return Html::a($model->dtInvoice->summary, ['dt-invoices/view', 'id' => $model->dt_invoices_id], ['data-method' => 'post']);
                 },
                 'format' => 'raw'
             ],
