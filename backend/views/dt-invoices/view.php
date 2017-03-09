@@ -83,7 +83,7 @@ Modal::end();
 					'delivery_type',
 					'summ',
 					'summPay',
-					'statusString'
+					'statusString:raw'
 				],
 			]) ?>
 		</div>

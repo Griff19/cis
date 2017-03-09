@@ -66,11 +66,8 @@ Modal::end();
 					'create_date:date',
 					'do_date:date',
 					'create_time:datetime',
-					//'workplace_id',
-//                    ['label' => 'Ответственный',
-//                    'value' => $model->ownerWP->snp],
 					'memo:boolean',
-					'statusString'
+					'statusString:raw'
 				],
 			]) ?>
 		</div>
