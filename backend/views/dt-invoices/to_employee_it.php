@@ -27,7 +27,7 @@ use backend\models\DtInvoices;
                 'value' => function ($model) {
                     /** @var $model DtInvoices */
                     return Html::a($model->summary,
-                        ['dt-invoices/view', 'id' => $model->id]);
+                        ['dt-invoices/view', 'id' => $model->id], ['data-method' => 'get']);
                 },
                 'format' => 'raw',
             ],

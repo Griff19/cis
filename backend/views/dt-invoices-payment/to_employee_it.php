@@ -39,7 +39,7 @@ use yii\grid\GridView;
 					return Html::a(
                         $model->dtInvoice->summary
                         . ' (' . $model->dtInvoice->summ . 'р.)',
-                        ['dt-invoices/view', 'id' => $model->dtInvoice->id]);
+                        ['dt-invoices/view', 'id' => $model->dtInvoice->id], ['data-method' => 'post']);
 				},
                 'format' => 'raw',
 			],
