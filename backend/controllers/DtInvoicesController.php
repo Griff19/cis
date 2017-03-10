@@ -92,7 +92,6 @@ class DtInvoicesController extends Controller
     }
 
     /**
-     *
      * Формирование pdf-документа
      * @param $id
      * @return mixed

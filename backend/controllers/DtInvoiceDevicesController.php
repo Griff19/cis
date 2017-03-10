@@ -174,12 +174,13 @@ class DtInvoiceDevicesController extends Controller
     }
 
     /**
+     * Генерация печатного документа "Ведомость на согласование"
      * @return mixed
      */
     public function actionPdf()
     {
         $searchModel = new DtInvoiceDevicesSearch();
-        $dataProvider = $searchModel->searchToEmployee(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchToEmployee(Yii::$app->request->queryParams, 'pdf');
 
         $type = 'на согласование';
         $this->layout = 'pdf';

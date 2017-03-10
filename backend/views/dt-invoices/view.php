@@ -122,7 +122,8 @@ Modal::end();
 		Html::a('Закрыть счет', ['dt-invoices/save', 'id' => $model->id], ['class' => 'btn btn-success'])
 		: '';
 	?>
-	Внимание! В закрытый счет нельзя вносить изменения.
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    Внимание! В закрытый счет нельзя вносить изменения.
 	<?php \yii\widgets\Pjax::end();?>
 </div>
 

@@ -75,15 +75,22 @@ class DtInvoiceDevicesSearch extends DtInvoiceDevices
         return $dataProvider;
     }
 
-	/**
-	 * Для страницы сотрудника it-отдела выбираем только открытые заявки и устройства без заявок
-	 * @param $params
-	 * @return ActiveDataProvider
-	 */
-	public function searchToEmployee($params)
+    /**
+     * Для страницы сотрудника it-отдела выбираем только открытые заявки и устройства без заявок
+     * @param $params
+     * @param string $mode Если =='pdf' то выбираются устройства для печати, иначе - для отображения на странице it_index
+     * @return ActiveDataProvider
+     */
+	public function searchToEmployee($params, $mode = '')
 	{
 		$enquiry = DtEnquiries::find()->select('id')->where(['status' => DtEnquiries::DTE_COMPLETE]);
-		$query = DtInvoiceDevices::find()->where(['NOT IN', 'dt_enquiries_id', $enquiry])->orWhere(['dt_enquiries_id' => null]);
+		if ($mode === '')
+		    $query = DtInvoiceDevices::find()->where(['NOT IN', 'dt_enquiries_id', $enquiry])
+                ->orWhere(['dt_enquiries_id' => null]);
+		else
+            $query = DtInvoiceDevices::find()->where(['<=', 'status', DtEnquiryDevices::AWAITING_PAYMENT])
+                ->andwhere(['NOT IN', 'dt_enquiries_id', $enquiry])
+                ->orWhere(['dt_enquiries_id' => null]);
 
 		// add conditions that should always apply here
 

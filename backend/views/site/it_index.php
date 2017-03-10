@@ -31,6 +31,10 @@ use yii\widgets\Pjax;
 			<?= Html::a('Заявки на оборудование',['dt-enquiries/index'],['class'=>'btn btn-warning'])?>
 			<p>Заявки на оборудование</p>
 		</div>
+        <div class="col-sm-3">
+            <?= Html::a('Счета',['dt-invoices/index'],['class'=>'btn btn-primary'])?>
+            <p>Документы для оптаты</p>
+        </div>
 	</div>
     <?php Pjax::begin(['enablePushState' => false])?>
 	<div class="row">

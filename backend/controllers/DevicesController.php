@@ -331,12 +331,16 @@ class DevicesController extends Controller
         $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
         $model->type_id = $type_id;
         $model->workplace_id = $id_wp;
-        if (!$model->sn)
-            $model->sn = 'SN' . $model->id;
+
         //Значение $type_id сохраняем в сессию чтобы форма подстроила зависимые поля
         Yii::$app->session->set('type_id', $type_id);
         if ($model->load(Yii::$app->request->post())) {
+
             if ($model->save()) {
+                if (!$model->sn) {
+                    $model->sn = 'SN' . $model->id;
+                    $model->save();
+                }
                 /** @var DtInvoiceDevices $did */
                 $did = DtInvoiceDevices::findOne($idid);
                 $did->status = DtEnquiryDevices::DEBIT;

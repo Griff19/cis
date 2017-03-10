@@ -1,13 +1,15 @@
 <?php
 /**
  * Ведомость на согласование платежей
- *
+ * @see \backend\controllers\DtInvoiceDevicesController::actionPdf()
  */
 
 use backend\models\DeviceType;
 use yii\grid\GridView;
 
-/* @var $dataProvider yii\data\ActiveDataProvider
+/**
+ *
+ * @var $dataProvider yii\data\ActiveDataProvider
  * @var $type string
  */
 
@@ -33,7 +35,6 @@ use yii\grid\GridView;
                 return DeviceType::getTitle($model->type_id);
             }],
             ['attribute' => 'price', 'header' => 'Сумма'],
-            //['attribute' => 'employee.snp', 'header' => 'Согласовавший'],
             ['attribute' => 'status', 'header' => 'Статус', 'value' => 'statusString'],
 			['class' => 'yii\grid\Column', 'header' => 'Подпись']
         ],

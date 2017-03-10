@@ -31,7 +31,7 @@ class DtEnquiryDevices extends ActiveRecord
     const WAITING_AGREE = 4; //ожидает согласования
     const AWAITING_PAYMENT = 5; //ожидает оплаты
     const PAID = 6; //куплено
-    const DEBIT = 7; //приходовано
+    const DEBIT = 7; //оприходовано
 
     /**
      * Готовим массив строк статуса
