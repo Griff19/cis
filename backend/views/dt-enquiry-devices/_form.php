@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 
     <?php // $form->field($model, 'dt_enquiries_id')->textInput() ?>
 
-    <?= $form->field($model, 'parent_device_id')->textInput([
-       // 'onclick' => "javascript:document.location.href='/admin/devices/index?mode=dvs&target=dt-enquiry-devices/create1&id_doc=" . $model->dt_enquiries_id . "'"
-    ]) ?>
+    <?php
+    //Если потребуется привязываеть новые устройства к родителям
+    //echo $form->field($model, 'parent_device_id')->textInput([]) ?>
 
     <?= $form->field($model, 'type_id')->dropDownList(
         ArrayHelper::map(DeviceType::arrDevType(), 'type_id', 'title'), [

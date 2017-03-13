@@ -50,11 +50,20 @@ use yii\grid\GridView;
         ['attribute' => 'status',
             'value' => function ($model) {
                 $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
-                return Html::a($stts, '', [
+                if ($model->status ==  DtEnquiryDevices::PAID)
+                    $a = Html::a('(Приходовать)', ['devices/create-from-doc',
+                        'type_id' => $model->type_id,
+                        'id_wp' => $model->dtEnquiryDevice ? $model->dtEnquiryDevice->workplace_id : null,
+                        'idid' => $model->id
+                    ], ['title' => 'Приходовать устройство']);
+                else
+                    $a = Html::a('(Сменить)', '', [
                     'class' => 'stat',
                     'title' => 'Сменить статус',
                     'onclick' => '$.post("/admin/dt-invoice-devices/set-status?id=' . $model->id . '")'
                 ]);
+
+                return $stts . ' ' . $a;
             },
             'format' => 'raw',
         ],

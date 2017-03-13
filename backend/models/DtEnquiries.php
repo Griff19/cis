@@ -1,14 +1,13 @@
 <?php
-
+/**
+ * Модель документа "Заявка на оборудование", соответствует таблице "dt_enquiries"
+ */
 namespace backend\models;
 
 use Yii;
 use yii\db\ActiveRecord;
-use DateTime;
 
 /**
- * Модель документа "Заявка на оборудование", соответствует таблице "dt_enquiries".
- *
  * @property integer id
  * @property integer employee_id
  * @property string employee_name
@@ -80,7 +79,7 @@ class DtEnquiries extends ActiveRecord
         return [
             [['employee_id'], 'required'],
             [['employee_id', 'status'], 'integer'],
-
+            ['employee_name', 'string'],
             ['memo', 'boolean'],
             [['create_date', 'do_date', 'create_time'], 'safe'],
             ['do_date', 'compare', 'compareAttribute' => 'create_date', 'operator' => '>', 'message' => '"{attribute}" должна быть позже "{compareAttribute}"']
@@ -94,7 +93,7 @@ class DtEnquiries extends ActiveRecord
     {
         return [
             'id' => 'ID',
-            'employee_name' => 'Имя сотрудника',
+            'employee_name' => 'Имя заявителя',
             'employee_id' => 'Сотрудник',
             'create_date' => 'Дата создания',
             'createDate' => 'Дата создания',
@@ -124,16 +123,25 @@ class DtEnquiries extends ActiveRecord
     }
 
     /**
+     * Связь с сотрудником
      * @return \yii\db\ActiveQuery
      */
     public function getEmployee(){
         return $this->hasOne(Employees::className(), ['id' => 'employee_id']);
     }
 
+    /**
+     * Связь с владельцем рабочего места
+     * @return $this
+     */
     public function getOwnerWP(){
         return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
     }
 
+    /**
+     * Связь с рабочим местом
+     * @return $this
+     */
     public function getWorkplaces(){
         return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])->viaTable('dt_enquiry_workplaces', ['dt_enquiries_id' => 'id']);
     }

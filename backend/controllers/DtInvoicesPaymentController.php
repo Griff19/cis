@@ -63,9 +63,9 @@ class DtInvoicesPaymentController extends Controller
 
     /**
      * Добавляем новый платеж по счету
-     * @param $id
-     * @param bool $is_modal
-     * @param int $idid
+     * @param integer $id Идентификатор счета
+     * @param bool $is_modal Признак открытия в модальном окне
+     * @param int $idid Идентификатор устройства в счете
      * @return string|\yii\web\Response
      */
     public function actionCreate($id, $is_modal = false, $idid = 0)
@@ -73,22 +73,32 @@ class DtInvoicesPaymentController extends Controller
         $model = new DtInvoicesPayment();
         $model->dt_invoices_id = $id;
         $model->status = DtInvoicesPayment::PAY_AGREED;
+        /** @var DtInvoices $dt_invoices */
+        $dt_invoices = DtInvoices::findOne($model->dt_invoices_id);
+        $model->summ = $dt_invoices->summ;
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
+                $err = '';
                 /** @var DtInvoiceDevices $model_id */
-                $model_id = DtInvoiceDevices::findOne($idid);
-                /** @var DtEnquiryDevices $model_ed */
-                $model_ed = DtEnquiryDevices::findOne($model_id->dt_enquiry_devices_id);
-                /** @var DtInvoices $dt_invoices */
-                $dt_invoices = DtInvoices::findOne($model->dt_invoices_id);
+                if ($idid) {
+                    $model_id = DtInvoiceDevices::findOne($idid);
+                    $model_id->status = DtEnquiryDevices::AWAITING_PAYMENT;
+                    if (!$model_id->save()) $err .= serialize($model_id->getErrors()) . '<br/>';
+
+                    if ($model_id->dt_enquiry_devices_id) {
+                        /** @var DtEnquiryDevices $model_ed */
+                        $model_ed = DtEnquiryDevices::findOne($model_id->dt_enquiry_devices_id);
+                        $model_ed->status = DtEnquiryDevices::AWAITING_PAYMENT;
+                        if (!$model_ed->save()) $err .= serialize($model_ed->getErrors()) . '<br/>';
+                    }
+                } else {
+                    DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::AWAITING_PAYMENT], ['dt_invoices_id' => $id]);
+                    DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::AWAITING_PAYMENT], ['dt_inv_id' => $id]);
+                }
 
                 $dt_invoices->status = DtInvoices::DOC_SAVE;
-                $model_id->status = DtEnquiryDevices::AWAITING_PAYMENT;
-                $model_ed->status = DtEnquiryDevices::AWAITING_PAYMENT;
-                $err = '';
-                if (!$model_id->save()) $err = serialize($model_id->getErrors());
-                if (!$model_ed->save()) $err = serialize($model_ed->getErrors());
+
                 if (!$dt_invoices->save()) $err = serialize($dt_invoices->getErrors());
                 if ($err)
                     Yii::$app->session->setFlash('error', $err);

@@ -102,7 +102,7 @@ class DtInvoiceDevicesController extends Controller
     {
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
-        $model->status = DtEnquiryDevices::AWAITING_PAYMENT;
+        $model->status = DtEnquiryDevices::WAITING_AGREE;
         if ($model->load(Yii::$app->request->post()) && $model->save())
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
         else

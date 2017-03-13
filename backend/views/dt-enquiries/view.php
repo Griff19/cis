@@ -123,11 +123,11 @@ Modal::end();
     <p>
         <?php
         if ($model->status == 0)
-            echo Html::a('Сохранить заявку', ['save', 'id' => $model->id], ['class' => 'btn btn-success']);
+            echo Html::a('Провести заявку', ['save', 'id' => $model->id], ['class' => 'btn btn-success']);
         else
-            echo Html::a('Отменить сохранение', ['un-save', 'id' => $model->id], ['class' => 'btn btn-success'])
+            echo Html::a('Отменить проведеине', ['un-save', 'id' => $model->id], ['class' => 'btn btn-success'])
         ?>
         <span class="glyphicon glyphicon-exclamation-sign"></span>
-        Сохраненная заявка отправляется в дальнейшую обработку и не может быть изменена.
+        Проведенная заявка отправляется в дальнейшую обработку и не может быть изменена.
     </p>
 </div>

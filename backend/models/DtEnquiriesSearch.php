@@ -34,10 +34,9 @@ class DtEnquiriesSearch extends DtEnquiries
     }
 
     /**
-     * Creates data provider instance with search query applied
+     * Собираем данные по заявкам на оборудование
      *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -45,6 +44,7 @@ class DtEnquiriesSearch extends DtEnquiries
         $query = DtEnquiries::find();
 
         // add conditions that should always apply here
+        $query->joinWith('employee');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -66,7 +66,7 @@ class DtEnquiriesSearch extends DtEnquiries
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->joinWith('employee');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

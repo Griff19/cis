@@ -1,6 +1,7 @@
 <?php
 /**
- * Страница для сотрудника ит-отдела. Генерируется actionEmployeeIt() контроллера SiteController
+ * Страница для сотрудника ит-отдела.
+ * @see \backend\controllers\SiteController::actionEmployeeIt()
  */
 
 use yii\helpers\Html;
