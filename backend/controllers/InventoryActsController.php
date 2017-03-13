@@ -434,7 +434,8 @@ class InventoryActsController extends Controller
             'lostDevProvider' => $oldModel ? $lostDevProvider : null
         ]);
 
-        $model->status = InventoryActs::DOC_PRINTED;
+        if ($model->status != InventoryActs::DOC_AGREE)
+            $model->status = InventoryActs::DOC_PRINTED;
         $model->save();
 
         return $pdf->render();

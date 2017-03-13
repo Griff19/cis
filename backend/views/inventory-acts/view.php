@@ -1,4 +1,8 @@
 <?php
+/**
+ * Представление документа "Акт инвентаризации"
+ * @see \backend\controllers\InventoryActsController::actionView()
+ */
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
