@@ -274,7 +274,7 @@ class DevicesController extends Controller
                     $model->sn = 'SN' . $model->id;
                     $model->save();
                 }
-                Yii::$app->session->setFlash('success', '<b>' . $model->sn . '</b> устройство успешно добавлено');
+                Yii::$app->session->setFlash('success', '<b>' . $model->summary . '</b> устройство успешно добавлено');
             } else {
                 Yii::$app->session->setFlash('error', serialize($model->errors));
             }
@@ -352,7 +352,7 @@ class DevicesController extends Controller
                     $ded->status = DtEnquiryDevices::DEBIT;
                     $ded->save();
                 }
-                Yii::$app->session->setFlash('success', '<b>'. $model->sn .'</b> устройство успешно добавлено');
+                Yii::$app->session->setFlash('success', '<b>'. $model->summary .'</b> устройство успешно добавлено');
                 return $this->redirect(['site/employee-it']);
             }
         } else {

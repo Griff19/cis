@@ -9,7 +9,6 @@ use yii\data\ActiveDataProvider;
 
 /**
  * Модель для таблицы "devices".
- *
  * @property integer id
  * @property integer type_id
  * @property string brand
@@ -25,6 +24,7 @@ use yii\data\ActiveDataProvider;
  * @property DeviceType deviceType
  * @property mixed fake_device помечает устройство как фейк
  * @property string fullWorkplace полное имя рабочего места
+ * @property string summary Краткая информация об устройстве
  */
 class Devices extends \yii\db\ActiveRecord
 {
@@ -64,11 +64,13 @@ class Devices extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['workplace_id','type_id'], 'required'],
-            ['sn', 'required', 'when' => function($model){return false;},
-            'whenClient' => 'function(attribute, value){return $("#devices-chekmode").val() == 0;}'],
-            [['sn', 'imei1'],'unique', 'on' => self::SCENARIO_INSERT],
-            [['workplace_id','type_id', 'parent_device_id', 'fake_device'], 'integer'],
+            [['workplace_id', 'type_id'], 'required'],
+            ['sn', 'required', 'when' => function ($model) {
+                return false;
+            },
+                'whenClient' => 'function(attribute, value){return $("#devices-chekmode").val() == 0;}'],
+            [['sn', 'imei1'], 'unique', 'on' => self::SCENARIO_INSERT],
+            [['workplace_id', 'type_id', 'parent_device_id', 'fake_device'], 'integer'],
             [['imei1', 'imei2'], 'match', 'pattern' => '/[0-9]/'],
             [['imei1', 'imei2'], 'string', 'max' => 15],
             [['device_note', 'specification'], 'string', 'max' => 512],
@@ -82,14 +84,15 @@ class Devices extends \yii\db\ActiveRecord
         ];
     }
 
-    public function scenarios(){
+    public function scenarios()
+    {
         $scenario = parent::scenarios();
         $scenario[self::SCENARIO_INSERT] = [
-            'sn', 'imei1', 'imei2', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
+            'sn', 'imei1', 'imei2', 'workplace_id', 'type_id', 'parent_device_id', 'device_note', 'specification',
             'brand', 'model', 'dt_title', 'dev_comp', 'device_mac', 'chekMode'
         ];
         $scenario[self::SCENARIO_UPDATE] = [
-            'sn', 'imei1', 'imei2', 'workplace_id','type_id', 'parent_device_id', 'device_note', 'specification',
+            'sn', 'imei1', 'imei2', 'workplace_id', 'type_id', 'parent_device_id', 'device_note', 'specification',
             'brand', 'model', 'dt_title', 'dev_comp', 'device_mac', 'chekMode'
         ];
 
@@ -127,7 +130,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $attribute
      * @internal param $params
      */
-    public function uniqueMac($attribute){
+    public function uniqueMac($attribute)
+    {
         $mac = Netints::findAll(['mac' => $this->device_mac]);
         if ($mac) {
             $this->addError($attribute, 'Устройство с таким mac-адресом уже существует');
@@ -137,7 +141,8 @@ class Devices extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDeviceType(){
+    public function getDeviceType()
+    {
         return $this->hasOne(DeviceType::className(), ['id' => 'type_id']);
     }
 
@@ -145,7 +150,8 @@ class Devices extends \yii\db\ActiveRecord
      * Связываем таблицу устройств с таблицей рабочих мест
      * @return \yii\db\ActiveQuery
      */
-    public function getWorkplace(){
+    public function getWorkplace()
+    {
         return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
     }
 
@@ -154,27 +160,31 @@ class Devices extends \yii\db\ActiveRecord
      * $mode = 0 - для вывода в строку, 1 - для вывода в "столбец"
      * @return string
      */
-    public function getFullWorkplace($mode = 0){
+    public function getFullWorkplace($mode = 0)
+    {
         if ($mode == 0)
             return $this->workplace->room->branch->branch_title . ' - '
-            . $this->workplace->room->room_title . ' - '
-            . $this->workplace->workplaces_title;
+                . $this->workplace->room->room_title . ' - '
+                . $this->workplace->workplaces_title;
         else
             return $this->workplace->room->branch->branch_title . "\n"
-            . $this->workplace->room->room_title . "\n"
-            . $this->workplace->workplaces_title . "\n"
-            . $this->snp;
+                . $this->workplace->room->room_title . "\n"
+                . $this->workplace->workplaces_title . "\n"
+                . $this->snp;
     }
 
-    public function getVoip(){
+    public function getVoip()
+    {
         return $this->hasMany(VoipNumbers::className(), ['device_id' => 'id']);
     }
 
-    public function getEmployee(){
+    public function getEmployee()
+    {
         return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
     }
 
-    public function getNetints(){
+    public function getNetints()
+    {
         return $this->hasMany(Netints::className(), ['device_id' => 'id']);
     }
 
@@ -184,7 +194,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $id_wp
      * @return mixed
      */
-    public function getCountOnWp($type_id, $id_wp){
+    public function getCountOnWp($type_id, $id_wp)
+    {
         $count = Devices::find()->where(['type_id' => $type_id, 'workplace_id' => $id_wp])->count();
         return $count;
     }
@@ -194,7 +205,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param string $term значение вводимое в поле Бренд на форме
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arrayBrands($type_id, $term){
+    public static function arrayBrands($type_id, $term)
+    {
         $arr = Devices::find()->select('brand as value, brand as label, COUNT(*) as count')
             ->where("brand > ''")
             ->andWhere(['type_id' => $type_id])
@@ -203,7 +215,7 @@ class Devices extends \yii\db\ActiveRecord
         return $arr->asArray()->all();
     }
 
-	/**
+    /**
      * Функция реализованная по задаче №62
      * Собирает данные в два этапа: сначала по конкретному типу устройсва затем по всем остальным
      * результаты оъединяет.
@@ -211,7 +223,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $term
      * @return array|int
      */
-    public static function arrBrands($type_id, $term){
+    public static function arrBrands($type_id, $term)
+    {
         $query1 = (new Query)->select(['brand' => 'brand', 'count' => 'COUNT(*)', 'sort' => 'MAX(0)'])
             ->from("devices")
             ->where("brand > ''")
@@ -235,7 +248,7 @@ class Devices extends \yii\db\ActiveRecord
             ->orderBy(['sort' => SORT_ASC, 'count' => SORT_DESC])
             ->all();
         $arr = [];
-        foreach ($union as $item){
+        foreach ($union as $item) {
             $arr[] = ['value' => $item['brand'], 'label' => $item['brand'], 'sort' => $item['sort']];
         }
         return $arr;
@@ -247,7 +260,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param string $term значение вводимое в поле "Модель" на форме
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arrayModels($type_id, $brand, $term){
+    public static function arrayModels($type_id, $brand, $term)
+    {
         $arr = Devices::find()->select('model as value, model as label, COUNT(*) as count')
             ->where("model > ''")
             ->andWhere(['type_id' => $type_id])
@@ -261,7 +275,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param int $mode
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arraySns($mode = 1){
+    public static function arraySns($mode = 1)
+    {
         if ($mode == 1) $select = 'sn as value, sn as label';
         else $select = 'sn';
 
@@ -270,13 +285,15 @@ class Devices extends \yii\db\ActiveRecord
             ->groupBy('sn')->orderBy('sn')->asArray()->all();
     }
 
-    public static function arrayImei1(){
+    public static function arrayImei1()
+    {
         return Devices::find()->select('imei1 as value, imei1 as label')
             ->where("imei1 > ''")
             ->groupBy('imei1')->orderBy('imei1')->asArray()->all();
     }
 
-    public static function arrayImei2(){
+    public static function arrayImei2()
+    {
         return Devices::find()->select('imei2 as value, imei2 as label')
             ->where("imei2 > ''")
             ->groupBy('imei2')->orderBy('imei2')->asArray()->all();
@@ -288,7 +305,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $term
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arraySpecifications($type_id, $term){
+    public static function arraySpecifications($type_id, $term)
+    {
         return Devices::find()->select('specification as value, specification as label, COUNT(*) as count')
             ->where("specification > ''")
             ->andWhere(['type_id' => $type_id])
@@ -301,7 +319,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $term
      * @return array|int
      */
-    public static function arrSpecifications($type_id, $term){
+    public static function arrSpecifications($type_id, $term)
+    {
         $query1 = (new Query)->select(['specification' => 'specification', 'count' => 'COUNT(*)', 'sort' => 'MAX(0)'])
             ->from("devices")
             ->where("specification > ''")
@@ -325,7 +344,7 @@ class Devices extends \yii\db\ActiveRecord
             ->orderBy(['sort' => SORT_ASC, 'count' => SORT_DESC])
             ->all();
         $arr = [];
-        foreach ($union as $item){
+        foreach ($union as $item) {
             $arr[] = ['value' => $item['specification'], 'label' => $item['specification'], 'sort' => $item['sort']];
         }
         return $arr;
@@ -339,7 +358,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $model
      * @return array|null|\yii\db\ActiveRecord
      */
-    public static function arraySpecificationsAuto($type_id, $brand, $model){
+    public static function arraySpecificationsAuto($type_id, $brand, $model)
+    {
         $arr = Devices::find()->select('specification')
             ->where(['type_id' => $type_id])
             ->andWhere(['brand' => $brand])
@@ -357,7 +377,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $id_wp
      * @return bool
      */
-    public function setTowp($id_wp, $comment = null){
+    public function setTowp($id_wp, $comment = null)
+    {
         /* @var $child Devices */
         $old_wp = $this->workplace_id;
         $this->workplace_id = $id_wp;
@@ -366,15 +387,14 @@ class Devices extends \yii\db\ActiveRecord
         //if ($id_wp == 131) $this->parent_device_id = null;
         if ($this->save()) {
             $children = Devices::find()->where(['parent_device_id' => $this->id])->all();
-            foreach ($children as $child){
+            foreach ($children as $child) {
                 $child->workplace_id = $id_wp;
                 $child->save();
             }
-            StoryDevice::addStory($id_wp, $this->id, StoryDevice::EVENT_IN, 'Перемещение с РМ №'. $old_wp . ' '.$comment);
-            StoryDevice::addStory($old_wp, $this->id, StoryDevice::EVENT_OUT, 'Перемещение на РМ №'. $id_wp . ' '.$comment  );
+            StoryDevice::addStory($id_wp, $this->id, StoryDevice::EVENT_IN, 'Перемещение с РМ №' . $old_wp . ' ' . $comment);
+            StoryDevice::addStory($old_wp, $this->id, StoryDevice::EVENT_OUT, 'Перемещение на РМ №' . $id_wp . ' ' . $comment);
             return true;
-        }
-        else return false;
+        } else return false;
     }
 
     /**
@@ -383,7 +403,8 @@ class Devices extends \yii\db\ActiveRecord
      * @param $id_wp
      * @return ActiveDataProvider
      */
-    public static function getIdsOnwp($id_wp){
+    public static function getIdsOnwp($id_wp)
+    {
         $query1 = (new Query())
             ->select([
                 'id' => 'id',
@@ -415,7 +436,12 @@ class Devices extends \yii\db\ActiveRecord
         return $provider;
     }
 
-    public static function findByMac($mac){
+    /**
+     * @param $mac
+     * @return static
+     */
+    public static function findByMac($mac)
+    {
         /* @var $net Netints */
         $net = Netints::findOne(['mac' => $mac]);
         $dev = Devices::findOne($net->device_id);
@@ -423,10 +449,12 @@ class Devices extends \yii\db\ActiveRecord
     }
 
     /**
+     * Получаем массив идентификаторов родительских устройств по рабочему месту
      * @param $id_wp
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function arrayParentId($id_wp){
+    public static function arrayParentId($id_wp)
+    {
 
         $query = (new Query())
             ->select('parent_device_id as id')
@@ -440,6 +468,19 @@ class Devices extends \yii\db\ActiveRecord
         }
 
         return !empty($arr) ? $arr : [0];
+    }
+
+    /**
+     * Получаем краткую информацию по устройству
+     * @return string
+     */
+    public function getSummary()
+    {
+        return 'ID:' . $this->id
+            . ' ' . $this->sn
+            . ' ' . $this->deviceType->title
+            . ' ' . $this->brand
+            . ' ' . $this->model;
     }
 
 }

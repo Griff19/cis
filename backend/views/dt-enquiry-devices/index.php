@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * "Устройства в Заявке" встраивается в представление документа "Заявка на оборудование" (dt-enquiries/view)
+ */
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -8,11 +10,13 @@ use backend\models\DtEnquiryWorkplaces;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtEnquiries;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\DtEnquiriyDevicesSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $modelDoc \backend\models\DtEnquiries */
-/* @var $ids_wp[] integer массив идентификаторов рабочих мест */
+/**
+ * @var $this yii\web\View
+ * @var $searchModel backend\models\DtEnquiryDevicesSearch
+ * @var $dataProvider yii\data\ActiveDataProvider
+ * @var $modelDoc \backend\models\DtEnquiries
+ * @var $ids_wp[] integer массив идентификаторов рабочих мест
+ */
 ?>
 <div class="dt-enquiry-devices-index">
     <p>
@@ -40,10 +44,12 @@ use backend\models\DtEnquiries;
         'dt_enquiries_id',
         'dt_def_dev_id',
         ['attribute' => 'workplace_id',
+            'contentOptions' => ['style' => 'padding-left: 1px; padding-right: 1px;'],
             'value' => function (DtEnquiryDevices $model) use ($modelDoc) {
                 if ($modelDoc->status == 0) {
                     $str = $model->workplace_id ? $model->workplace_id : 0;
-                    return Html::dropDownList('rm', $str, ArrayHelper::map(DtEnquiryWorkplaces::arrWpIds($model->dt_enquiries_id), 'workplace_id', 'workplace_id'),
+                    return Html::dropDownList('rm', $str,
+                        ArrayHelper::map(DtEnquiryWorkplaces::arrWpIds($model->dt_enquiries_id), 'workplace_id', 'workplace_id'),
                         ['class' => 'form-control',
                             'id' => 'wp_sel',
                             'title' => 'Выберите рабочее место для устройства...',
