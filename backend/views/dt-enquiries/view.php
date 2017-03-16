@@ -46,7 +46,7 @@ Modal::end();
                         ],
                     ]);
                 } else {
-                    echo Html::a('Ввести счет', ['dt-invoices/create'], ['class' => 'btn btn-primary']) . ' ';
+                    echo Html::a('Ввести счет', ['dt-invoices/create', 'enquiry_id' => $model->id], ['class' => 'btn btn-primary']) . ' ';
                     echo Html::a('Согласовать', ['index-agree', 'id' => $model->id], ['class' => 'btn btn-default']);
                 } ?>
                 <?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/pdf', 'id' => $model->id], [

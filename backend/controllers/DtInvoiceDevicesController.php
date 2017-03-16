@@ -61,30 +61,32 @@ class DtInvoiceDevicesController extends Controller
 
     /**
      * Добавляем новое устройство в табличную часть документа Счет
-     * @param $dt_invoices_id
-     * @param $id
+     * @param int $dt_invoices_id Идентификатор документа "Счет"
+     * @param int $id идентификатор строки в документе "Заявка на оборудование"
      * @return mixed
-     * @internal param $dt_enquiries_id
-     * @internal param $type_id
      */
     public function actionCreate($dt_invoices_id, $id)
     {
         /* @var $deviceEnquiry DtEnquiryDevices */
         $deviceEnquiry = DtEnquiryDevices::find()->where(['id' => $id])->one();
-        //var_dump($deviceEnquiry);
-        //die;
+
         /** @var $model DtInvoiceDevices */
         $model = new DtInvoiceDevices();
         $model->dt_invoices_id = $dt_invoices_id;
         $model->type_id = $deviceEnquiry['type_id'];
         $model->dt_enquiries_id = $deviceEnquiry['dt_enquiries_id'];
         $model->status = $deviceEnquiry->status + 1;
-
         $model->dt_enquiry_devices_id = $id;
-        $deviceEnquiry->status = $model->status;
-        $deviceEnquiry->dt_inv_id = $model->dt_invoices_id;
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $deviceEnquiry->status = $model->status;
+            $deviceEnquiry->dt_inv_id = $model->dt_invoices_id;
             $deviceEnquiry->save();
+
+            $dt_invoices = DtInvoices::findOne($dt_invoices_id);
+            $dt_invoices->status = DtInvoices::DOC_WAITING_AGREE;
+            $dt_invoices->save();
+
             return $this->redirect(['dt-invoices/view', 'id' => $dt_invoices_id]);
         } else {
             return $this->render('create', [

@@ -22,8 +22,6 @@ use backend\models\DtEnquiries;
 			return ['class' => $model->status == \backend\models\DtEnquiries::DTE_COMPLETE ? 'success' : ''];
 		},
         'columns' => [
-//            ['class' => 'yii\grid\SerialColumn'],
-
             ['attribute' => 'id',
                 'label' => 'Док №',
                 'value' => function($model) {
@@ -41,9 +39,13 @@ use backend\models\DtEnquiries;
                 'format' => 'raw',
                 'filter' => DtEnquiries::arrStatusString()
             ],
-//            ['class' => 'yii\grid\ActionColumn',
-//                'controller' => 'dt-enquiries'
-//            ],
+            ['class' => '\yii\grid\Column',
+                //'header' => 'Действия',
+                'content' => function ($model) {
+                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-save-file']), ['dt-invoices/create'],
+                        ['title' => 'Ввести новый счет']);
+                }
+            ],
         ],
     ]); ?>
 </div>

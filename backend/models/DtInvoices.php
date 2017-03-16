@@ -7,31 +7,36 @@
 namespace backend\models;
 
 use Yii;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+
 
 /**
  * @property integer $id
- * @property string $doc_number
- * @property string $doc_date
- * @property integer $d_partners_id
- * @property integer $delivery_type
- * @property string $summ
- * @property string $d_partners_name Переменная для подстановки имени контрагента и определени ИД
- * @property integer $status
- * @property integer summPay
- * @property string statusString строка статуса документа
- * @property DtInvoiceDevices invoiceDevices
- * @property DPartners $partner
- * @property string docDate
- * @property string summary Краткая информация о счете
+ * @property string $doc_number                 Номер документа
+ * @property string $doc_date                   Дата документа
+ * @property integer $d_partners_id             Идентификатор контрагента
+ * @property integer $delivery_type             Доставка, тип доставки
+ * @property string $summ                       Сумма счета
+ * @property string $d_partners_name            Переменная для подстановки имени контрагента и определени ИД
+ * @property integer $status                    Статус документа
+ * @property integer summPay                    Сумма всех платежей по счету
+ * @property string statusString                Строка статуса документа
+ * @property DtInvoiceDevices invoiceDevices    "Табличная часть" документа "Счет"
+ * @property DPartners $partner                 Связь с моделью "Контрагенты"
+ * @property string docDate                     Форматированная дата документа
+ * @property string summary                     Краткая информация о счете
+ * @property ActiveQuery enquiries              Связь с моделью "Заявка на оборудование" через промежуточную таблицу
  */
 class DtInvoices extends ActiveRecord
 {
     const DOC_DEL = 0; //удаленный документ
     const DOC_NEW = 1; //новый, не сохраненный документ
-    //const DOC_PROCESS = 2;
-    const DOC_SAVE = 2; //сохраненный документ
-    const DOC_CLOSED = 3; //счет закрыт
+    const DOC_WAITING_AGREE = 2; //ожидает согласования
+    const DOC_AWAITING_PAYMENT = 3; //ожидает оплаты
+    const DOC_SAVE = 4; //документ оплачен
+    const DOC_CLOSED = 5; //счет закрыт
+
 
     public $d_partners_name; //для работы автоподстановки
 
@@ -65,7 +70,9 @@ class DtInvoices extends ActiveRecord
         return [
             self::DOC_DEL => 'Удален',
             self::DOC_NEW => 'Новый',
-            self::DOC_SAVE => 'В&nbsp;Обработке',
+            self::DOC_WAITING_AGREE => 'Согласовывается',
+            self::DOC_AWAITING_PAYMENT => 'Ожидает оплаты',
+            self::DOC_SAVE => 'Оплачен',
             self::DOC_CLOSED => 'Закрыт'
         ];
     }
@@ -77,7 +84,9 @@ class DtInvoices extends ActiveRecord
     public function getStatusString()
     {
         $arr = self::arrStatusString();
-        return $arr[$this->status];
+        $str = $arr[$this->status];
+        $str = str_replace(' ', '&nbsp;', $str);
+        return $str;
     }
 
     /**
@@ -138,6 +147,27 @@ class DtInvoices extends ActiveRecord
     public function getPartner()
     {
         return $this->hasOne(DPartners::className(), ['id' => 'd_partners_id']);
+    }
+
+    /**
+     * Связь с документом "Заявка на оборудование" через промежуточную таблицу
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEnquiries()
+    {
+        return $this->hasMany(DtInvoices::className(), ['id' => 'enquiry_id'])
+            ->viaTable('dt_enquiry_invoice', ['invoice_id' => 'id']);
+    }
+
+    /**
+     * @param $enquiry_id
+     */
+    public function setEnquiries($enquiry_id)
+    {
+        $dt_enquiry_invoice = new DtEnquiryInvoice();
+        $dt_enquiry_invoice->enquiry_id = $enquiry_id;
+        $dt_enquiry_invoice->invoice_id = $this->id;
+        $dt_enquiry_invoice->save();
     }
 
     /**

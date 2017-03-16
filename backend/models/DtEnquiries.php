@@ -9,17 +9,18 @@ use yii\db\ActiveRecord;
 
 /**
  * @property integer id
- * @property integer employee_id
- * @property string employee_name
- * @property string create_date
- * @property string do_date
- * @property string create_time
- * @property mixed memo
- * @property integer status
- * @property \backend\models\Employees employee
- * @property string statusString
- * @property mixed enquiryDevices
- * @property mixed invoices
+ * @property integer employee_id                   Идентификатор сотрудника - используется в базе
+ * @property string employee_name                  Имя сотрудника - используется в формах
+ * @property string create_date                    Дата написания заявки, если нет служебки то дата создания
+ * @property string do_date                        Исполнить заявку до
+ * @property string create_time                    Дата и время создания заявки в базе
+ * @property mixed memo                            Флаг наличия служебной записки
+ * @property integer status                        Статус документа
+ * @property integer dt_invoices_id                Идентификатор документа "Счет"
+ * @property \backend\models\Employees employee    Связанная модель сотрудника
+ * @property string statusString                   Строка статуса
+ * @property mixed enquiryDevices                  "Табличная часть" документа "Заявка на оборудование"
+ * @property mixed invoices                        Связанная модель документа "Счет"
  */
 class DtEnquiries extends ActiveRecord
 {
@@ -46,21 +47,26 @@ class DtEnquiries extends ActiveRecord
     /**
      * @return array
      */
-    public static function arrStatusString(){
+    public static function arrStatusString()
+    {
         return [
             self::DTE_NEW => 'Новый',
-            self::DTE_SAVED => "В&nbsp;Обработке",
+            self::DTE_SAVED => 'В Обработке',
             self::DTE_COMPLETE => 'Обработан',
             self::DTE_CLOSED => 'Закрыт'
         ];
     }
 
     /**
+     * Получаем строку статуса
      * @return string
      */
-    public function getStatusString(){
+    public function getStatusString()
+    {
         $arr = self::arrStatusString();
-        return $arr[$this->status];
+        $str = $arr[$this->status];
+        $str = str_replace(' ', '&nbsp;', $str);
+        return $str;
     }
 
     /**
@@ -103,6 +109,7 @@ class DtEnquiries extends ActiveRecord
             'memo' => 'Есть служебка',
             'status' => 'Статус',
             'statusString' => 'Статус',
+            'dt_invoices_id' => 'Счет',
         ];
     }
 
@@ -110,7 +117,8 @@ class DtEnquiries extends ActiveRecord
      * Форматируем дату создания документа
      * @return string
      */
-    public function getCreateDate(){
+    public function getCreateDate()
+    {
         return Yii::$app->formatter->asDate($this->create_date);
     }
 
@@ -118,7 +126,8 @@ class DtEnquiries extends ActiveRecord
      * Форматируем дату исполнения документа
      * @return string
      */
-    public function getDoDate(){
+    public function getDoDate()
+    {
         return Yii::$app->formatter->asDate($this->do_date);
     }
 
@@ -126,40 +135,48 @@ class DtEnquiries extends ActiveRecord
      * Связь с сотрудником
      * @return \yii\db\ActiveQuery
      */
-    public function getEmployee(){
+    public function getEmployee()
+    {
         return $this->hasOne(Employees::className(), ['id' => 'employee_id']);
     }
 
     /**
      * Связь с владельцем рабочего места
-     * @return $this
+     * @return \yii\db\ActiveQuery
      */
-    public function getOwnerWP(){
-        return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
+    public function getOwnerWP()
+    {
+        return $this->hasOne(Employees::className(), ['id' => 'employee_id'])
+            ->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
     }
 
     /**
      * Связь с рабочим местом
-     * @return $this
+     * @return \yii\db\ActiveQuery
      */
-    public function getWorkplaces(){
-        return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])->viaTable('dt_enquiry_workplaces', ['dt_enquiries_id' => 'id']);
+    public function getWorkplaces()
+    {
+        return $this->hasMany(Workplaces::className(), ['id' => 'workplace_id'])
+            ->viaTable('dt_enquiry_workplaces', ['dt_enquiries_id' => 'id']);
     }
 
     /**
      * Связь с таблицей устройств
      * @return \yii\db\ActiveQuery
      */
-    public function getEnquiryDevices(){
+    public function getEnquiryDevices()
+    {
         return $this->hasMany(DtEnquiryDevices::className(), ['dt_enquiries_id' => 'id']);
     }
 
     /**
-     * Связь с документом "Счет"
+     * Связь с документом "Счет" через промежуточную таблицу
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoices(){
-        return $this->hasMany(DtInvoices::className(), ['id' => 'dt_inv_id'])->via('enquiryDevices');
+    public function getInvoices()
+    {
+        return $this->hasMany(DtInvoices::className(), ['id' => 'invoice_id'])
+            ->viaTable('dt_enquiry_invoice', ['enquiry_id' => 'id']);
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\DtEnquiryInvoice;
 use Yii;
 use backend\models\DtEnquiryDevices;
 //use backend\models\DtEnquiryDevicesSearch;
@@ -122,15 +123,16 @@ class DtInvoicesController extends Controller
     }
 
     /**
-     * Creates a new DtInvoices model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Создание счета
+     * @param integer $enquiry_id Идентификатор документа "Заявка на оборудование"
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($enquiry_id = 0)
     {
         $model = new DtInvoices();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $model->enquiries = $enquiry_id;
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -187,8 +189,8 @@ class DtInvoicesController extends Controller
      * Функция "сохранения" документа для преключения статуса устройств и самого документа
      * позволяет сделать документ не доступным для редактирования
      * @param $id
+     * @param int $mode Режим вызова 0 - из стандартного представления, 1 - со страницы "сотрудника ит"
      * @return \yii\web\Response
-     * @throws NotFoundHttpException
      */
     public function actionSave($id, $mode = 0)
     {
@@ -196,9 +198,9 @@ class DtInvoicesController extends Controller
         $model = $this->findModel($id);
 
         if ($model->saveDoc())
-            Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
+            if ($mode == 0) Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
         else
-            Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
+            if ($mode == 0) Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
 
         if ($mode == 1) {
             $controller = new SiteController('site', $this->module);

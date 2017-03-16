@@ -12,7 +12,7 @@ use backend\models\DtEnquiryWorkplaces;
 
 /**
  * @var $this yii\web\View
- * @var $searchModel backend\models\DtEnquiriyDevicesSearch
+ * @var $searchModel backend\models\DtEnquiryDevicesSearch
  * @var $dataProvider yii\data\ActiveDataProvider
  * @var $dataProvider->models[] DtEnquiryDevices
  * @var $dt_invoice_id integer идентификатор документа счет

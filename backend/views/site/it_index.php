@@ -34,7 +34,7 @@ use yii\widgets\Pjax;
 		</div>
         <div class="col-sm-3">
             <?= Html::a('Счета',['dt-invoices/index'],['class'=>'btn btn-primary'])?>
-            <p>Документы для оптаты</p>
+            <p>Документы для оплаты</p>
         </div>
 	</div>
     <?php Pjax::begin(['enablePushState' => false])?>
