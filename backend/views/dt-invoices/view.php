@@ -47,6 +47,9 @@ Modal::end();
 	<div class="row">
 		<div class="col-lg-6">
 			<h1> <?= Html::encode($this->title) ?></h1>
+            <i><?= $model->enquiries ?
+                    'На основании документа: ' . Html::a('Заявка на оборудование №' . $model->enquiries[0]->id,
+                        ['dt-enquiries/view', 'id' => $model->enquiries[0]->id]) : '' ?></i>
 			<p>
 				<?php
 				if ($model->status == DtInvoices::DOC_NEW) {

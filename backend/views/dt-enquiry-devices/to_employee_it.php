@@ -42,7 +42,8 @@ use backend\models\DtEnquiryWorkplaces;
         //'parent_device_id',
         ['attribute' => 'statusString',
             'value' => function ($model) {
-                return Html::a($model->statusString, ['dt-invoices/create'], ['title' => 'Создать документ "Счет"']);
+                return Html::a($model->statusString, ['dt-invoices/create', 'id' => $model->dt_enquiries_id],
+                    ['title' => 'Создать документ "Счет"', 'data-method' => 'post']);
             },
             'format' => 'raw'
         ],

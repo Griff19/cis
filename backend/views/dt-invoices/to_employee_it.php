@@ -48,7 +48,8 @@ use backend\models\DtInvoices;
                     /** @var $model \backend\models\DtInvoices */
                     $a = '';
                     if ($model->status == DtInvoices::DOC_WAITING_AGREE) {
-                        $a = Html::a('Печать', ['dt-invoices/create-pdf', 'id' => $model->id]);
+                        $a = Html::a('Печать', ['dt-invoices/create-pdf', 'id' => $model->id],
+                            ['data-method' => 'post']);
                         $a .= ' ';
                         $a .= Html::a('Согласован...', '#', [
                             'id' => 'linkModal',

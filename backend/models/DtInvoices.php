@@ -155,7 +155,7 @@ class DtInvoices extends ActiveRecord
      */
     public function getEnquiries()
     {
-        return $this->hasMany(DtInvoices::className(), ['id' => 'enquiry_id'])
+        return $this->hasMany(DtEnquiries::className(), ['id' => 'enquiry_id'])
             ->viaTable('dt_enquiry_invoice', ['invoice_id' => 'id']);
     }
 
@@ -194,7 +194,6 @@ class DtInvoices extends ActiveRecord
      */
     public function saveDoc()
     {
-
         if ($this->summ > $this->summPay) {
             return false;
         } else {

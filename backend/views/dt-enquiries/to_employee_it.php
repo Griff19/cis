@@ -40,9 +40,11 @@ use backend\models\DtEnquiries;
                 'filter' => DtEnquiries::arrStatusString()
             ],
             ['class' => '\yii\grid\Column',
-                //'header' => 'Действия',
+                'options' => ['style' => 'width: 45px'],
                 'content' => function ($model) {
-                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-save-file']), ['dt-invoices/create'],
+                    return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-plus'])
+                        . Html::tag('span', '', ['class' => 'glyphicon glyphicon-file']),
+                        ['dt-invoices/create', 'enquiry_id' => $model->id],
                         ['title' => 'Ввести новый счет']);
                 }
             ],

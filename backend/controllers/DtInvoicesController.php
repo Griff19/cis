@@ -180,6 +180,7 @@ class DtInvoicesController extends Controller
             }
             DtInvoiceDevices::deleteAll(['dt_invoices_id' => $model->id]);
             DtInvoicesPayment::deleteAll(['dt_invoices_id' => $model->id]);
+            DtEnquiryInvoice::deleteAll(['invoice_id' => $id]);
         }
 
         return $this->redirect(['index']);
