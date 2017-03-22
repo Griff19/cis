@@ -109,7 +109,7 @@ Modal::end();
 		</div>
 	</div>
 
-	<?= $model->status == DtInvoices::DOC_NEW ?
+	<?= $model->status != DtInvoices::DOC_CLOSED ?
 		Html::a('Выбрать устройства', '#', ['class' => 'btn btn-primary',
 		'id' => 'linkModal',
 		'data-target' => '/admin/dt-enquiry-devices/index-invoices?id=' . $model->id,

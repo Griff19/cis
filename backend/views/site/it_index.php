@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 /**
  * @var $provider_de \yii\data\ActiveDataProvider
@@ -19,6 +20,14 @@ use yii\widgets\Pjax;
  * @var $provider_dip \yii\data\ActiveDataProvider
  * @var $search_dip \backend\models\DtInvoicesPaymentSearch
  */
+$this->registerAssetBundle('backend\assets\ModalAsset');
+Modal::begin([
+    'header' => '<h4 id = "modalHeader"></h4>',
+    'id' => 'modal',
+    'size' => 'modal-lg'
+]);
+echo '<div id="modalContent"></div>';
+Modal::end();
 
 ?>
 <div>
@@ -29,7 +38,7 @@ use yii\widgets\Pjax;
 			<p>Список рабочих мест.</p>
 		</div>
 		<div class="col-sm-3">
-			<?= Html::a('Заявки на оборудование',['dt-enquiries/index'],['class'=>'btn btn-warning'])?>
+			<?= Html::a('Заявки на оборудование', ['dt-enquiries/index'], ['class'=>'btn btn-warning'])?>
 			<p>Заявки на оборудование</p>
 		</div>
         <div class="col-sm-3">
@@ -37,14 +46,14 @@ use yii\widgets\Pjax;
             <p>Документы для оплаты</p>
         </div>
 	</div>
-    <?php Pjax::begin(['enablePushState' => false])?>
+    <?php Pjax::begin(['id' => 'pj_employee_it', 'enablePushState' => false, 'timeout' => 5000]) ?>
 	<div class="row">
 	<?//lg - нужно для того чтобы две таблицы не наезжали друг на друга при сужении экрана ?>
 		<div class="col-lg-6">
 			<?= $this->render('../dt-enquiries/to_employee_it', ['searchModel' => $search_de, 'dataProvider' => $provider_de]) ?>
 		</div>
 		<div class="col-lg-6">
-			<?= $this->render('../dt-invoices/to_employee_it', ['searchModel' => $search_di, 'dataProvider' => $provider_di])?>
+			<?= $this->render('../dt-invoices/to_employee_it', ['searchModel' => $search_di, 'dataProvider' => $provider_di]) ?>
 		</div>
 	</div>
 
@@ -56,5 +65,5 @@ use yii\widgets\Pjax;
 	//таблица платежей по счету "Манипуляции с платежами"
     echo $this->render('../dt-invoices-payment/to_employee_it', ['searchModel' => $search_dip, 'dataProvider' => $provider_dip]);
 	?>
-    <?php Pjax::end()?>
+    <?php Pjax::end() ?>
 </div>

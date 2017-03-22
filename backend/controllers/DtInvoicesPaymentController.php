@@ -97,9 +97,9 @@ class DtInvoicesPaymentController extends Controller
                     DtEnquiryDevices::updateAll(['status' => DtEnquiryDevices::AWAITING_PAYMENT], ['dt_inv_id' => $id]);
                 }
 
-                $dt_invoices->status = DtInvoices::DOC_SAVE;
+                $dt_invoices->status = DtInvoices::DOC_AWAITING_PAYMENT;
 
-                if (!$dt_invoices->save()) $err = serialize($dt_invoices->getErrors());
+                if (!$dt_invoices->save()) $err .= serialize($dt_invoices->getErrors());
                 if ($err)
                     Yii::$app->session->setFlash('error', $err);
             }

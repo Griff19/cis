@@ -14,8 +14,7 @@ use backend\models\DtEnquiryWorkplaces;
 ?>
 <div class="dt-enquiry-devices-index">
     <h3>Устройства, требующие покупки:</h3>
-    <?php Pjax::begin();
-    ?>
+
     <?php
     $columns = [
         ['class' => 'yii\grid\SerialColumn'],
@@ -55,5 +54,5 @@ use backend\models\DtEnquiryWorkplaces;
         'filterModel' => $searchModel,
         'columns' => $columns,
     ]); ?>
-    <?php Pjax::end();?>
+
 </div>

@@ -15,6 +15,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\DtInvoicesPaymentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+
 ?>
 <div class="dt-invoices-payment-index">
 
@@ -22,6 +23,7 @@ use yii\grid\GridView;
         <?= Html::a('Ведомость на оплату', ['dt-invoices-payment/pdf', 'status' => DtInvoicesPayment::PAY_AGREED],
             ['class' => 'btn btn-default', 'data-method' => 'post']) ?>
     </h3>
+
     <span class="alert-danger"><?= Yii::$app->session->getFlash('payment_error') ?></span>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -94,5 +96,6 @@ use yii\grid\GridView;
             ]
         ],
     ]); ?>
+
 
 </div>

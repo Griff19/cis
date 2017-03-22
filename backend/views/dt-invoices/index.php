@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'summ',
             'summPay',
             'delivery_type',
+            'statusString:raw',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

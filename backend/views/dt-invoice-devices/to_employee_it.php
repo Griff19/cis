@@ -7,7 +7,6 @@
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
-use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -15,16 +14,9 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->registerAssetBundle('backend\assets\ModalAsset');
-Modal::begin([
-    'header' => '<h4 id = "modalHeader"></h4>',
-    'id' => 'modal',
-    'size' => 'modal-lg'
-]);
-echo '<div id="modalContent"></div>';
-Modal::end();
 
 ?>
+
 <div class="dt-invoice-devices-index">
 
     <h3>Устройства, требующие оплаты:

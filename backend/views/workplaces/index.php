@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'yii\grid\SerialColumn'], //0
         ['attribute' => 'id', //1
             'options' => ['style' => 'width:30px'],
+            'filterOptions' => ['style' => 'padding: 8px 1px 0px 1px']
         ],
         // подразделение
         [ //2
@@ -77,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //при установке устройства на рабочее место:
         ['class' => \yii\grid\Column::className(), //6
             'content' => function($model) use ($id_dev, $target, $target_id){
-                return Html::a(Html::img('/admin/img/ok.png',['width' => '25px']),
+                return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']),
                    // ['devices/addtowp', 'id' => $id_dev, 'id_wp' => $model->id]);
                     ['select', 'id' => $model->id, 'target' => $target, 'target_id' => $target_id]);
             }

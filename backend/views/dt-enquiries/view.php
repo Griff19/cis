@@ -34,6 +34,11 @@ Modal::end();
     <div class="row">
         <div class="col-sm-6">
             <h1><?= Html::encode($this->title) ?></h1>
+            <i><?= $model->invoices ?
+                'Связанный документ: ' . Html::a('Счет №' . $model->invoices[0]->id,
+                    ['dt-invoices/view', 'id' => $model->invoices[0]->id]) : '' ;
+                ?>
+            </i>
             <p>
                 <?php
                 if ($model->status == 0) {

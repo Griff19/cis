@@ -260,7 +260,7 @@ class DtEnquiriesController extends Controller
     public function actionIndexAgree($id) {
         $model = $this->findModel($id);
         $search_di = new DtInvoicesSearch();
-        $provider_di = $search_di->search(Yii::$app->request->queryParams, $model->invoices);
+        $provider_di = $search_di->searchForEnquiry(Yii::$app->request->queryParams, $model->invoices);
         return $this->render('index_agree', [
             'model' => $model,
             'provider' => $provider_di

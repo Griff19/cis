@@ -23,7 +23,7 @@ use yii\web\JsExpression;
         'options' => ['class' => 'form-control']
     ]) ?>
     <?= Html::a(Html::tag('span','',['class' => 'glyphicon glyphicon-plus']). 'Ввести нового контрагента',
-        ['d-partners/create', 'target' => 'dt-invoices/create'],
+        ['d-partners/create', 'target' => 'dt-invoices/create', 'target_id' => $enquiry_id],
         ['style' => 'float: right']
         )?>
     <?= $form->field($model, 'd_partners_name')->widget(

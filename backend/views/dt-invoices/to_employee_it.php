@@ -51,12 +51,30 @@ use backend\models\DtInvoices;
                         $a = Html::a('Печать', ['dt-invoices/create-pdf', 'id' => $model->id],
                             ['data-method' => 'post']);
                         $a .= ' ';
-                        $a .= Html::a('Согласован...', '#', [
+                        $a .= Html::a('Согласован...', '', [
                             'id' => 'linkModal',
                             'data-target' => '/admin/dt-invoices-payment/create?id='
                                 . $model->id
                                 . '&is_modal=true',
                             'data-header' => 'Фиксация согласованного платежа']);
+                    }
+                    if ($model->status == DtInvoices::DOC_AWAITING_PAYMENT) {
+                        $a = Html::a('Отправить', ['dt-invoices/set-status',
+                            'id' => $model->id,
+                            'status' => DtInvoices::DOC_SENT_FOR_PAYMENT
+                        ],
+                            ['class' => 'btn btn-primary btn-sm',
+                                'title' => 'Отправить бухгалтеру на оплату',
+                            ]
+                        );
+                    }
+                    if ($model->status == DtInvoices::DOC_SENT_FOR_PAYMENT) {
+                        $a = Html::a('Подтвердить', ['dt-invoices/set-status',
+                            'id' => $model->id,
+                            'status' => DtInvoices::DOC_SAVE,
+                        ],
+                            ['class' => 'btn btn-success btn-sm', 'title' => 'Подтвердить прошедшую оплату']
+                        );
                     }
                     if ($model->summ <= $model->summPay && $model->status == DtInvoices::DOC_SAVE)
                         $a = Html::a('Закрыть', ['dt-invoices/save', 'id' => $model->id, 'mode' => 1],
@@ -67,4 +85,5 @@ use backend\models\DtInvoices;
             ],
         ],
     ]); ?>
+
 </div>

@@ -130,20 +130,26 @@ class DtInvoicesController extends Controller
     public function actionCreate($enquiry_id = 0)
     {
         $model = new DtInvoices();
+        if ($enquiry_id)
+            $model->status = DtEnquiryDevices::NEED_BUY;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $model->enquiries = $enquiry_id;
+
+            if ($enquiry_id) {
+                $model->enquiries = $enquiry_id;
+                $model->copyFromEnquiry($model->id, $enquiry_id);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'enquiry_id' => $enquiry_id,
             ]);
         }
     }
 
     /**
-     * Updates an existing DtInvoices model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     *
      * @param integer $id
      * @return mixed
      */
@@ -200,14 +206,44 @@ class DtInvoicesController extends Controller
 
         if ($model->saveDoc())
             if ($mode == 0) Yii::$app->session->setFlash('success', 'Документ "Счет" полностью оплачен');
-        else
-            if ($mode == 0) Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
+            else
+                if ($mode == 0) Yii::$app->session->setFlash('error', 'Счет еще не оплачен');
 
         if ($mode == 1) {
             $controller = new SiteController('site', $this->module);
             return $controller->actionEmployeeIt();
         } else
             return $this->redirect(['view', 'id' => $id]);
+    }
+
+    /**
+     * Устанавливаем статус документа Счет. Одновнеменно меняем статусы и в строках документа
+     * @param int $id Идентификатор документа Счет
+     * @param int $status Устанавливаемый статус
+     * @return bool
+     */
+    public function actionSetStatus($id, $status = 0)
+    {
+        $model = $this->findModel($id);
+        if ($status)
+            $model->status = $status;
+        else
+            $model->status = $model->status + 1;
+
+        if ($model->save()) {
+            //определяем статус для строки на основе статуса документа
+            if ($model->status == DtInvoices::DOC_SENT_FOR_PAYMENT) {
+                DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::AWAITING_PAYMENT], ['dt_invoices_id' => $id]);
+                DtInvoicesPayment::updateAll(['status' => DtInvoicesPayment::PAY_REFER], ['dt_invoices_id' => $id]);
+            } elseif ($model->status == DtInvoices::DOC_SAVE) {
+                DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $id]);
+                DtInvoicesPayment::updateAll(['status' => DtInvoicesPayment::PAY_OK], ['dt_invoices_id' => $id]);
+            }
+        } else
+            Yii::$app->session->setFlash('error', serialize($model->getErrors()));
+
+        $controller = new SiteController('site', $this->module);
+        return $controller->actionEmployeeIt();
     }
 
     /**

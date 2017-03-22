@@ -71,14 +71,14 @@ class DPartnersController extends Controller
      * Создаем нового контрагента
      * @return mixed
      */
-    public function actionCreate($target = '')
+    public function actionCreate($target = '', $target_id = '')
     {
         $model = new DPartners();
 
         if ($model->load(Yii::$app->request->post()) ) {
             if ($model->save())
                 if ($target)
-                    return $this->redirect([$target]);
+                    return $this->redirect([$target, 'enquiry_id' => $target_id]);
                 else
                     return $this->redirect(['view', 'id' => $model->id]);
         } else {

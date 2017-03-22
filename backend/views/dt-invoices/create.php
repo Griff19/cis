@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	</p>
     <?= $this->render('_form', [
         'model' => $model,
+        'enquiry_id' => $enquiry_id,
     ]) ?>
 	<p> <span class="glyphicon glyphicon-info-sign"></span>
 		Скан оригинального документа можно будет добавить на странице просмотра счета.

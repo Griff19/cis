@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  * @property DtEnquiries dtEnquiry
  * @property DtEnquiryDevices dtEnquiryDevice
  * @property DtInvoices dtInvoice
+ *
  */
 class DtInvoiceDevices extends ActiveRecord
 {

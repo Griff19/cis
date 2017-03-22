@@ -9,6 +9,7 @@ use yii\bootstrap\Modal;
 $this->registerAssetBundle('backend\assets\ModalAsset');
 
 $this->title = 'Согласование';
+$this->params['breadcrumbs'][] = ['label' => 'Заявки на оборудование', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Заявка №' . $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -49,6 +50,10 @@ Modal::end();
      * @see \backend\models\DtInvoicesSearch::search()
      */
     'dataProvider' => $provider,
+    'emptyText' => 'По данной заявке не зарегистрированно ни одного Счета. '
+        . 'Вам необходимо запросить Счет у поставщика, либо '
+        . Html::a('<b>Ввести счет</b>', ['dt-invoices/create', 'enquiries_id' => $model->id], ['title' => 'Ввести новый Счет'])
+        . ' если он уже имеется.',
 	'columns' => [
 		'id',
 		'doc_number',
@@ -81,5 +86,6 @@ Modal::end();
 	]
 ]) ?>
 <p> <span class="glyphicon glyphicon-info-sign"></span>
-	После согласования оплаты Вам необходимо ввести одобренную сумму в разделе "Платежей" соответствующего документа "Счет" </p>
+	После согласования оплаты Вам необходимо ввести одобренную сумму в разделе "Платежей" соответствующего документа "Счет"
+</p>
 

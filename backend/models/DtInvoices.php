@@ -10,7 +10,6 @@ use Yii;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
-
 /**
  * @property integer $id
  * @property string $doc_number                 Номер документа
@@ -27,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property string docDate                     Форматированная дата документа
  * @property string summary                     Краткая информация о счете
  * @property ActiveQuery enquiries              Связь с моделью "Заявка на оборудование" через промежуточную таблицу
+ * @property boolean copyFromEnquiry            Метод, копирующий данные из "табличной части" документа Заявка на оборудование
  */
 class DtInvoices extends ActiveRecord
 {
@@ -34,9 +34,9 @@ class DtInvoices extends ActiveRecord
     const DOC_NEW = 1; //новый, не сохраненный документ
     const DOC_WAITING_AGREE = 2; //ожидает согласования
     const DOC_AWAITING_PAYMENT = 3; //ожидает оплаты
-    const DOC_SAVE = 4; //документ оплачен
-    const DOC_CLOSED = 5; //счет закрыт
-
+    const DOC_SENT_FOR_PAYMENT = 4; //отправлен на оплату
+    const DOC_SAVE = 5; //документ оплачен
+    const DOC_CLOSED = 6; //счет закрыт
 
     public $d_partners_name; //для работы автоподстановки
 
@@ -72,6 +72,7 @@ class DtInvoices extends ActiveRecord
             self::DOC_NEW => 'Новый',
             self::DOC_WAITING_AGREE => 'Согласовывается',
             self::DOC_AWAITING_PAYMENT => 'Ожидает оплаты',
+            self::DOC_SENT_FOR_PAYMENT => 'Отправлен бухгалтеру',
             self::DOC_SAVE => 'Оплачен',
             self::DOC_CLOSED => 'Закрыт'
         ];
@@ -205,6 +206,30 @@ class DtInvoices extends ActiveRecord
             DtInvoiceDevices::updateAll(['status' => DtEnquiryDevices::PAID], ['dt_invoices_id' => $this->id]);
             $this->status = DtInvoices::DOC_CLOSED;
             $this->save();
+        }
+        return true;
+    }
+
+    /**
+     * Копируем данные из "табличной части" документа "Заявка на оборудование"
+     * @param integer $invoice_id Идентификатор документа Счет
+     * @param integer $enquiry_id Идентификатор документа Заявка на оборудование
+     * @return bool
+     */
+    public function copyFromEnquiry($invoice_id, $enquiry_id)
+    {
+        $enquiry_devices = DtEnquiryDevices::findAll(['dt_enquiries_id' => $enquiry_id]);
+        foreach ($enquiry_devices as $enquiry_device) {
+            $invoice_device = new DtInvoiceDevices();
+            $invoice_device->dt_invoices_id = $invoice_id;
+            $invoice_device->status = DtEnquiryDevices::WAITING_AGREE;
+            $invoice_device->type_id = $enquiry_device->type_id;
+            $invoice_device->dt_enquiries_id = $enquiry_device->dt_enquiries_id;
+            $invoice_device->dt_enquiry_devices_id = $enquiry_device->id;
+            $invoice_device->save();
+
+            $enquiry_device->status = DtEnquiryDevices::AWAITING_PAYMENT;
+            $enquiry_device->save();
         }
         return true;
     }

@@ -18,7 +18,7 @@ use yii\grid\GridView;
 
     <h3> История платежей: </h3>
     <p>
-        <?= $modelDoc->status == DtInvoices::DOC_NEW ? Html::a('Добавить платеж', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
+        <?= $modelDoc->status != DtInvoices::DOC_CLOSED ? Html::a('Добавить платеж', ['dt-invoices-payment/create', 'id' => $modelDoc->id ], ['class' => 'btn btn-success']) : ''; ?>
     </p>
     <?php
         $cols = [
