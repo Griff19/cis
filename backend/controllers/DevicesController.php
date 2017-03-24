@@ -46,7 +46,6 @@ class DevicesController extends Controller
                             'view',
                             'view-table-comp',
                             'update',
-                            'create',
                             'create-from-doc',
                             'validation',
                             'addcomp',
@@ -64,7 +63,7 @@ class DevicesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['delete', 'addtowp'],
+                        'actions' => ['create', 'delete', 'addtowp'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
