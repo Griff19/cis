@@ -26,6 +26,8 @@ use yii\helpers\Html;
     echo $form->field($model, 'device_note')->textInput(['maxlength' => true]);
 
     echo Html::submitButton('Найти', ['class' => 'btn btn-primary']);
+    echo ' ';
+    echo Html::a('Сбросить', ['devices/find-device'], ['class' => 'btn btn-default']);
     ActiveForm::end();
 ?>
 
