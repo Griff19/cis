@@ -4,10 +4,8 @@
  */
 
 use backend\models\DeviceType;
-use backend\models\DtInvoicesPayment;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
-use yii\helpers\Html;
 
 /**
  * @var \backend\models\DtInvoices $model

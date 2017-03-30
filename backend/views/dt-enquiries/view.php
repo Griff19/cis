@@ -130,7 +130,9 @@ Modal::end();
         if ($model->status == 0)
             echo Html::a('Провести заявку', ['save', 'id' => $model->id], ['class' => 'btn btn-success']);
         else
-            echo Html::a('Отменить проведеине', ['un-save', 'id' => $model->id], ['class' => 'btn btn-success'])
+            echo Html::a('Отменить проведеине', ['un-save', 'id' => $model->id], [
+                    'class' => Yii::$app->user->can('admin') ? 'btn btn-success' : 'btn btn-default']
+            );
         ?>
         <span class="glyphicon glyphicon-exclamation-sign"></span>
         Проведенная заявка отправляется в дальнейшую обработку и не может быть изменена.

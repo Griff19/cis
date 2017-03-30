@@ -18,6 +18,7 @@ use backend\models\DtInvoices;
  */
 
 $this->registerAssetBundle('backend\assets\ModalAsset');
+$this->registerAssetBundle('backend\assets\AppAsset');
 
 $this->title = 'Документ №' . $model->doc_number;
 $this->params['breadcrumbs'][] = ['label' => 'Счета', 'url' => ['index']];
@@ -41,9 +42,12 @@ Modal::end();
 
 <div class="dt-invoices-view">
 	<?php \yii\widgets\Pjax::begin([
-		'options' => ['id' => $model->id],
+		'id' => 'dt-invoices-view',
 		'enablePushState' => false
-	])?>
+	]);
+
+    ?>
+
 	<div class="row">
 		<div class="col-lg-6">
 			<h1> <?= Html::encode($this->title) ?></h1>

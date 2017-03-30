@@ -22,7 +22,7 @@ use yii\web\JsExpression;
         AutoComplete::className(), [
         'clientOptions' => [
             'source' => Employees::arraySnpId(),
-            'minLength' => '1',
+            'minLength' => '3',
             'autoFill' => true,
             'select' => new JsExpression("function( event, ui ) {
                 $('#employee_id_hidd').val(ui.item.id);

@@ -44,7 +44,7 @@ use backend\models\DtEnquiries;
         'dt_enquiries_id',
         'dt_def_dev_id',
         ['attribute' => 'workplace_id',
-            'contentOptions' => ['style' => 'padding-left: 1px; padding-right: 1px;'],
+            'contentOptions' => ['style' => 'padding-left: 1px; padding-right: 1px; text-align: center;'],
             'value' => function (DtEnquiryDevices $model) use ($modelDoc) {
                 if ($modelDoc->status == 0) {
                     $str = $model->workplace_id ? $model->workplace_id : 0;

@@ -34,12 +34,12 @@ class DtEnquiriesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view', 'pdf', 'set-status', 'set-device-on-wp'],
+                        'actions' => ['create', 'index','view', 'save', 'pdf', 'set-status', 'set-device-on-wp', 'index-agree'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete', 'save', 'un-save', 'index-agree'],
+                        'actions' => ['update','delete', 'un-save'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],

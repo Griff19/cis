@@ -112,15 +112,18 @@ class DtInvoiceDevicesController extends Controller
     }
 
     /**
-     * Редактировать устройство в документе счет. В данном контексте тебуется сменить только статус
+     *
      * @param integer $id
      * @return mixed
-     *
-    public function actionUpdate($id)
-    {
-
-    }
      */
+    public function actionSetPrice($id, $price)
+    {
+        $model = $this->findModel($id);
+        $model->price = $price;
+        $model->save();
+        return true;
+    }
+
 
     /**
      * @param $id

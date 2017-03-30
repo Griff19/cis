@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  */
 class DtInvoicesSearch extends DtInvoices
 {
+
     /**
      * @inheritdoc
      */
@@ -41,9 +42,12 @@ class DtInvoicesSearch extends DtInvoices
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $status = null)
     {
-        $query = DtInvoices::find();
+        if ($status)
+            $query = DtInvoices::find()->where(['status' => $status]);
+        else
+            $query = DtInvoices::find();
 
         // add conditions that should always apply here
 
@@ -74,14 +78,15 @@ class DtInvoicesSearch extends DtInvoices
         return $dataProvider;
     }
 
+    /**
+     * Функция подбирает документы соответствующие документу "Заявка на оборудование"
+     * @param $params POST-параметры
+     * @param null $enq_invoices Идентификатор документов "Заявка"
+     * @return ActiveDataProvider
+     */
     public function searchForEnquiry($params, $enq_invoices = null)
     {
-        //if ($enq_invoices)
-            $query = DtInvoices::find()->where(['IN', 'id', $enq_invoices]);
-        //else
-        //    return false;
-
-        // add conditions that should always apply here
+        $query = DtInvoices::find()->where(['IN', 'id', $enq_invoices]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

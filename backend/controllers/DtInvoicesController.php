@@ -2,10 +2,9 @@
 
 namespace backend\controllers;
 
-use backend\models\DtEnquiryInvoice;
 use Yii;
+use backend\models\DtEnquiryInvoice;
 use backend\models\DtEnquiryDevices;
-//use backend\models\DtEnquiryDevicesSearch;
 use backend\models\DtInvoices;
 use backend\models\DtInvoicesSearch;
 use backend\models\DtInvoiceDevices;
@@ -15,19 +14,32 @@ use backend\models\DtInvoicesPaymentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use kartik\mpdf\Pdf;
 
 /**
- * DtInvoicesController implements the CRUD actions for DtInvoices model.
+ * Контроллер для модели документа "Счет"
  */
 class DtInvoicesController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['view', 'index', 'create-pdf'],
+                        'allow' => true,
+                        'roles' => ['it'],
+                    ],
+                    [
+                        'actions' => ['delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -118,6 +130,26 @@ class DtInvoicesController extends Controller
             'model' => $model,
             'dt_id_provider' => $dt_id_provider,
             'dt_ip_provider' => $dt_ip_provider
+        ]);
+        return $pdf->render();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function actionPdfAgree()
+    {
+        $search = new DtInvoicesSearch();
+        $dt_invoices = $search->search(Yii::$app->request->queryParams, DtInvoices::DOC_WAITING_AGREE);
+
+        $this->layout = 'pdf';
+        /** @var Pdf $pdf */
+        $pdf = Yii::$app->pdf;
+        $pdf->options = ['title' => 'Ведомость на согласование'];
+        //$pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
+        //$pdf->content = "Содержимое";
+        $pdf->content = $this->render('pdf_agree', [
+            'dt_invoices' => $dt_invoices,
         ]);
         return $pdf->render();
     }

@@ -48,7 +48,7 @@ class DtInvoiceDevicesSearch extends DtInvoiceDevices
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
-            'sort' => ['defaultOrder' => ['dt_invoices_id' => SORT_ASC]]
+            'sort' => ['defaultOrder' => ['id' => SORT_ASC]]
         ]);
 
         $this->load($params);

@@ -15,6 +15,8 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\DtInvoiceDevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$this->registerAssetBundle('backend\assets\AddInput');
+
 ?>
 <div class="dt-invoice-devices-index">
 
@@ -35,7 +37,10 @@ use yii\grid\GridView;
         ['attribute' => 'dt_enquiries_id',
             'value' => function ($model) {
                 if ($model->dt_enquiries_id)
-                    return Html::a('Заявка №' . $model->dt_enquiries_id . ' от ' . $model->dtEnquiry->create_date, ['dt-enquiries/view', 'id' => $model->dt_enquiries_id]);
+                    return Html::a('Заявка №' . $model->dt_enquiries_id . ' от ' . $model->dtEnquiry->create_date,
+                        ['dt-enquiries/view', 'id' => $model->dt_enquiries_id],
+                        ['title' => 'Открыть документ']
+                        );
                 else
                     return '';
             },
@@ -46,7 +51,25 @@ use yii\grid\GridView;
                 return DeviceType::getTitle($model->type_id);
             }
         ],
-        'price',
+        ['attribute' => 'price',
+            'contentOptions' => function($model) {
+                return ['id' => 'd' . $model->id];
+            },
+            'value' => function ($model) {
+                $price = $model->price;
+                if ($price == 0)
+                    $price = '0.00';
+                /** @see \backend\assets\AddInput */
+                $a = Html::a($price, 'javascript:', [
+                        'class' => 'set-price',
+                        'data-id' => $model->id,
+                        'data-price' => $model->price,
+                        'title' => 'Установить цену',
+                ]);
+                return $a;
+            },
+            'format' => 'raw',
+        ],
         ['attribute' => 'status',
             'value' => function ($model) {
                 $stts = $model->status ? DtEnquiryDevices::arrStatusString()[$model->status] : '-';
