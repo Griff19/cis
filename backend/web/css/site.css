@@ -201,6 +201,7 @@ a.ok:hover {
     color: #337ab7;
     cursor: pointer;
 }
+
 .click:hover, .click:focus {
     color: #23527c;
     text-decoration: underline;

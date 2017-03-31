@@ -19,8 +19,9 @@ $exec = $model->execEmployee->snp;
 
 <h3> Акт инвентаризации №<?= $model->id ?> от <?= Yii::$app->formatter->asDate($model->act_date, 'dd.MM.yyyy') ?></h3>
 <p>
-    РМ №<?= $model->workplace->id ?><br/>
-    Помещение:<?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?><br/>
+    Филиал: <?= $model->workplace->branch->branch_title ?>;
+    Рабочее место №<?= $model->workplace->id ?><br/>
+    Помещение: <?= $model->workplace->room->room_title ?> <?= $model->workplace->workplaces_title ?><br/>
     Ответственный: <?= $owner ?> (<?= $model->ownerEmployee->job_title ?>)<br/>
     <?php if ($oldModel) { ?>
         Предыдущая инвентаризация: Акт №<?= $oldModel->id ?> от <?= $oldModel->act_date ?><br/>

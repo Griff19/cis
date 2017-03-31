@@ -8,27 +8,22 @@ use yii\data\ActiveDataProvider;
 
 
 /**
- * This is the model class for table "workplaces".
+ * Модель "Рабочее место", использует таблицу "workplaces".
  *
- * @property integer $id
- * @property integer $room_id
- * @property boolean $mu
- * @property string $workplaces_title
- * @property integer $voip
- * @property ip $ip
- * @property integer $status
- * @property integer $voip_number
- * @property string $email
- * @property string $snp
- * @property string $cellnumber
- * @property Employees[] owner
- * @property mixed inventory
+ * @property integer $id              Идентификатор рабочего места
+ * @property integer $room_id         Идентификатор кабинета
+ * @property boolean $mu              Многопользовательское рабочее место
+ * @property string $workplaces_title Описание рабочего места
+ * @property integer $voip            Внутренний номер
+ * @property integer $status          Статус рабочего места
+ * @property Employees[] owner        Владелец рабочего места
+ * @property mixed inventory          Связь с документами "Акт инвентаризации"
+ * @property string summary           Сводная информация о рабочем месте
  */
 class Workplaces extends \yii\db\ActiveRecord
 {
     public $_owner;
     public $voip;
-
 
     /**
      * @inheritdoc
@@ -47,9 +42,7 @@ class Workplaces extends \yii\db\ActiveRecord
             [['room_id', 'branch_id'], 'required'],
             [['room_id', 'branch_id', 'voip'], 'integer', 'message' => 'Необходимо заполнить {attribute}'],
             [['workplaces_title'], 'string', 'max' => 255],
-            //['ip', 'ip'],
             [['mu'], 'boolean'],
-            //['inventoryDate', 'date']
         ];
     }
 
@@ -66,7 +59,8 @@ class Workplaces extends \yii\db\ActiveRecord
             '_owner' => 'Ответственный',
             'voip' => 'Вн.Номер',
             'mu' => 'МП*',
-            'inventoryDate' => 'Инвентаризация'
+            'inventoryDate' => 'Инвентаризация',
+            'summary' => 'Рабоче место'
         ];
     }
 
@@ -142,8 +136,34 @@ class Workplaces extends \yii\db\ActiveRecord
             return false;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function getTitle($id){
         $workplace = Workplaces::find()->select('workplaces_title')->where(['id' => $id])->asArray()->one();
         return $workplace['workplaces_title'];
+    }
+
+    /**
+     * Возвращает полное наименование рабочего места
+     * $mode = 0 - для вывода в строку, 1 - для вывода в "столбец"
+     * @return string
+     */
+    public function getSummary($mode = 0)
+    {
+        $res = '';
+        if ($mode == 0)
+            $sep = ", ";
+        else
+            $sep = "\n";
+
+        $res .= '№' . $this->id . ', ';
+        $res .= $this->room->branch->branch_title . $sep;
+        $res .= $this->room->room_title . $sep;
+        $res .= $this->workplaces_title;
+
+        return $res;
+
     }
 }

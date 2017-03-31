@@ -90,7 +90,7 @@ if ($model->status == InventoryActs::DOC_PRINTED) {
         'model' => $model,
         'attributes' => [
             'id',
-            'workplace_id',
+            'workplace.summary',
             ['attribute' => 'owner_employee_id',
                 'value' => $model->ownerEmployee->snp,
             ],

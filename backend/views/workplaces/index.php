@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //при установке устройства на рабочее место:
         ['class' => \yii\grid\Column::className(), //6
             'content' => function($model) use ($id_dev, $target, $target_id){
-                return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-ok']),
+                return Html::a('<span class="glyphicon glyphicon-ok"></span>',
                    // ['devices/addtowp', 'id' => $id_dev, 'id_wp' => $model->id]);
                     ['select', 'id' => $model->id, 'target' => $target, 'target_id' => $target_id]);
             }

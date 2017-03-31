@@ -88,7 +88,7 @@ if($target && $param) {
                     ]);
                 } else if ($mode == 'def'){
                     return Html::a(Html::img('/admin/img/man.png', ['style' => 'height:24px;']), ['workplaces/view', 'id' => $model->workplace_id], [
-                        'title' => $model->getFullWorkplace(1)]);
+                        'title' => $model->workplace->getSummary(1)]);
                 }
             }
         ],

@@ -18,7 +18,6 @@ use backend\models\DtInvoices;
  */
 
 $this->registerAssetBundle('backend\assets\ModalAsset');
-$this->registerAssetBundle('backend\assets\AppAsset');
 
 $this->title = 'Документ №' . $model->doc_number;
 $this->params['breadcrumbs'][] = ['label' => 'Счета', 'url' => ['index']];
