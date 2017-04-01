@@ -23,7 +23,7 @@ if($target && $param) {
     $query = 'mode=' . ArrayHelper::getValue($param, 'mode') . '&'
         . 'target=' . ArrayHelper::getValue($param, 'target') . '&'
         . 'target_id=' . ArrayHelper::getValue($param, 'target_id') . '&'
-        . 'id_wp=' . ArrayHelper::getValue($param, 'id_wp');
+        . 'id_wp=' . ArrayHelper::getValue($param, 'id_wp') . '&';
 } else $query = null;
 //var_dump($query);
 ?>
@@ -38,12 +38,18 @@ if($target && $param) {
             echo Html::a('Комплектующие автоматом', ['autocomp'], [
                     'class' => 'btn btn-success', 'data' => [
                             'confirm' => "Произвести автоматическую установку комплектуюдщих \r\n для одиноких системников?"
-                ]]);
+                ]]) . ' ';
             echo Html::a('Добавить устройство', ['devices/create?'. $query], ['class' => 'btn btn-success']);
         }?>
-        <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Общий склад', ['devices/index?'. $query .'&DevicesSearch%5Bworkplace_id%5D=1'], ['class' => 'btn btn-default'])?>
-		<?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['devices/index?'. $query .'&DevicesSearch%5Bworkplace_id%5D=130'], ['class' => 'btn btn-default'])?>
-		<?= Html::a(Html::img('/admin/img/cross.png', ['style' => 'height: 14px; margin: 0px 1px 3px 0px;']) . ' Сбросить фильтр', ['devices/index?' . $query], ['class' => 'btn btn-default', 'style' => 'float:right;']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-search"></span> Общий склад',
+            ['devices/index?'. $query .'DevicesSearch%5Bworkplace_id%5D=1'],
+            ['class' => 'btn btn-default']) ?>
+		<?= Html::a('<span class="glyphicon glyphicon-search"></span> Потерянные',
+            ['devices/index?'. $query .'DevicesSearch%5Bworkplace_id%5D=130'],
+            ['class' => 'btn btn-default']) ?>
+		<?= Html::a('<span class="glyphicon glyphicon-remove"></span> Сбросить фильтр',
+            ['devices/index?' . $query],
+            ['class' => 'btn btn-default']) ?>
     </p>
 
     <?php
