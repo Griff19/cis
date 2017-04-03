@@ -39,7 +39,7 @@ class DtEnquiriesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['update','delete', 'un-save'],
+                        'actions' => ['update','delete', 'un-save', 'test'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -90,6 +90,14 @@ class DtEnquiriesController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return string
+     */
+    public function actionTest($id){
+
+        return $this->renderAjax('../pdf_layout', ['url' => '/admin/dt-enquiries/pdf?id=' . $id]);
+    }
     /**
      * Формируем pdf-версию
      * @param $id

@@ -93,7 +93,7 @@ if($target && $param) {
                         'title' => $model->workplace_id . ' ' . $model->wp_title
                     ]);
                 } else if ($mode == 'def'){
-                    return Html::a(Html::img('/admin/img/man.png', ['style' => 'height:24px;']), ['workplaces/view', 'id' => $model->workplace_id], [
+                    return Html::a('<span class="glyphicon glyphicon-user"></span>', ['workplaces/view', 'id' => $model->workplace_id], [
                         'title' => $model->workplace->getSummary(1)]);
                 }
             }
@@ -109,7 +109,7 @@ if($target && $param) {
         ],
         ['class' => Column::className(), //12
             'content' => function ($model) {
-                return Html::a(Html::img('/admin/img/view.png', ['style' => 'height:24px;']),
+                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                     ['devices/view', 'id' => $model->id], ['title' => 'Просмотр и редактирование...']);
             }
         ],

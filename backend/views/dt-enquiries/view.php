@@ -54,9 +54,9 @@ Modal::end();
                     echo Html::a('Ввести счет', ['dt-invoices/create', 'enquiry_id' => $model->id], ['class' => 'btn btn-primary']) . ' ';
                     echo Html::a('Согласовать', ['index-agree', 'id' => $model->id], ['class' => 'btn btn-default']);
                 } ?>
-                <?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/pdf', 'id' => $model->id], [
+                <?= Html::a('<span class="glyphicon glyphicon-print"></span> <b>pdf</b>', ['dt-enquiries/test', 'id' => $model->id], [
                     'class' => 'btn btn-default',
-                    'style' => 'padding: 3px 6px',
+                    //'style' => 'padding: 3px 6px',
                     'title' => 'Открыть PDF'
                 ]); ?>
             </p>

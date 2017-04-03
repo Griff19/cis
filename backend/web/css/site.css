@@ -21,25 +21,7 @@ body {
 .container {
     width: 100%;
 }
-/*
-@media (min-width: 1200px) {
-    .container {
-        width: 1200px;
-    }
-}
 
-@media (min-width: 1500px) {
-    .container {
-        width: 1500px;
-    }
-}
-
-@media (min-width: 1800px){
-    .container {
-        width: 1800px;
-    }
-}
-*/
 .footer {
     height: 60px;
     background-color: #f5f5f5;
@@ -137,10 +119,15 @@ a.delete {
 }
 
 a.delete:hover {}
+
+tr .glyphicon {
+    font-size: large;
+}
+
 .glyphicon-eye-close:hover,
 .glyphicon-trash:hover {
     background: linear-gradient(to left, #e80c19, #800514);
-    width: 18px;
+    /*width: 18px;*/
     color: transparent;
     -webkit-background-clip: text;
 }
@@ -152,7 +139,7 @@ a.delete:hover {}
 .glyphicon-ok,
 .glyphicon-print {
     color: #777;
-    font-size: large;
+    /*font-size: large;*/
     line-height: normal;
 }
 
@@ -161,7 +148,7 @@ a.delete:hover {}
 .glyphicon-ok:hover,
 .glyphicon-print:hover {
     background: linear-gradient(to left, #25e825, green);
-    width: 18px;
+    /*width: 18px;*/
     color: transparent;
     -webkit-background-clip: text;
 }

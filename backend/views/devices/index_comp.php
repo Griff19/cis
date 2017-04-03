@@ -72,7 +72,7 @@ if($target && $param) {
             'content' => function ($model) {
                 if ($model->workplace_id == 1 || $model->workplace_id == null) return '';
                 else return Html::a(Html::img('/admin/img/man.png', ['style' => 'height:24px;']), ['workplaces/view', 'id' => $model->workplace_id], [
-                    'title' => $model->getFullWorkplace(1)]);
+                    'title' => $model->getSummary(1)]);
             }
         ],
         // активно при выборе устройства как комплектующее
