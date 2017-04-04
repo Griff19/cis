@@ -54,7 +54,7 @@ use backend\models\DtInvoices;
                         $a = Html::a('Печать', ['dt-invoices/create-pdf', 'id' => $model->id],
                             ['data-pjax' => 0]);
                         $a .= ' ';
-                        $a .= Html::a('Согласован...', '', [
+                        $a .= Html::a('Согласован...', 'javascript:', [
                             'id' => 'linkModal',
                             'data-target' => '/admin/dt-invoices-payment/create?id='
                                 . $model->id
