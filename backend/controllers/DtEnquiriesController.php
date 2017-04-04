@@ -4,8 +4,8 @@
  */
 namespace backend\controllers;
 
-use backend\models\Devices;
 use Yii;
+use backend\models\Devices;
 use backend\models\Message;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtEnquiryDevicesSearch;
@@ -20,6 +20,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\mpdf\Pdf;
 
 class DtEnquiriesController extends Controller
@@ -34,12 +35,13 @@ class DtEnquiriesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['create', 'index','view', 'save', 'pdf', 'set-status', 'set-device-on-wp', 'index-agree'],
+                        'actions' => ['create', 'index', 'view', 'save', 'pdf', 'set-status',
+                            'set-device-on-wp', 'index-agree', 'render-pdf'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['update','delete', 'un-save', 'test'],
+                        'actions' => ['update','delete', 'un-save'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -94,17 +96,18 @@ class DtEnquiriesController extends Controller
      * @param $id
      * @return string
      */
-    public function actionTest($id){
-
-        return $this->renderAjax('../pdf_layout', ['url' => '/admin/dt-enquiries/pdf?id=' . $id]);
+    public function actionPdf($id){
+        Url::remember(['dt-enquiries/view', 'id' => $id]);
+        return $this->renderAjax('../pdf_layout', ['url' => '/admin/dt-enquiries/render-pdf?id=' . $id]);
     }
+
     /**
      * Формируем pdf-версию
      * @param $id
      * @return mixed
      * @throws NotFoundHttpException
      */
-    public function actionPdf($id){
+    public function actionRenderPdf($id){
         $model = $this->findModel($id);
 
         $dedSearch = new DtEnquiryDevicesSearch();
@@ -117,8 +120,7 @@ class DtEnquiriesController extends Controller
         /** @var Pdf $pdf */
         $pdf = Yii::$app->pdf;
         $pdf->options = ['title' => 'Заявка на оборудование ID' . $model->id];
-        //$pdf->filename = 'InventoryAct_'. $model->id .'_'. $model->act_date .'.pdf';
-        //$pdf->content = "Содержимое";
+
         $pdf->content = $this->render('pdf', [
             'model' => $model,
             'wpProvider' => $wpProvider,

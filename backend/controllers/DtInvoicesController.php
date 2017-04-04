@@ -29,7 +29,7 @@ class DtInvoicesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create-pdf'],
+                        'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -137,10 +137,15 @@ class DtInvoicesController extends Controller
     /**
      * @return mixed
      */
-    public function actionPdfAgree()
+    public function actionPdfAgree($mode = 1)
     {
         $search = new DtInvoicesSearch();
-        $dt_invoices = $search->search(Yii::$app->request->queryParams, DtInvoices::DOC_WAITING_AGREE);
+        if ($mode == 1)
+            $status = DtInvoices::DOC_WAITING_AGREE;
+        else
+            $status = DtInvoices::DOC_AWAITING_PAYMENT;
+
+        $dt_invoices = $search->search(Yii::$app->request->queryParams, $status);
 
         $this->layout = 'pdf';
         /** @var Pdf $pdf */

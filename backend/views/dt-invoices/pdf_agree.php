@@ -14,6 +14,6 @@
         ['attribute' => 'doc_date', 'header' => 'Док. Дата'],
         ['attribute' => 'd_partners_name', 'header' => 'Контрагент', 'value' => 'partner.brand'],
         ['attribute' => 'summ', 'header' => 'Сумма'],
-        'statusString'
+        'statusString:raw'
     ]
 ])?>

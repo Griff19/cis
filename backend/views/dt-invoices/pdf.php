@@ -63,7 +63,7 @@ use yii\grid\GridView;
 			}
 		],
 		['attribute' => 'price', 'header' => 'Цена'],
-		['attribute' => 'status', 'header' => 'Статус', 'value' => 'statusString'],
+		['attribute' => 'status', 'header' => 'Статус', 'value' => 'statusString', 'format' => 'raw'],
 		['attribute' => 'note', 'header' => 'Заметка'],
 	]
 ])?>

@@ -17,7 +17,9 @@ use backend\models\DtInvoices;
 ?>
 <div class="dt-invoices-index">
 
-    <h3> Текущие счета: <?= Html::a('Ведомость на согласование', ['dt-invoices/pdf-agree'], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
+    <h3> Текущие счета:
+        <?= Html::a('Ведомость на согласование', ['dt-invoices/pdf-agree'], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
+        <?= Html::a('Ведомость на оплату', ['dt-invoices/pdf-agree', 'mode' => 0], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
     </h3>
 
     <?= GridView::widget([
@@ -57,7 +59,9 @@ use backend\models\DtInvoices;
                             'data-target' => '/admin/dt-invoices-payment/create?id='
                                 . $model->id
                                 . '&is_modal=true',
-                            'data-header' => 'Фиксация согласованного платежа']);
+                            'data-header' => 'Фиксация согласованного платежа',
+                            'data-pjax' => 0
+                        ]);
                     }
                     if ($model->status == DtInvoices::DOC_AWAITING_PAYMENT) {
                         $a = Html::a('Отправить', ['dt-invoices/set-status',
