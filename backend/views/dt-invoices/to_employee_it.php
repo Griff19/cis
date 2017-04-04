@@ -60,7 +60,7 @@ use backend\models\DtInvoices;
                                 . $model->id
                                 . '&is_modal=true',
                             'data-header' => 'Фиксация согласованного платежа',
-                            'data-pjax' => 0
+                            'data-pjax' => 1
                         ]);
                     }
                     if ($model->status == DtInvoices::DOC_AWAITING_PAYMENT) {
