@@ -15,6 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\Url;
 use kartik\mpdf\Pdf;
 
 /**
@@ -29,7 +30,7 @@ class DtInvoicesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status'],
+                        'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status', 'pdf'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -105,6 +106,26 @@ class DtInvoicesController extends Controller
     }
 
     /**
+     * @param string $id
+     * @param int|string $mode
+     * @return string
+     */
+    public function actionPdf($id = '', $mode = 0)
+    {
+        Url::remember(['site/employee-it']);
+        switch ($mode) {
+            case 0:
+                return $this->renderAjax('../pdf_layout', ['url' => '/admin/dt-invoices/create-pdf?id=' . $id]);
+                //break;
+            case 1:
+            case 2:
+                return $this->renderAjax('../pdf_layout', ['url' => '/admin/dt-invoices/pdf-agree?mode=' . ($mode-1)]);
+                //break;
+        }
+
+    }
+
+    /**
      * Формирование pdf-документа
      * @param $id
      * @return mixed
@@ -155,6 +176,7 @@ class DtInvoicesController extends Controller
         //$pdf->content = "Содержимое";
         $pdf->content = $this->render('pdf_agree', [
             'dt_invoices' => $dt_invoices,
+            'mode' => $mode,
         ]);
         return $pdf->render();
     }

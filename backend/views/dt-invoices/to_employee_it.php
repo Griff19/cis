@@ -18,8 +18,8 @@ use backend\models\DtInvoices;
 <div class="dt-invoices-index">
 
     <h3> Текущие счета:
-        <?= Html::a('Ведомость на согласование', ['dt-invoices/pdf-agree'], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
-        <?= Html::a('Ведомость на оплату', ['dt-invoices/pdf-agree', 'mode' => 0], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
+        <?= Html::a('Ведомость на согласование', ['dt-invoices/pdf', 'id' => 0, 'mode' => 2], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
+        <?= Html::a('Ведомость на оплату', ['dt-invoices/pdf', 'id' => 0, 'mode' => 1], ['class' => 'btn btn-default', 'data-pjax' => 0]) ?>
     </h3>
 
     <?= GridView::widget([
@@ -51,7 +51,7 @@ use backend\models\DtInvoices;
                     /** @var $model \backend\models\DtInvoices */
                     $a = '';
                     if ($model->status == DtInvoices::DOC_WAITING_AGREE) {
-                        $a = Html::a('Печать', ['dt-invoices/create-pdf', 'id' => $model->id],
+                        $a = Html::a('Печать', ['dt-invoices/pdf', 'id' => $model->id],
                             ['data-pjax' => 0]);
                         $a .= ' ';
                         $a .= Html::a('Согласован...', 'javascript:', [

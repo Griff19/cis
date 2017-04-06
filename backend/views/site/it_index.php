@@ -62,7 +62,7 @@ Modal::end();
 
     <?php
     //таблица устройств в заявке "Устройства, требующие покупки"
-    echo $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded, 'dataProvider' => $provider_ded]);
+    //echo $this->render('../dt-enquiry-devices/to_employee_it', ['searchModel' => $search_ded, 'dataProvider' => $provider_ded]);
     //таблица устройств в счете "Устройства, требующиие оплату"
     echo $this->render('../dt-invoice-devices/to_employee_it', ['searchModel' => $search_did, 'dataProvider' => $provider_did]);
     //таблица платежей по счету "Манипуляции с платежами"
