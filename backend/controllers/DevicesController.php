@@ -57,13 +57,14 @@ class DevicesController extends Controller
                             'set-type-id',
                             'delfromwp',
                             'delcomp',
-                            'find-device'
+                            'find-device',
+                            'addtowp'
                         ],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create', 'delete', 'addtowp'],
+                        'actions' => ['create', 'delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
