@@ -11,7 +11,7 @@ use yii\grid\Column;
 /* @var $searchModel backend\models\DevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Устройства';
+$this->title = 'Комплектующие устройства';
 $this->params['breadcrumbs'][] = $this->title;
 
 $param = Yii::$app->request->queryParams;
@@ -71,14 +71,14 @@ if($target && $param) {
         ['class' => Column::className(),
             'content' => function ($model) {
                 if ($model->workplace_id == 1 || $model->workplace_id == null) return '';
-                else return Html::a(Html::img('/admin/img/man.png', ['style' => 'height:24px;']), ['workplaces/view', 'id' => $model->workplace_id], [
-                    'title' => $model->getSummary(1)]);
+                else return Html::a('<span class="glyphicon glyphicon-user">', ['workplaces/view', 'id' => $model->workplace_id], [
+                    'title' => $model->getFullWorkplace(1)]);
             }
         ],
         // активно при выборе устройства как комплектующее
         ['class' => Column::className(), //11
             'content' => function ($model) use ($target) {
-                return Html::a(Html::img('/admin/img/ok.png', ['style' => 'height:24px;']),
+                return Html::a('<span class="glyphicon glyphicon-ok"></span>',
                     //['devices/addcomp', 'id_dev' => $id_dev, 'id_comp' => $model->id, 'id_wp' => $id_wp]
                     [$target, 'id' => $model->id, 'param' => Yii::$app->request->queryString]
                 );

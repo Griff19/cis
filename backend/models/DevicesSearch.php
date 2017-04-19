@@ -203,7 +203,7 @@ class DevicesSearch extends Devices
      * @return ActiveDataProvider
      */
     public function searchComp($params){
-        $query = Devices::find();
+        $query = Devices::find()->where(['device_type.comp' => true]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
