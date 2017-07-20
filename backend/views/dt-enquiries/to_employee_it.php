@@ -1,6 +1,6 @@
 <?php
 /**
- * Представление встраивается на страницу site\it_index.php выводит список документов "Заявка на оборудование"
+ * Представление встраивается на страницу site\it_index.php (admin/site/employee-it) выводит список документов "Заявка на оборудование"
  */
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -40,7 +40,8 @@ use backend\models\DtEnquiries;
                 'filter' => DtEnquiries::arrStatusString()
             ],
             ['class' => '\yii\grid\Column',
-                'options' => ['style' => 'width: 45px'],
+                'options' => ['style' => 'width: 40px;'],
+                'contentOptions' => ['style' => 'padding: 8px 0px 0px 1px'],
                 'content' => function ($model) {
                     return Html::a(Html::tag('span', '', ['class' => 'glyphicon glyphicon-plus'])
                         . Html::tag('span', '', ['class' => 'glyphicon glyphicon-file']),
