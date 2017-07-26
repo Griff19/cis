@@ -12,7 +12,7 @@ use yii\helpers\Html;
 
 $col1 = [
 	'dataProvider' => $dataProvider,
-	'filterModel' => $searchModel,
+	#'filterModel' => $searchModel,
 	'tableOptions' => ['class' => 'table table-bordered table-hover'],
 	'showHeader' => false,
 	'layout' => "{items}",

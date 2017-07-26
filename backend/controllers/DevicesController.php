@@ -147,16 +147,17 @@ class DevicesController extends Controller
     /**
      * Экшн используется для развертывания списка комплектующих устройств
      * в таблице устройств на странице рабочего места
-     * @param int $id идентификатор родительского устройства
+     * @param int $id_par идентификатор родительского устройства
      * @param int $mode отображать ли колонку действий в таблице
      * @return string
      */
-    public function actionViewTableComp($id, $mode = 1)
+    public function actionViewTableComp($id_par, $mode = 1)
     {
         $searchModel = new DevicesSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0, $id);
+        #$dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0, $id, $mode);
+        $dataProvider = $searchModel->searchCollapseComp($id_par);
         return $this->renderAjax('view_table_comp', [
-            'searchModel' => $searchModel,
+            #'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'mode' => $mode == 0 ? false : true,
         ]);
@@ -182,7 +183,6 @@ class DevicesController extends Controller
             'id_dev' => $id_dev,
 
         ]);
-
     }
 
     /**

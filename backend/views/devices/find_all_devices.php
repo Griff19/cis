@@ -50,7 +50,7 @@ use backend\models\Employees;
                     return [
                         'class' => 'info',
                         'id' => 'row'.$model['id'],
-                        'data-target' => '/admin/devices/view-table-comp?id=' . $model['id'] . '&mode=0'
+                        'data-target' => '/admin/devices/view-table-comp?id_par=' . $model['id'] . '&mode=0'
                     ];
                 } else {
                     return '';
@@ -72,7 +72,7 @@ use backend\models\Employees;
             ],
         ];
         $this->registerAssetBundle('backend\assets\CollapseTableAsset');
-        \yii\widgets\Pjax::begin();
+        \yii\widgets\Pjax::begin(['enablePushState' => true]);
         echo GridView::widget($col1);
         $this->registerJs('CollapseTable();');
         \yii\widgets\Pjax::end();

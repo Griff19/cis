@@ -41,16 +41,33 @@ class DevicesSearch extends Devices
     }
 
     /**
+     * @param $id_par
+     * @return ActiveDataProvider
+     */
+    public function searchCollapseComp($id_par)
+    {
+        $query = Devices::find()->from(['d' => Devices::tableName()])->where(['parent_device_id' => $id_par]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => ['defaultPageSize' => 50]
+        ]);
+
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+
+        return $dataProvider;
+    }
+
+
+    /**
      * Создаем провайдер для стандартной таблицы устройств
-     *
      * @param array $params параметры запроса
      * @param int $id_wp идентификатор работчего места по которому отбираются устройства
-     *
      * @param int $id идентификатор родительского устройства для отбора комплектующих
+     * @param int $mode режим отображения
      * @return ActiveDataProvider
-     *
      */
-    public function search($params, $id_wp = 0, $id = 0)
+    public function search($params, $id_wp = 0, $id = 0, $mode = 1)
     {
         if ($id > 0) {
             $query = Devices::find()->from(['d' => Devices::tableName()])->where(['parent_device_id' => $id]);
@@ -58,31 +75,31 @@ class DevicesSearch extends Devices
             $query = Devices::find()->where(['workplace_id' => $id_wp]);
         } else {
             $query = Devices::find()
-                    ->select([
-                        'id' => 'd.id',
-                        'type_id' => 'd.type_id',
-                        'dt_title' => 'device_type.title',
-                        'dev_comp' => 'device_type.comp',
-                        'brand' => 'd.brand',
-                        'model' => 'd.model',
-                        'sn' => 'd.sn',
-                        'specification' => 'd.specification',
-                        'imei1' => 'd.imei1',
-                        'parent_device_id' => 'd.parent_device_id',
-                        'device_note' => 'd.device_note',
-                        'workplace_id' => 'd.workplace_id',
-                        'wp_title' => 'workplaces.workplaces_title',
-                        'snp' => 'MAX(employees.snp)',
-                        'fake_device' => 'd.fake_device'
-                    ])
-                    ->from(['d' => 'devices'])
-                    ->leftJoin('workplaces', 'workplaces.id = workplace_id')
-                    ->leftJoin('device_type', 'device_type.id = type_id')
-                    ->leftJoin('wp_owners', 'wp_owners.workplace_id = d.workplace_id')
-                    ->leftJoin('employees', 'employees.id = wp_owners.employee_id')
-                    ->groupBy('d.id, device_type.title, device_type.comp,	d.brand,'
-                    	.'d.model,	d.sn,	d.specification,	d.imei1,'
-                        .'d.parent_device_id,	d.workplace_id,	workplaces.workplaces_title');
+                ->select([
+                    'id' => 'd.id',
+                    'type_id' => 'd.type_id',
+                    'dt_title' => 'device_type.title',
+                    'dev_comp' => 'device_type.comp',
+                    'brand' => 'd.brand',
+                    'model' => 'd.model',
+                    'sn' => 'd.sn',
+                    'specification' => 'd.specification',
+                    'imei1' => 'd.imei1',
+                    'parent_device_id' => 'd.parent_device_id',
+                    'device_note' => 'd.device_note',
+                    'workplace_id' => 'd.workplace_id',
+                    'wp_title' => 'workplaces.workplaces_title',
+                    'snp' => 'MAX(employees.snp)',
+                    'fake_device' => 'd.fake_device'
+                ])
+                ->from(['d' => 'devices'])
+                ->leftJoin('workplaces', 'workplaces.id = workplace_id')
+                ->leftJoin('device_type', 'device_type.id = type_id')
+                ->leftJoin('wp_owners', 'wp_owners.workplace_id = d.workplace_id')
+                ->leftJoin('employees', 'employees.id = wp_owners.employee_id')
+                ->groupBy('d.id, device_type.title, device_type.comp,	d.brand,'
+                    . 'd.model,	d.sn,	d.specification,	d.imei1,'
+                    . 'd.parent_device_id,	d.workplace_id,	workplaces.workplaces_title');
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -121,7 +138,7 @@ class DevicesSearch extends Devices
             'd.id' => $this->id,
             'd.workplace_id' => $this->workplace_id,
             'device_type.comp' => $this->dev_comp,
-			'parent_device_id' => $this->parent_device_id
+            'parent_device_id' => $this->parent_device_id
         ]);
 
         $query->andFilterWhere(['like', 'LOWER(device_note)', mb_strtolower($this->device_note)])
@@ -130,9 +147,10 @@ class DevicesSearch extends Devices
             ->andFilterWhere(['like', 'LOWER(model)', mb_strtolower($this->model)])
             ->andFilterWhere(['like', 'LOWER(sn)', mb_strtolower($this->sn)])
             ->andFilterWhere(['like', 'LOWER(specification)', mb_strtolower($this->specification)])
-            ->andFilterWhere(['like', 'LOWER(imei1)', mb_strtolower($this->imei1)])
-        ;
+            ->andFilterWhere(['like', 'LOWER(imei1)', mb_strtolower($this->imei1)]);
         return $dataProvider;
+
+
     }
 
     /**
@@ -143,7 +161,8 @@ class DevicesSearch extends Devices
      * @param null $id_wp
      * @return ActiveDataProvider
      */
-    public function searchInventoryData($params, $id_wp = null){
+    public function searchInventoryData($params, $id_wp = null)
+    {
 
         $query1 = (new Query())
             ->select([
@@ -202,7 +221,8 @@ class DevicesSearch extends Devices
      * @param $params
      * @return ActiveDataProvider
      */
-    public function searchComp($params){
+    public function searchComp($params)
+    {
         $query = Devices::find()->where(['device_type.comp' => true]);
 
         $dataProvider = new ActiveDataProvider([
@@ -230,8 +250,7 @@ class DevicesSearch extends Devices
             ->andFilterWhere(['like', 'LOWER(model)', mb_strtolower($this->model)])
             ->andFilterWhere(['like', 'LOWER(sn)', mb_strtolower($this->sn)])
             ->andFilterWhere(['like', 'LOWER(specification)', mb_strtolower($this->specification)])
-            ->andFilterWhere(['like', 'LOWER(imei1)', mb_strtolower($this->imei1)])
-        ;
+            ->andFilterWhere(['like', 'LOWER(imei1)', mb_strtolower($this->imei1)]);
         return $dataProvider;
     }
 
@@ -241,7 +260,8 @@ class DevicesSearch extends Devices
      * @param $id_wp
      * @return ActiveDataProvider
      */
-    public function searchDeviceOnWp($params, $id_wp) {
+    public function searchDeviceOnWp($params, $id_wp)
+    {
         $query = Devices::find()->where(['workplace_id' => $id_wp])
             ->andWhere("parent_device_id IS NULL OR parent_device_id = 0");
         $query->joinWith('deviceType');
@@ -286,8 +306,7 @@ class DevicesSearch extends Devices
             ->andFilterWhere(['ilike', 'brand', $this->brand])
             ->andFilterWhere(['ilike', 'model', $this->model])
             ->andFilterWhere(['ilike', 'sn', $this->sn])
-            ->andFilterWhere(['ilike', 'specification', $this->specification])
-            ;
+            ->andFilterWhere(['ilike', 'specification', $this->specification]);
 
         return $dataProvider;
     }
@@ -309,15 +328,16 @@ class DevicesSearch extends Devices
             'model' => 'd.model',
             'sn' => 'd.sn',
             'specification' => 'd.specification'
-            ])
+        ])
             ->from(['d' => 'devices'])
             ->leftJoin('wp_owners w', 'd.workplace_id = w.workplace_id')
             ->leftJoin('workplaces wp', 'wp.id = w.workplace_id')
             ->leftJoin('device_type dt', 'd.type_id = dt.id')
             ->where("d.parent_device_id IS NULL OR d.parent_device_id = 0")
-            ;
+            ->andWhere(['wp.room_id' => 21])
+        ;
 
-        if ($employee_id){
+        if ($employee_id) {
             $query->andWhere(['w.employee_id' => $employee_id]);
         }
 
@@ -333,7 +353,7 @@ class DevicesSearch extends Devices
         ]);
 
         $this->load($params);
-        if (!$this->validate()){
+        if (!$this->validate()) {
             Yii::$app->session->setFlash('error', 'Валидация не прошла');
             return $dataProvider;
         }
@@ -344,8 +364,7 @@ class DevicesSearch extends Devices
             ->andFilterWhere(['ilike', 'brand', $this->brand])
             ->andFilterWhere(['ilike', 'model', $this->model])
             ->andFilterWhere(['ilike', 'sn', $this->sn])
-            ->andFilterWhere(['ilike', 'specification', $this->specification])
-        ;
+            ->andFilterWhere(['ilike', 'specification', $this->specification]);
 
         return $dataProvider;
     }
