@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use yii\helpers\Html;
 use backend\models\Images;
 use backend\models\Employees;
+use yii\widgets\Pjax;
 
 ?>
 
@@ -44,6 +45,7 @@ use backend\models\Employees;
         $col1 = [
             'dataProvider' => $deviceProvider,
             'filterModel' => $searchDeviceModel,
+            'filterUrl' => 'find-all-devices',
             'tableOptions' => ['class' => 'table table-bordered table-hover'],
             'rowOptions' => function ($model) use ($arrParent) {
                 if (in_array($model['id'], $arrParent)){
@@ -71,11 +73,12 @@ use backend\models\Employees;
                 'specification'
             ],
         ];
+
         $this->registerAssetBundle('backend\assets\CollapseTableAsset');
-        \yii\widgets\Pjax::begin(['enablePushState' => true]);
+        Pjax::begin();
         echo GridView::widget($col1);
         $this->registerJs('CollapseTable();');
-        \yii\widgets\Pjax::end();
+        Pjax::end();
         ?>
 
     </div>

@@ -3,6 +3,7 @@
  * Вспомогательная таблица для вывода комплектующих в основную таблицу устройств
  *
  * @var $mode bool отображать колонку действий или нет
+ * @var $dataProvider \yii\data\ActiveDataProvider
  */
 
 use backend\models\DeviceType;
@@ -11,8 +12,8 @@ use yii\grid\Column;
 use yii\helpers\Html;
 
 $col1 = [
+    'id' => 'comp',
 	'dataProvider' => $dataProvider,
-	#'filterModel' => $searchModel,
 	'tableOptions' => ['class' => 'table table-bordered table-hover'],
 	'showHeader' => false,
 	'layout' => "{items}",
