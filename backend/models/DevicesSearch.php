@@ -8,7 +8,7 @@ use yii\data\ActiveDataProvider;
 use yii\db\Expression;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-//use backend\models\Devices;
+
 
 /**
  * DevicesSearch represents the model behind the search form about `backend\models\Devices`.
@@ -53,7 +53,7 @@ class DevicesSearch extends Devices
     public function search($params, $id_wp = 0, $id = 0)
     {
         if ($id > 0) {
-            $query = Devices::find()->where(['parent_device_id' => $id]);
+            $query = Devices::find()->from(['d' => Devices::tableName()])->where(['parent_device_id' => $id]);
         } elseif ($id_wp > 0) {
             $query = Devices::find()->where(['workplace_id' => $id_wp]);
         } else {
@@ -277,17 +277,75 @@ class DevicesSearch extends Devices
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
+            'devices.id' => $this->id,
             'workplace_id' => $this->workplace_id,
         ]);
 
-        $query->andFilterWhere(['like', 'LOWER(device_type.title)', mb_strtolower($this->type_id)])
-            ->andFilterWhere(['like', 'LOWER(device_note)', mb_strtolower($this->device_note)])
-            ->andFilterWhere(['like', 'LOWER(brand)', mb_strtolower($this->brand)])
-            ->andFilterWhere(['like', 'LOWER(model)', mb_strtolower($this->model)])
-            ->andFilterWhere(['like', 'LOWER(sn)', mb_strtolower($this->sn)])
-            ->andFilterWhere(['like', 'LOWER(specification)', mb_strtolower($this->specification)])
+        $query->andFilterWhere(['ilike', 'device_type.title', $this->type_id])
+            ->andFilterWhere(['ilike', 'device_note', $this->device_note])
+            ->andFilterWhere(['ilike', 'brand', $this->brand])
+            ->andFilterWhere(['ilike', 'model', $this->model])
+            ->andFilterWhere(['ilike', 'sn', $this->sn])
+            ->andFilterWhere(['ilike', 'specification', $this->specification])
             ;
+
+        return $dataProvider;
+    }
+
+    /**
+     * Ищем все устройства, закрепленные за сотрудником, отсортированные по РМ
+     * todo: Протестировать, добавить фильтры
+     */
+    public function searchAllDeviceEmployee($params, $employee_id = null)
+    {
+        $query = (new Query())->select([
+            'employee_id' => 'w.employee_id',
+            'workplace_id' => 'w.workplace_id',
+            'workplaces_title' => 'wp.workplaces_title',
+            'id' => 'd.id',
+            'title' => 'dt.title',
+            'device_note' => 'd.device_note',
+            'brand' => 'd.brand',
+            'model' => 'd.model',
+            'sn' => 'd.sn',
+            'specification' => 'd.specification'
+            ])
+            ->from(['d' => 'devices'])
+            ->leftJoin('wp_owners w', 'd.workplace_id = w.workplace_id')
+            ->leftJoin('workplaces wp', 'wp.id = w.workplace_id')
+            ->leftJoin('device_type dt', 'd.type_id = dt.id')
+            ->where("d.parent_device_id IS NULL OR d.parent_device_id = 0")
+            ;
+
+        if ($employee_id){
+            $query->andWhere(['w.employee_id' => $employee_id]);
+        }
+
+
+        $dataProvider = new ActiveDataProvider(['query' => $query, 'pagination' => false]);
+        $dataProvider->setSort([
+            'attributes' => [
+                'workplace_id',
+                'workplaces_title',
+                'id',
+                'title',
+            ]
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()){
+            Yii::$app->session->setFlash('error', 'Валидация не прошла');
+            return $dataProvider;
+        }
+
+        $query->andFilterWhere(['d.id' => $this->id]);
+
+        $query->andFilterWhere(['ilike', 'device_note', $this->device_note])
+            ->andFilterWhere(['ilike', 'brand', $this->brand])
+            ->andFilterWhere(['ilike', 'model', $this->model])
+            ->andFilterWhere(['ilike', 'sn', $this->sn])
+            ->andFilterWhere(['ilike', 'specification', $this->specification])
+        ;
 
         return $dataProvider;
     }

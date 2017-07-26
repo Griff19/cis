@@ -2,10 +2,10 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
-use Yii;
 use backend\models\InventoryActs;
 use backend\models\InventoryActsTb;
 use backend\models\StoryDevice;
@@ -24,6 +24,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 use yii\filters\AccessControl;
+
 
 
 /**
@@ -58,6 +59,7 @@ class DevicesController extends Controller
                             'delfromwp',
                             'delcomp',
                             'find-device',
+                            'find-all-devices',
                             'addtowp'
                         ],
                         'allow' => true,
@@ -145,16 +147,18 @@ class DevicesController extends Controller
     /**
      * Экшн используется для развертывания списка комплектующих устройств
      * в таблице устройств на странице рабочего места
-     * @param $id
+     * @param int $id идентификатор родительского устройства
+     * @param int $mode отображать ли колонку действий в таблице
      * @return string
      */
-    public function actionViewTableComp($id)
+    public function actionViewTableComp($id, $mode = 1)
     {
         $searchModel = new DevicesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, 0, $id);
         return $this->renderAjax('view_table_comp', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'mode' => $mode == 0 ? false : true,
         ]);
     }
 
@@ -741,6 +745,25 @@ class DevicesController extends Controller
 
         return $this->render('searchDevice', [
             'deviceSearch' => $deviceSearch,
+            'deviceProvider' => $deviceProvider
+        ]);
+    }
+
+    /**
+     * todo: Метод должен выводить список всех устройств закрепленных за пользователем на всех рабочих местах...
+     * @return string
+     */
+    public function actionFindAllDevices($employee_id = null)
+    {
+        $deviceSearch = new DevicesSearch();
+        $deviceProvider = $deviceSearch->searchAllDeviceEmployee(Yii::$app->request->queryParams, $employee_id);
+
+        $arrParent = Devices::arrayParentEmployeeId($employee_id);
+
+        return $this->render('find_all_devices', [
+            'employee_id' => $employee_id,
+            'arrParent' => $arrParent,
+            'searchDeviceModel' => $deviceSearch,
             'deviceProvider' => $deviceProvider
         ]);
     }

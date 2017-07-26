@@ -95,6 +95,8 @@ class ImagesController extends Controller
             }
             if ($owner_id)
                 return $this->redirect([$target, 'id' => $owner_id]);
+            elseif ($target)
+                return $this->redirect([$target]);
             else
                 return $this->redirect(['index']);
         } else {
@@ -173,9 +175,12 @@ class ImagesController extends Controller
      */
     public function actionDelete($id)
     {
+
         $model = $this->findModel($id);
         $path = $model->linkfile;
-        unlink($path);
+        if (file_exists($path)) {
+            unlink($path);
+        }
         $model->delete();
 
         return $this->redirect(['index']);

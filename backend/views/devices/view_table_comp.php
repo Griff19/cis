@@ -1,9 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: ivan
- * Date: 26.10.2016
- * Time: 22:10
+ * Вспомогательная таблица для вывода комплектующих в основную таблицу устройств
+ *
+ * @var $mode bool отображать колонку действий или нет
  */
 
 use backend\models\DeviceType;
@@ -19,7 +18,6 @@ $col1 = [
 	'layout' => "{items}",
 	'columns' => [
 		['class' => 'yii\grid\SerialColumn'],
-		//'sort',
 		'id',
 		['attribute' => 'type_id',
 			'value' => function ($model){
@@ -27,7 +25,6 @@ $col1 = [
 			},
 			'format' => 'raw'
 		],
-		//'type_id',
 		'device_note',
 		'brand',
 		'model',
@@ -35,7 +32,8 @@ $col1 = [
 		'specification',
 		'parent_device_id',
 		['class' => Column::className(),
-			'content' => function ($moddev){
+            'visible' => $mode,
+			'content' => function ($moddev) use ($mode) {
 				if (Yii::$app->user->can('admin'))
 					return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $moddev['workplace_id']],['class' => 'cross']);
 				else

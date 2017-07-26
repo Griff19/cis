@@ -67,6 +67,7 @@ class User extends ActiveRecord
         ];
     }
 
+
     /**
      * @inheritdoc
      */
@@ -108,14 +109,14 @@ class User extends ActiveRecord
         return $usr->username;
     }
 
-    public function getParent($id){
-        $usr = User::findOne(['id' => $id]);
-        $cust = Customers::findOne(['customer_name' => $usr->fullname]);
-        //$usr = User::findOne(['id' => $cust->user_id]);
-        //var_dump($cust);
-        //die;
-        return $cust->typeprices_id;
-    }
+//    public function getParent($id){
+//        $usr = User::findOne(['id' => $id]);
+//        $cust = Customers::findOne(['customer_name' => $usr->fullname]);
+//        //$usr = User::findOne(['id' => $cust->user_id]);
+//        //var_dump($cust);
+//        //die;
+//        return $cust->typeprices_id;
+//    }
 
     /**
      * Связь с моделью Сотрудников
@@ -128,4 +129,6 @@ class User extends ActiveRecord
     public static function arrayUsers(){
         return User::find()->select('id as value, username as label')->orderBy('username')->asArray()->all();
     }
+
+
 }

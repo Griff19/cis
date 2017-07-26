@@ -452,12 +452,12 @@ class Devices extends \yii\db\ActiveRecord
 
     /**
      * Получаем массив идентификаторов родительских устройств по рабочему месту
+     * По сути перебираем комплектующие и смотрим их родителей
      * @param $id_wp
      * @return array|\yii\db\ActiveRecord[]
      */
     public static function arrayParentId($id_wp)
     {
-
         $query = (new Query())
             ->select('parent_device_id as id')
             ->from('devices')
@@ -466,6 +466,32 @@ class Devices extends \yii\db\ActiveRecord
             ->groupBy('parent_device_id')
             ->all();
         foreach ($query as $item) {
+            $arr[] = $item['id'];
+        }
+
+        return !empty($arr) ? $arr : [0];
+    }
+
+    /**
+     * todo: Протестировать
+     * Получаем массив идентификаторов родительских устройств по сотруднику
+     * @param $employee_id
+     * @return array
+     */
+    public static function arrayParentEmployeeId($employee_id = null)
+    {
+        $query = (new Query())
+            ->select(['id' => 'parent_device_id'])
+            ->from('devices')
+            ->leftJoin('wp_owners', 'wp_owners.workplace_id = devices.workplace_id')
+            ->where('parent_device_id > 0')
+            ->groupBy('parent_device_id');
+
+        if (!empty($employee_id)) {
+            $query->andWhere('wp_owners.employee_id = :employee_id', [':employee_id' => $employee_id]);
+        }
+
+        foreach ($query->each() as $item) {
             $arr[] = $item['id'];
         }
 
