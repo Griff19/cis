@@ -22,11 +22,11 @@ use yii\widgets\Pjax;
         ?>
     </div>
     <p> Выборка по:
-    <?= Html::a('Соседов С.А.;', ['find-all-devices', 'employee_id' => 4193])?>
-    <?= Html::a('Лучинкин А.В.;', ['find-all-devices', 'employee_id' => 3695])?>
-    <?= Html::a('Ярцев Е.А.;', ['find-all-devices', 'employee_id' => 4446])?>
-    <?= Html::a('Важин Ю.А.;', ['find-all-devices', 'employee_id' => 3133])?>
-    <?= Html::a('Все;', ['find-all-devices'])?>
+    <?= Html::a('Соседов С.А.', ['find-all-devices', 'employee_id' => 4193], ['style' => $employee_id == 4193 ? 'font-weight:bold' : ''])?>;
+    <?= Html::a('Лучинкин А.В.', ['find-all-devices', 'employee_id' => 3695], ['style' => $employee_id == 3695 ? 'font-weight:bold' : ''])?>;
+    <?= Html::a('Ярцев Е.А.', ['find-all-devices', 'employee_id' => 4446], ['style' => $employee_id == 4446 ? 'font-weight:bold' : ''])?>;
+    <?= Html::a('Важин Ю.А.', ['find-all-devices', 'employee_id' => 3133], ['style' => $employee_id == 3133 ? 'font-weight:bold' : ''])?>;
+    <?= Html::a('Все', ['find-all-devices'], ['style' => empty($employee_id) ? 'font-weight:bold' : ''])?>;
     </p>
     <div class="find-all-devices">
         <h3>
@@ -36,7 +36,7 @@ use yii\widgets\Pjax;
             echo 'Все';
         ?>
         </h3>
-        <h4> Закрепленные устройства: </h4>
+        <h4> Устройства на складе: </h4>
 
         <?php
 
@@ -61,9 +61,13 @@ use yii\widgets\Pjax;
             'layout' => "{items}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                ['attribute' => 'employee_id', 'label' => 'ID Сотрудника'],
+                //['attribute' => 'employee_id', 'label' => 'ID Сотрудника'],
                 ['attribute' => 'workplace_id', 'label' => 'ID РМ'],
-                ['attribute' => 'workplaces_title', 'label' => 'Рабочее место'],
+                ['attribute' => 'workplaces_title', 'label' => 'Зона хранения',
+                    'content' => function($model){
+                        $res = str_replace('Зона хранения', '', $model['workplaces_title']);
+                        return '<b>'.$res.'</b>';
+                    }],
                 ['attribute' => 'id', 'label' => 'ID Устройства'],
                 ['attribute' => 'title', 'label' => 'Тип Устройства'],
                 'device_note',
