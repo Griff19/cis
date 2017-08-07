@@ -14,11 +14,12 @@ use yii\widgets\Pjax;
     <div class="img-thumbnail" style="margin-top: 20px">
         <?php
         $key = md5('workplace' . 'find-all-devices');
-        echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '200px', 'alt' => 'Отсутствует изображение']) . '<br>';
+        echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '350px', 'alt' => 'Отсутствует изображение']) . '<br>';
         if (Yii::$app->user->can('admin'))
             echo Html::a('Изменить', ['images/index',
                 'owner' => $key,
-                'target' => 'devices/find-all-devices?employee_id=' . $employee_id]);
+                //'target' => 'devices/find-all-devices?employee_id=' . $employee_id]);
+                'target' => 'devices/find-all-devices']);
         ?>
     </div>
     <p> Выборка по:
@@ -61,7 +62,6 @@ use yii\widgets\Pjax;
             'layout' => "{items}",
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
-                //['attribute' => 'employee_id', 'label' => 'ID Сотрудника'],
                 ['attribute' => 'workplace_id', 'label' => 'ID РМ'],
                 ['attribute' => 'workplaces_title', 'label' => 'Зона хранения',
                     'content' => function($model){

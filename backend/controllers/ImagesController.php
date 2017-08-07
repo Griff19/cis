@@ -75,7 +75,7 @@ class ImagesController extends Controller
             $model->file = UploadedFile::getInstance($model, 'file');
             if($model->file){
                 $fileName = $model->file->baseName;
-                $fileName = md5($fileName);
+                $fileName = md5($fileName . time());
                 if($model->file->saveAs('images/'. $fileName .'.'. $model->file->extension)) {
                     $model->linkfile = 'images/'. $fileName .'.'. $model->file->extension;
 
