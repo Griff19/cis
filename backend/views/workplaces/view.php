@@ -236,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return [
                         'class' => 'info',
                         'id' => 'row'.$model->id,
-                        'data-target' => '/admin/devices/view-table-comp?id=' . $model->id
+                        'data-target' => '/admin/devices/view-table-comp?id_par=' . $model->id
                     ];
                 } else {
                     return '';

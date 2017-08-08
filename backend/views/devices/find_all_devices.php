@@ -14,7 +14,7 @@ use yii\widgets\Pjax;
     <div class="img-thumbnail" style="margin-top: 20px">
         <?php
         $key = md5('workplace' . 'find-all-devices');
-        echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '350px', 'alt' => 'Отсутствует изображение']) . '<br>';
+        echo Html::img('/admin/' . Images::getLinkfile($key), ['height' => '350px', 'alt' => 'Отсутствует изображение']) . '<br>';
         if (Yii::$app->user->can('admin'))
             echo Html::a('Изменить', ['images/index',
                 'owner' => $key,
@@ -41,7 +41,7 @@ use yii\widgets\Pjax;
 
         <?php
 
-        //var_dump($arrParent);
+        //Настраиваем колонки таблицы
 
         $col1 = [
             'dataProvider' => $deviceProvider,

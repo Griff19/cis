@@ -31,11 +31,11 @@ class ImagesController extends Controller
     }
 
     /**
-     * Lists all Images models.
+     * Список изображений
      * если $owner установлен то выводится список с возможностью выбора изображения
      * @return mixed
      */
-    public function actionIndex($owner = null, $owner_id = null, $target = null)
+    public function actionIndex($owner = null, $owner_id = null)
     {
         $searchModel = new ImagesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

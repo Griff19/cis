@@ -45,7 +45,7 @@ Modal::end();
             <ul class="dropdown-menu">
                 <li><?= Html::a('Список устройств', ['devices/index']) ?></li>
                 <li><?= Html::a('Поиск по рабочему месту и сотруднику', ['site/admin_workplace']) ?></li>
-                <li><?= Html::a('Все мои устройства...', [
+                <li><?= Html::a('Мои устройства на складе...', [
                         'devices/find-all-devices',
                         'employee_id' => User::findOne(Yii::$app->user->id)->employee_id]) ?></li>
             </ul>
