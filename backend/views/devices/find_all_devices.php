@@ -7,19 +7,30 @@ use yii\helpers\Html;
 use backend\models\Images;
 use backend\models\Employees;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+
+Modal::begin([
+    'id' => 'modalImg',
+    'size' => 'modal-lg'
+]);
+$key = md5('workplace' . 'find-all-devices');
+echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '100%', 'alt' => 'Отсутствует изображение']);
+Modal::end();
 
 ?>
 
 <div style="margin: 5px">
     <div class="img-thumbnail" style="margin-top: 20px">
         <?php
-        $key = md5('workplace' . 'find-all-devices');
-        echo Html::img('/admin/' . Images::getLinkfile($key), ['height' => '350px', 'alt' => 'Отсутствует изображение']) . '<br>';
+        //$key = md5('workplace' . 'find-all-devices');
+        $img = Html::img('/admin/' . Images::getLinkfile($key), ['height' => '350px', 'alt' => 'Отсутствует изображение']) . '<br>';
+        echo Html::a($img, '#', ['data-toggle' => 'modal', 'data-target' => '#modalImg']);
         if (Yii::$app->user->can('admin'))
             echo Html::a('Изменить', ['images/index',
                 'owner' => $key,
                 //'target' => 'devices/find-all-devices?employee_id=' . $employee_id]);
                 'target' => 'devices/find-all-devices']);
+        echo '<span style="float:right">Нажмите чтобы увеличить.</span>'
         ?>
     </div>
     <p> Выборка по:
