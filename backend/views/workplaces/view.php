@@ -9,6 +9,9 @@ use backend\models\Workplaces;
 use backend\models\Images;
 use backend\models\DeviceType;
 use backend\models\Devices;
+use backend\assets\MapAsset;
+
+MapAsset::register($this);
 
 /**
  * @var $this yii\web\View
@@ -22,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="workplaces-view" style="position: relative">
     <div class="row">
-        <div class="col-xs-12 col-md-9 col-md-push-3">
+        <div class="col-xs-12 col-md-4 col-md-push-8">
 
             <h1><?= Html::encode($this->title) ?></h1>
 
@@ -31,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
                     echo Html::a('Удалить', ['delete', 'id' => $model->id], [
                         'class' => 'btn btn-danger',
-                        'style' => 'float:right',
+                        //'style' => 'float:right',
                         'data' => [
                             'confirm' => 'Уверенны что хотите удалить это рабочее место?',
                             'method' => 'post',
@@ -104,8 +107,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             </div>
         </div>
-        <div class="col-xs-12 col-md-3 col-md-pull-9">
-
+        <div class="col-xs-12 col-md-8 col-md-pull-4">
+            <!--
             <div class="img-thumbnail" style="margin-top: 20px">
                 <?php
                 $key = md5('workplace' . $model->id);
@@ -114,6 +117,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Html::a('Изменить', ['images/index', 'owner' => $key, 'owner_id' => $model->id, 'target' => 'workplaces/view']);
                 ?>
             </div>
+            -->
+            <div id="map" class="map"></div>
         </div>
     </div>
 
@@ -279,3 +284,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </div>
 </div>
+
+<script type="text/javascript">
+    var points = new Set();
+    points
+        .add({y: 0, x: 0, balloonContent: '<?= $model->workplaces_title ?>', preset: 'islands#darkOrangeDotIcon'})
+</script>
+
+

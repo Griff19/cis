@@ -198,3 +198,12 @@ a.ok:hover {
     text-decoration: underline;
 }
 
+.map {
+    width: 800px;
+    height: 400px;
+    padding: 0;
+    margin: 0;
+}
+
+
+
