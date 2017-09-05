@@ -3,7 +3,7 @@
  * сейчас обрабатывает не загруженные изображения заменяя стандартную картинку
  */
 $("img").error(function () {
-    $(this).attr("src", "../img/noimage.jpg");
+    $(this).attr("src", "/admin/img/noimage.jpg");
 });
 
 
