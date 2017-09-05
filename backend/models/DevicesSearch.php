@@ -227,7 +227,7 @@ class DevicesSearch extends Devices
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false
+            'pagination' => ['pageSize' => 100],
         ]);
 
         $query->joinWith('deviceType');
