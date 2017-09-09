@@ -18,8 +18,10 @@ class NetintsSearch extends Netints
     public function rules()
     {
         return [
+            [['mac'], 'match', 'pattern' => '/([0-9a-fA-F]{2}([:-]|$)){6}$|([0-9a-fA-F]{4}([.]|$)){3}/'],
+            [['mac'], 'string', 'max' => 17],
             [['id', 'type', 'port_count', 'device_id'], 'integer'],
-            [['mac', 'vendor', 'ipaddr', 'domain_name'], 'safe'],
+            [['vendor', 'ipaddr', 'domain_name'], 'safe'],
         ];
     }
 
@@ -53,11 +55,18 @@ class NetintsSearch extends Netints
 
         $this->load($params);
 
+        if ($this->mac) {
+            $dataProvider->setSort(['defaultOrder' => ['mac' => SORT_ASC]]);
+            $this->mac = str_replace('_', '0', $this->mac);
+        }
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
+
+
         $query->joinWith('devices');
         $query->joinWith('deviceType');
         $query->andFilterWhere([
@@ -67,7 +76,7 @@ class NetintsSearch extends Netints
             'device_id' => $this->device_id,
         ]);
 
-        $query->andFilterWhere(['like', 'mac', $this->mac])
+        $query->andFilterWhere(['>=', 'netints.mac', $this->mac])
             ->andFilterWhere(['like', 'vendor', $this->vendor])
             ->andFilterWhere(['like', 'ipaddr', $this->ipaddr])
             ->andFilterWhere(['like', 'domain_name', $this->domain_name]);

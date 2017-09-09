@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\Netints;
+use yii\widgets\MaskedInput;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\NetintsSearch */
@@ -23,11 +24,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'mac',
+            ['attribute' => 'mac',
+                'filter' => MaskedInput::widget([
+                    'name' => 'NetintsSearch[mac]',
+                    'mask' => '**:**:**:**:**:**',
+
+                ]),
+
+            ],
             'ipaddr',
             'domain_name',
             'port_count',
