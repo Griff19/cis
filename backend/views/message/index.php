@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'rowOptions' => function($model) {
-            $option = '';
+            $option = null;
             if ($model->status == Message::STATUS_CREATED)
                 $option = ['class' => 'danger'];
             return $option;

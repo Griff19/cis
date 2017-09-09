@@ -61,7 +61,7 @@ echo GridView::widget([
         'maxButtonCount' => 20
     ],
     'rowOptions' => function ($model) {
-        return $model->status == 0 ? ['class' => 'danger'] : '';
+        return $model->status == 0 ? ['class' => 'danger'] : null;
     },
     'columns' => [
         ['class' => 'yii\grid\SerialColumn'],

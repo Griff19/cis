@@ -244,7 +244,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'data-target' => '/admin/devices/view-table-comp?id_par=' . $model->id
                     ];
                 } else {
-                    return '';
+                    return null;
                 }
             },
             'layout' => "{items}",

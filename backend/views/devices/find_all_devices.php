@@ -67,7 +67,7 @@ Modal::end();
                         'data-target' => '/admin/devices/view-table-comp?id_par=' . $model['id'] . '&mode=0'
                     ];
                 } else {
-                    return '';
+                    return null;
                 }
             },
             'layout' => "{items}",

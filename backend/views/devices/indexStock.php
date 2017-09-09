@@ -71,7 +71,7 @@ if($target && $param) $query = Yii::$app->request->queryString; else $query = nu
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'rowOptions' => function (Devices $model) {
-            $res = '';
+            $res = null;
 
             if ($model->fake_device == Devices::DEVICE_FAKE)
                 $res = ['class' => 'info'];

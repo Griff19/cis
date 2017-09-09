@@ -42,7 +42,7 @@ use yii\bootstrap\Nav;
             } elseif ($value == InventoryActs::ADDITION_DEV || $value == InventoryActs::REPLACE_DEV) {
                 return ['class' => 'info'];
             } else {
-                return '';
+                return null;
             }
         },
         'columns' => [

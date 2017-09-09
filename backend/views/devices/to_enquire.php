@@ -80,7 +80,7 @@ if ($target == 'dt-enquiry-devices/create2') $mess = 'Выбраны устро�
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
         'rowOptions' => function (Devices $model) {
-            $res = '';
+            $res = null;
 
             if ($model->fake_device == 2)
                 $res = ['class' => 'danger'];

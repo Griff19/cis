@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'rowOptions' => function ($model) {
-            $res = '';
+            $res = null;
             if ($model->status == InventoryActs::DOC_SAVED || $model->status == InventoryActs::DOC_PRINTED)
                 $res = ['class' => 'warning'];
             elseif ($model->status == InventoryActs::DOC_AGREE)

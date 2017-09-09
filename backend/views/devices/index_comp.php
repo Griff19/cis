@@ -91,7 +91,7 @@ if($target && $param) {
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'rowOptions' => function (Devices $model) {
-            $res = '';
+            $res = null;
 
             if ($model->workplace_id == 127)
                 $res = ['class' => 'danger'];

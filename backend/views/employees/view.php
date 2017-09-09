@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'layout' => "{items}",
         'rowOptions' => function ($numbers){
             /** @var $numbers \backend\models\CellNumbers */
-            return $numbers->status == 1 ? ['class' => 'success'] : '';
+            return $numbers->status == 1 ? ['class' => 'success'] : null;
         },
         'columns' => $columns,
     ]); ?>
@@ -115,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //'filterModel' => $emailSearch,
         'layout' => "{items}",
         'rowOptions' => function ($model) {
-            return $model->status == 1 ? ['class' => 'success'] : '';
+            return $model->status == 1 ? ['class' => 'success'] : null;
         },
         'columns' => $columns
     ]); ?>
