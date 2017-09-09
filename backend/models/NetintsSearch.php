@@ -54,7 +54,8 @@ class NetintsSearch extends Netints
         ]);
 
         $this->load($params);
-
+        //если введен mac то сортируем таблицу и приводим маску ввода к правильному формату
+        //чтобы можно было искать только по первым символам
         if ($this->mac) {
             $dataProvider->setSort(['defaultOrder' => ['mac' => SORT_ASC]]);
             $this->mac = str_replace('_', '0', $this->mac);
