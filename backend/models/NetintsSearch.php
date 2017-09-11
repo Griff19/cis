@@ -36,9 +36,7 @@ class NetintsSearch extends Netints
 
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params, $id_dev = 0)

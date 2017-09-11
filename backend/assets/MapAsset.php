@@ -15,6 +15,5 @@ class MapAsset extends AssetBundle
     public $js = [
         'https://api-maps.yandex.ru/2.1/?lang=ru_RU',
         'js/get_map.js',
-        'js/map_hide.js',
     ];
 }
