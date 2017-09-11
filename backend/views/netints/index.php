@@ -11,6 +11,7 @@ use yii\widgets\MaskedInput;
 
 $this->title = 'Сетевые интерфейсы';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="netints-index">
 
@@ -54,3 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+
+<script type="text/javascript">
+    $('[name="NetintsSearch[mac]"]').mask('**:**:**:**:**:**');
+</script>
