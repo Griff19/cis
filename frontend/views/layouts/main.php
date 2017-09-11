@@ -30,7 +30,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'Алтайская Буренка',
+        'brandLabel' => Html::img('/admin/img/burenka.png', ['width' => '32px', 'style' => 'display: inline']) . ' Корпоративная Информационная Система',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
