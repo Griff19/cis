@@ -286,6 +286,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script type="text/javascript">
+    var floor = 1;
     var points = new Set();
     points
         .add({y: 0, x: 0, balloonContent: '<?= $model->workplaces_title ?>', preset: 'islands#darkOrangeDotIcon'})
