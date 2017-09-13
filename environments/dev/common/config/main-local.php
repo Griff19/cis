@@ -1,20 +1,27 @@
 <?php
 return [
+    'name' => 'DEV! КИС Алтайская Буренка',
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=yii2advanced',
-            'username' => 'root',
-            'password' => '',
+            'dsn' => 'pgsql:host=192.168.0.7;dbname=cis_dev',
+            'username' => 'cis_dev',
+            'password' => 'uZp_3eZwD8oT',
             'charset' => 'utf8',
+            'enableSchemaCache' => true,
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            // send all mails to a file by default. You have to set
-            // 'useFileTransport' to false and configure a transport
-            // for the mailer to send real emails.
-            'useFileTransport' => true,
+            'useFileTransport' => false,
+            'transport' => [
+                'class' => 'Swift_SmtpTransport',
+                'host' => 'mail.nic.ru',
+                'username' => 'portal@altburenka.ru',
+                'password' => 'M3vJhNa39J9Vk',
+                'port' => '465',
+                'encryption' => 'ssl'
+            ]
         ],
     ],
 ];

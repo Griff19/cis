@@ -14,7 +14,9 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'modules' => [
-       
+        'task' => [
+            'class' => 'app\modules\tasks\task',
+        ],
     ],
     'homeUrl' => '/admin',
     'components' => [
