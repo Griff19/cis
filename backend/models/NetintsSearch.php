@@ -65,7 +65,6 @@ class NetintsSearch extends Netints
             return $dataProvider;
         }
 
-
         $query->joinWith('devices');
         $query->joinWith('deviceType');
         $query->andFilterWhere([

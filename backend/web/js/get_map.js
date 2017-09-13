@@ -4,14 +4,13 @@ ymaps.ready(function () {
     var LAYER_NAME = 'user#layer',
         MAP_TYPE_NAME = 'user#customMap',
         
-        TILES_PATH = '/admin/tails',
+        TILES_PATH = '/admin/map/floor' + floor,
        
-        MAX_ZOOM = 10,
-        PIC_WIDTH = 4340,
-        PIC_HEIGHT = 2142;
+        MAX_ZOOM = 6,
+        PIC_WIDTH = 9560,
+        PIC_HEIGHT = 7214;
 
     //Создаем свой слой.
-
     var Layer = function () {
         var layer = new ymaps.Layer(TILES_PATH + '/%z/tile-%x-%y.png', {
             // Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
@@ -20,7 +19,7 @@ ymaps.ready(function () {
         });
         // Указываем доступный диапазон масштабов для данного слоя.
         layer.getZoomRange = function () {
-            return ymaps.vow.resolve([0, 10]);
+            return ymaps.vow.resolve([0, 6]);
         };
         // Добавляем свои копирайты.
         layer.getCopyrights = function () {
@@ -31,7 +30,6 @@ ymaps.ready(function () {
     // Добавляем в хранилище слоев свой конструктор.
     ymaps.layer.storage.add(LAYER_NAME, Layer);
 
-
     var mapType = new ymaps.MapType(MAP_TYPE_NAME, [LAYER_NAME]);
     // Сохраняем тип в хранилище типов.
     ymaps.mapType.storage.add(MAP_TYPE_NAME, mapType);
@@ -41,7 +39,7 @@ ymaps.ready(function () {
         //Создаем карту, указав свой новый тип карты.
         map = new ymaps.Map('map', {
             center: [0, 0],
-            zoom: 9,
+            zoom: 5,
             controls: ['zoomControl'],
             type: MAP_TYPE_NAME
         }, {
