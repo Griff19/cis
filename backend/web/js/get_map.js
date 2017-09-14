@@ -1,6 +1,7 @@
 var map;
 ymaps.ready(function () {
 
+
     var LAYER_NAME = 'user#layer',
         MAP_TYPE_NAME = 'user#customMap',
         
@@ -34,11 +35,19 @@ ymaps.ready(function () {
     // Сохраняем тип в хранилище типов.
     ymaps.mapType.storage.add(MAP_TYPE_NAME, mapType);
 
+    var centerY = 0;
+    var centerX = 0;
+
+    if (typeof (points) != "undefined") {
+        centerY = points[0].y;
+        centerX = points[0].x;
+    };
+
     // Вычисляем размер всех тайлов на максимальном зуме.
     var worldSize = Math.pow(2, MAX_ZOOM) * 256,
         //Создаем карту, указав свой новый тип карты.
         map = new ymaps.Map('map', {
-            center: [0, 0],
+            center: [centerY, centerX],
             zoom: 5,
             controls: ['zoomControl'],
             type: MAP_TYPE_NAME
@@ -68,5 +77,12 @@ ymaps.ready(function () {
             map.geoObjects.add(point);
         }
     }
+
+    map.events.add('click', function (e) {
+        // Получение координат щелчка
+        var coords = e.get('coords');
+        $('#coordinate-y').val(coords[0]);
+        $('#coordinate-x').val(coords[1]);
+    });
 });
 

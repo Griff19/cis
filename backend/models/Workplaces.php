@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\db\Query;
 use yii\data\ActiveDataProvider;
+use backend\models\Coordinate;
 
 
 /**
@@ -19,6 +20,7 @@ use yii\data\ActiveDataProvider;
  * @property Employees[] owner        Владелец рабочего места
  * @property mixed inventory          Связь с документами "Акт инвентаризации"
  * @property string summary           Сводная информация о рабочем месте
+ * @property Coordinate[] coordinate    Координаты рабочего места на карте
  */
 class Workplaces extends \yii\db\ActiveRecord
 {
@@ -123,6 +125,14 @@ class Workplaces extends \yii\db\ActiveRecord
      */
     public function getInventory(){
         return $this->hasMany(InventoryActs::className(), ['workplace_id' => 'id'])->orderBy('act_date DESC');
+    }
+
+	/**
+	 * Связываем рабочее место и координаты
+	 * @return \yii\db\ActiveQuery
+	 */
+    public function getCoordinate() {
+    	return $this->hasMany(Coordinate::className(), ['workplace_id' => 'id']);
     }
 
     /**

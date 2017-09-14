@@ -103,7 +103,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php if (Yii::$app->user->can('admin')) { ?>
                     <br>
                     <?= Html::a('Добавить пользователя', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
+	                <br>
+                    <?= Html::a('<<< Установить координаты', [
+                        'coordinate/create',
+                        'id_wp' => $model->id,
+                        'target' => 'workplaces/view',
+                        'target_id' => $model->id],
+                        [
+                        'class' => 'btn btn-default',
+                        'style' => 'margin-top: 10px']) ?>
                 <?php } ?>
+
+
 
             </div>
         </div>
@@ -286,10 +297,16 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script type="text/javascript">
-    var floor = 1;
-    var points = new Set();
-    points
-        .add({y: 0, x: 0, balloonContent: '<?= $model->workplaces_title ?>', preset: 'islands#darkOrangeDotIcon'})
+    <?php if ($model->coordinate) { ?>
+        var floor = <?= $model->coordinate[0]->floor ?>;
+        var points = [];
+
+        <?php foreach ( $model->coordinate as $coordinate) {?>
+            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#darkOrangeDotIcon'})
+        <?php } ?>
+    <?php } else { ?>
+        var floor = 1;
+    <?php } ?>
 </script>
 
 
