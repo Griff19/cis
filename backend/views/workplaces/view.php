@@ -104,17 +104,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     <br>
                     <?= Html::a('Добавить пользователя', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
 	                <br>
-                    <?= Html::a('<<< Установить координаты', [
-                        'coordinate/create',
-                        'id_wp' => $model->id,
-                        'target' => 'workplaces/view',
-                        'target_id' => $model->id],
-                        [
-                        'class' => 'btn btn-default',
-                        'style' => 'margin-top: 10px']) ?>
+                    <?= Html::a('<<< Установить координаты',
+                        ['coordinate/create', 'id_wp' => $model->id],
+                        ['class' => 'btn btn-default', 'style' => 'margin-top: 10px'])
+                    ?>
                 <?php } ?>
-
-
 
             </div>
         </div>

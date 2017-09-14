@@ -27,4 +27,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script>
     var floor = <?= $model->floor ?>;
+    var edit = true;
 </script>

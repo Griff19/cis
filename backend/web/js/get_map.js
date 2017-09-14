@@ -48,9 +48,10 @@ ymaps.ready(function () {
         //Создаем карту, указав свой новый тип карты.
         map = new ymaps.Map('map', {
             center: [centerY, centerX],
-            zoom: 5,
+            zoom: 4,
             controls: ['zoomControl'],
-            type: MAP_TYPE_NAME
+            type: MAP_TYPE_NAME,
+
         }, {
 
             // Задаем в качестве проекции Декартову. При данном расчёте центр изображения будет лежать в координатах [0, 0].
@@ -63,6 +64,8 @@ ymaps.ready(function () {
             // projection: new ymaps.projection.Cartesian([[PIC_HEIGHT - worldSize, 0], [PIC_HEIGHT, worldSize]], [false, false]),
             // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
         });
+    map.cursors.push('crosshair');
+
 
     //получаем метки из представления где будет отображаться карта
     if (typeof (points) != "undefined") {
@@ -78,11 +81,28 @@ ymaps.ready(function () {
         }
     }
 
-    map.events.add('click', function (e) {
-        // Получение координат щелчка
-        var coords = e.get('coords');
-        $('#coordinate-y').val(coords[0]);
-        $('#coordinate-x').val(coords[1]);
-    });
+    if (typeof (edit) != "undefined") {
+        var myPlacemark;
+        map.events.add('click', function (e) {
+            // Получение координат щелчка
+            var coords = e.get('coords');
+            $('#coordinate-y').val(coords[0]);
+            $('#coordinate-x').val(coords[1]);
+
+            if (myPlacemark) {
+                myPlacemark.geometry.setCoordinates(coords);
+            }
+            // Если нет – создаем.
+            else {
+                myPlacemark = new ymaps.Placemark(coords, {
+                    iconCaption: 'поиск...'
+                }, {
+                    preset: 'islands#dotIcon',
+                    draggable: true
+                });
+                map.geoObjects.add(myPlacemark);
+            }
+        });
+    }
 });
 

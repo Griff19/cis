@@ -61,20 +61,25 @@ class CoordinateController extends Controller
      * При совпадении идентификатора рабочего места - старая точка удаляется
      * @return mixed
      */
-    public function actionCreate($id_wp = null, $floor = 1, $target = 'view', $target_id = null)
+    public function actionCreate($id_wp = null, $floor = 1, $mod = 0)
     {
         $model = new Coordinate();
-		$model->floor = $floor;
-		$model->workplace_id = $id_wp;
+        $model->workplace_id = $id_wp;
+        $model->floor = $floor;
+		$old_model = Coordinate::findOne(['workplace_id' => $id_wp]);
 
-        if ($model->load(Yii::$app->request->post())) {
-			$old_model = $this->findModel(['workplace_id' => $id_wp]);
-			if ($old_model) {
-				$old_model->delete();
-			}
-	        $model->save();
-
-			return $this->redirect([$target, 'id' => $target_id ? : $model->id]);
+		if ($model->load(Yii::$app->request->post())) {
+	        if ($model->save())
+	        {
+		        if ($old_model) {$old_model->delete();}
+	        	if ($mod == 1) {
+			        return $this->redirect(['index']);
+		        } else {
+			        return $this->redirect(['workplaces/view', 'id' => $model->workplace_id]);
+		        }
+	        } else {
+				Yii::$app->session->setFlash('error', serialize($model->errors));
+	        }
         } else {
             return $this->render('create', [
                 'model' => $model,
