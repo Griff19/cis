@@ -72,7 +72,7 @@ class CoordinateController extends Controller
 	        if ($model->save())
 	        {
 		        if ($old_model) {$old_model->delete();}
-	        	if ($mod == 1) {
+	        	if ($mod == 1 || $id_wp == null) {
 			        return $this->redirect(['index']);
 		        } else {
 			        return $this->redirect(['workplaces/view', 'id' => $model->workplace_id]);

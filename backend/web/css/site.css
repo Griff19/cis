@@ -199,10 +199,10 @@ a.ok:hover {
 }
 
 .map {
-    width: 800px;
+    width: 100%;
     height: 400px;
     padding: 0;
-    margin: 0;
+    margin: 0 0 10px;
     outline: auto;
 }
 
