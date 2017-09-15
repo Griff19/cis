@@ -21,6 +21,7 @@ use backend\models\Coordinate;
  * @property mixed inventory          Связь с документами "Акт инвентаризации"
  * @property string summary           Сводная информация о рабочем месте
  * @property Coordinate[] coordinate    Координаты рабочего места на карте
+ * @property Coordinate[] allCoordinate Все координаты доступные на данном слое
  */
 class Workplaces extends \yii\db\ActiveRecord
 {
@@ -133,6 +134,13 @@ class Workplaces extends \yii\db\ActiveRecord
 	 */
     public function getCoordinate() {
     	return $this->hasMany(Coordinate::className(), ['workplace_id' => 'id']);
+    }
+
+	/**
+	 * @return array|\yii\db\ActiveRecord[]
+	 */
+    public function getAllCoordinate($floor) {
+    	return Coordinate::find()->where(['workplace_id' => 0])->andWhere(['floor' => $floor])->all();
     }
 
     /**

@@ -285,22 +285,29 @@ $this->params['breadcrumbs'][] = $this->title;
         echo GridView::widget($col1);
         $this->registerJs('CollapseTable();');
         \yii\widgets\Pjax::end();
+
+
         ?>
+
 
     </div>
 </div>
 
 <script type="text/javascript">
+    var points = [];
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
-        var points = [];
-
         <?php foreach ( $model->coordinate as $coordinate) {?>
-            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#darkOrangeDotIcon'})
+            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#blueDotIcon'})
         <?php } ?>
     <?php } else { ?>
         var floor = 1;
+    <?php }
+    $allCoord = $model->getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1);
+    foreach ( $allCoord as $coordinate ){ ?>
+        points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#darkOrangeDotIcon'})
     <?php } ?>
 </script>
+
 
 
