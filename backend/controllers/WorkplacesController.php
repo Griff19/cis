@@ -75,25 +75,30 @@ class WorkplacesController extends Controller
         ]);
     }
 
-    /**
-     * Выводим подробности по рабочему месту.
-     * @param integer $id
-     * @return mixed
-     */
+	/**
+	 * Выводим подробности по рабочему месту.
+	 * @param integer $id
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id)
     {
-        $searchEmployeeModel = new WpOwnersSearch();
+        $model = $this->findModel($id);
+        //Аудитору запрещаем просмотр Буланихи
+        if (Yii::$app->user->can('auditor') && $model->branch_id == 1){
+	        throw new NotFoundHttpException('Запрашиваемая страница не доступна.');
+        }
+    	$searchEmployeeModel = new WpOwnersSearch();
         $employeeProvider = $searchEmployeeModel->search(Yii::$app->request->queryParams, $id);
 
         $searchDeviceModel = new DevicesSearch();
         $deviceProvider = $searchDeviceModel->searchDeviceOnWp(Yii::$app->request->queryParams, $id);
-        //$deviceProvider = $searchDeviceModel->searchInventoryData(Yii::$app->request->queryParams, $id);
+
         $searchVoip = new VoipnumbersSearch();
         $voipProvider = $searchVoip->search(Yii::$app->request->queryParams, 0, $id);
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            //'searchEmployeeModel' => $searchEmployeeModel,
+            'model' => $model,
             'employeeProvider' => $employeeProvider,
             'searchDeviceModel' => $searchDeviceModel,
             'deviceProvider' => $deviceProvider,

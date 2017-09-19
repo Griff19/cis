@@ -53,6 +53,10 @@ class WorkplacesSearch extends Workplaces
         $query->joinWith('voips');
         $query->joinWith('netints');
         $query->joinWith('inventory');
+		//Аудитору не показываем Буланиху
+        if (Yii::$app->user->can('auditor')){
+        	$query->where(['>', 'workplaces.branch_id', 1]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -105,10 +109,10 @@ class WorkplacesSearch extends Workplaces
         if ($this->inventoryDate) $query->andFilterWhere(['<=','act_date', $this->inventoryDate]);
         //if ($this->inventoryDate) $query->andFilterWhere(['<=','act_date', Yii::$app->formatter->asDate($this->inventoryDate, 'yyyy-mm-dd')]);
 
-        $query->andFilterWhere(['like', 'LOWER(workplaces_title)', mb_strtolower($this->workplaces_title)])
-        ->andFilterWhere(['like', 'LOWER(rooms.room_title)', mb_strtolower($this->room_id)])
-        ->andFilterWhere(['like', 'LOWER(branches.branch_title)', mb_strtolower($this->branch_id)])
-        ->andFilterWhere(['like', 'LOWER(employees.snp)', mb_strtolower($this->_owner)]);
+        $query->andFilterWhere(['ilike', 'workplaces_title', $this->workplaces_title])
+        ->andFilterWhere(['ilike', 'rooms.room_title', $this->room_id])
+        ->andFilterWhere(['ilike', 'branches.branch_title', $this->branch_id])
+        ->andFilterWhere(['ilike', 'employees.snp', $this->_owner]);
 
         return $dataProvider;
     }

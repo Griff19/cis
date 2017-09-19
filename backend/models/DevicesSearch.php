@@ -100,7 +100,13 @@ class DevicesSearch extends Devices
                 ->groupBy('d.id, device_type.title, device_type.comp,	d.brand,'
                     . 'd.model,	d.sn,	d.specification,	d.imei1,'
                     . 'd.parent_device_id,	d.workplace_id,	workplaces.workplaces_title');
+
+            if (Yii::$app->user->can('auditor')){
+		        $query->where(['>', 'workplaces.branch_id', 1]);
+	        }
         }
+
+
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

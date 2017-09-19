@@ -189,15 +189,22 @@ class DevicesController extends Controller
         ]);
     }
 
-    /**
-     * Выводим подробную информацию об устройстве вместе с данными из таблицы parameters
-     * @param integer $id
-     * @param int $id_wp Идентификатор рабочего места
-     * @return mixed
-     */
+	/**
+	 * Выводим подробную информацию об устройстве вместе с данными из таблицы parameters
+	 *
+	 * @param integer $id
+	 * @param int     $id_wp Идентификатор рабочего места
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id, $id_wp = 0)
     {
-        $param_model = Parameters::findOne(['id_device' => $id]);
+		$model = $this->findModel($id);
+		//Запрещаем Аудитору просматривать устройства Буланихи
+		if (Yii::$app->user->can('auditor') && $model->workplace->branch_id == 1){
+			throw new NotFoundHttpException('Запрашиваемой страницы не существует.');
+		}
+    	$param_model = Parameters::findOne(['id_device' => $id]);
 
         $netSearch = new NetintsSearch();
         $netProvider = $netSearch->search(Yii::$app->request->queryParams, $id);
@@ -210,7 +217,7 @@ class DevicesController extends Controller
 
         Yii::$app->session->set('id_wp', $id_wp);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
             'param_model' => $param_model,
             'voipSearch' => $voipSearch,
             'voipProvider' => $voipProvider,
