@@ -70,7 +70,11 @@ class DevicesController extends Controller
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
-
+	                [
+	                	'actions' => ['view-table-comp', 'view', 'index'],
+		                'allow' => true,
+		                'roles' => ['auditor']
+	                ],
                 ],
             ],
             'verbs' => [

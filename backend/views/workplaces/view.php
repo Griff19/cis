@@ -167,7 +167,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($voip) {
                     return Html::a($voip->secret ? '* * *' : '', '', ['title' => $voip->secret]);
                 },
-                'format' => 'raw'
+                'format' => 'raw',
+                'visible' => Yii::$app->user->can('it'),
             ],
             'description',
             'context',
@@ -238,6 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //var_dump($arrParent);
 
         $col1 = [
+            'id' => 'devices',
             'dataProvider' => $deviceProvider,
             'filterModel' => $searchDeviceModel,
             'tableOptions' => ['class' => 'table table-bordered table-hover'],
@@ -281,15 +283,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ];
         $this->registerAssetBundle('backend\assets\CollapseTableAsset');
-        \yii\widgets\Pjax::begin();
+        \yii\widgets\Pjax::begin(['id' => 'workplaces_device']);
         echo GridView::widget($col1);
         $this->registerJs('CollapseTable();');
         \yii\widgets\Pjax::end();
-
-
         ?>
-
-
     </div>
 </div>
 

@@ -5,7 +5,7 @@ use yii\db\Migration;
 /**
  * Создаем таблицы для подсистемы "Задачи"
  */
-class m170915_052950_create_task_table extends Migration
+class m180915_052950_create_task_table extends Migration
 {
     /**
      * @inheritdoc

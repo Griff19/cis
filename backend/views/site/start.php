@@ -8,8 +8,6 @@ use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Система IT';
-
 ?>
 
 <div class="row">
@@ -51,8 +49,9 @@ $this->title = 'Система IT';
 </div>
 
 <?php
-Pjax::begin();
+Pjax::begin(['id' => 'employee']);
 echo GridView::widget([
+    'id' => 'employee',
 	'dataProvider' => $dataProvider,
 	'filterModel' => $searchModel,
 	'pager' => [
@@ -80,8 +79,8 @@ echo GridView::widget([
 		'cell_number', 'voip_number', 'email_address', 'room_title',
 		[
 			'attribute' => 'workplaces_title',
-			'value' => function ($arr) {
-				return Html::a($arr['wp_id'], ['workplaces/view', 'id' => $arr['wp_id']]);
+			'value' => function ($model) {
+				return Html::a($model->wp_id, ['workplaces/view', 'id' => $model->wp_id]);
 			},
 			'format' => 'raw'
 		],

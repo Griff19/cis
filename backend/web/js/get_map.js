@@ -38,7 +38,7 @@ ymaps.ready(function () {
     var centerY = 0;
     var centerX = 0;
 
-    if (typeof (points) != "undefined") {
+    if (typeof (points) != "undefined" && points.length > 0) {
         centerY = points[0].y;
         centerX = points[0].x;
     };

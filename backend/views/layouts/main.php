@@ -54,6 +54,9 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Для сотруднков IT', 'url' => ['/site/employee-it']];
         //$menuItems[] = ['label' => 'Рабочие места', 'url' => ['/site/admin_workplace']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/workplaces']];
+    } elseif (Yii::$app->user->can('auditor')) {
+	    $menuItems[] = ['label' => 'Рабочие места', 'url' => ['workplaces/index']];
+	    $menuItems[] = ['label' => 'Список устройств', 'url' => ['devices/index']];
     }
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Логин', 'url' => ['/site/login']];
