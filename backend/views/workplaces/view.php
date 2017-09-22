@@ -4,12 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\grid\Column;
-use yii\bootstrap\Modal;
+//use yii\bootstrap\Modal;
 use backend\models\Workplaces;
 use backend\models\Images;
 use backend\models\DeviceType;
 use backend\models\Devices;
 use backend\assets\MapAsset;
+use yii\widgets\Pjax;
 
 MapAsset::register($this);
 
@@ -283,10 +284,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ];
         $this->registerAssetBundle('backend\assets\CollapseTableAsset');
-        \yii\widgets\Pjax::begin(['id' => 'workplaces_device']);
+        Pjax::begin(['id' => 'workplaces_device']);
         echo GridView::widget($col1);
         $this->registerJs('CollapseTable();');
-        \yii\widgets\Pjax::end();
+        Pjax::end();
         ?>
     </div>
 </div>
@@ -296,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
         <?php foreach ( $model->coordinate as $coordinate) {?>
-            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#blueDotIcon'})
+            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $model->workplaces_title . '<br>' .$coordinate->balloon ?>', preset: 'islands#blueDotIcon'})
         <?php } ?>
     <?php } else { ?>
         var floor = 1;

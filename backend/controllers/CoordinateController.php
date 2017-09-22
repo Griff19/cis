@@ -74,6 +74,8 @@ class CoordinateController extends Controller
 		        if ($old_model) {$old_model->delete();}
 	        	if ($mod == 1 || $id_wp == null) {
 			        return $this->redirect(['index']);
+		        } elseif ($mod == 2){
+					return $this->redirect(['workplaces/list-unset']);
 		        } else {
 			        return $this->redirect(['workplaces/view', 'id' => $model->workplace_id]);
 		        }
@@ -83,6 +85,7 @@ class CoordinateController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+	            'mod' => $mod
             ]);
         }
     }

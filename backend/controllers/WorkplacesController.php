@@ -36,7 +36,7 @@ class WorkplacesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete', 'readfile', 'uploadform'],
+                        'actions' => ['create','update','delete', 'readfile', 'uploadform', 'list-unset'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -208,6 +208,16 @@ class WorkplacesController extends Controller
         return $res;
     }
 
+    public function actionListUnset()
+    {
+    	$search = new WorkplacesSearch();
+    	$data = $search->searchUnsetCoordinate(Yii::$app->request->queryParams);
+
+    	return $this->render('unset_coord', [
+    		'dataProvider' => $data,
+		    'searchModel' => $search,
+	    ]);
+    }
     /**
      * Finds the Workplaces model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

@@ -48,6 +48,8 @@ class CoordinateSearch extends Coordinate
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+	        'pagination' => false,
+	        'sort' => ['defaultOrder' => ['y' => SORT_DESC]]
         ]);
 
         $this->load($params);

@@ -38,10 +38,8 @@ class WorkplacesSearch extends Workplaces
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
+     * Создаем провайдер для представления списка рабочих мест
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
     public function search($params)
@@ -115,5 +113,31 @@ class WorkplacesSearch extends Workplaces
         ->andFilterWhere(['ilike', 'employees.snp', $this->_owner]);
 
         return $dataProvider;
+    }
+
+	/**
+	 * Готовим провайдер для отображения рабочих мест без установленных координат
+	 * @param $params
+	 * @return ActiveDataProvider
+	 */
+    public function searchUnsetCoordinate($params)
+    {
+    	$query = Workplaces::find();
+    	$query->joinWith('coordinate');
+    	$query->where(['coordinate.id' => null]);
+
+    	$dataProvider = new ActiveDataProvider([
+    		'query' => $query,
+		    'pagination' => false,
+		    'sort' => ['defaultOrder' => ['branch_id' => SORT_ASC, 'id' => SORT_ASC]],
+	    ]);
+
+    	$this->load($params);
+
+    	if (!$this->validate()) {
+    		return $dataProvider;
+	    }
+
+	    return $dataProvider;
     }
 }

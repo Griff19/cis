@@ -31,6 +31,7 @@ $this->title = 'Карта сайта';
     var floor = <?= $floor ?>;
     <?php foreach ( $dataProvider->models as $coordinate) {
         $workplace = Workplaces::findOne($coordinate->workplace_id);
+        $title = '';
         if ($workplace->owner) {
             if ($workplace->owner[0]){
                 $title = $workplace->owner[0]->snp . '<br>' . $workplace->owner[0]->job_title;
