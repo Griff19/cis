@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Неисправное оборудование', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=неисправное+оборудование'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=потерянные'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/cross.png',['width' => '16px']) . 'Сбросить фильтр', ['index?' . $query], ['class' => 'btn btn-default'])?>
-        <?= Html::a('Найти устройства без координат', ['list-unset'], ['class' => 'btn btn-info'])?>
+        <?= Html::a('Найти РМ без координат', ['list-unset'], ['class' => 'btn btn-info'])?>
     </p>
 
     <?php
