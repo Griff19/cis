@@ -21,6 +21,7 @@ class CoordinateSearch extends Coordinate
             [['id', 'workplace_id', 'floor'], 'integer'],
 	        [['x', 'y'], 'number'],
             [['balloon', 'preset', 'comment'], 'safe'],
+	        ['snp', 'string']
         ];
     }
 
@@ -41,6 +42,10 @@ class CoordinateSearch extends Coordinate
     public function search($params, $floor)
     {
         $query = Coordinate::find();
+        $query->joinWith('workplace')
+            ->leftJoin('wp_owners', 'wp_owners.workplace_id = workplaces.id')
+	        ->leftJoin('employees', 'employees.id = wp_owners.employee_id');
+
 
         if ($floor) { $query->where(['floor' => $floor]); }
 
@@ -71,7 +76,8 @@ class CoordinateSearch extends Coordinate
 
         $query->andFilterWhere(['like', 'balloon', $this->balloon])
             ->andFilterWhere(['like', 'preset', $this->preset])
-            ->andFilterWhere(['like', 'comment', $this->comment]);
+            ->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['ilike', 'employees.snp', $this->snp]);
 
         return $dataProvider;
     }

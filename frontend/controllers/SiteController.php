@@ -91,11 +91,11 @@ class SiteController extends Controller
     public function actionMap($floor = 1)
     {
         $search = new CoordinateSearch();
+
         $dataProvider = $search->search(Yii::$app->request->queryParams, $floor);
 
-
-
         return $this->render('map', [
+        	'search' => $search,
             'dataProvider' => $dataProvider,
             'floor' => $floor
         ]);

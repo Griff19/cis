@@ -15,10 +15,12 @@ use Yii;
  * @property string $balloon
  * @property string $preset
  * @property string $comment
+ * @property string $snp
  */
 class Coordinate extends \yii\db\ActiveRecord
 {
-    /**
+    public $snp;
+	/**
      * @inheritdoc
      */
     public static function tableName()
@@ -34,7 +36,7 @@ class Coordinate extends \yii\db\ActiveRecord
         return [
             [['workplace_id', 'floor'], 'integer'],
 	        [['x', 'y'], 'number'],
-            [['comment'], 'string'],
+            [['comment', 'snp'], 'string'],
             [['balloon', 'preset'], 'string', 'max' => 256],
         ];
     }
@@ -53,6 +55,12 @@ class Coordinate extends \yii\db\ActiveRecord
             'balloon' => 'Balloon',
             'preset' => 'Preset',
             'comment' => 'Comment',
+	        'snp' => 'Владелец:'
         ];
+    }
+
+    public function getWorkplace()
+    {
+    	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
     }
 }

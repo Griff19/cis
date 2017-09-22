@@ -5,6 +5,7 @@
 use frontend\assets\MapAsset;
 use yii\helpers\Html;
 use backend\models\Workplaces;
+use yii\widgets\ActiveForm;
 
 MapAsset::register($this);
 
@@ -22,6 +23,13 @@ $this->title = 'Карта сайта';
 
 <?= Html::a('1 Этаж', ['map', 'floor' => 1], ['class' => 'btn btn-default', 'style' => $floor == 1 ? 'font-weight: 600' : '']) ?>
 <?= Html::a('2 Этаж', ['map', 'floor' => 2], ['class' => 'btn btn-default', 'style' => $floor == 2 ? 'font-weight: 600' : '']) ?>
+
+<?php $form = ActiveForm::begin([
+	'action' => ['site/map?floor='.$floor],
+	'method' => 'get',
+]); ?>
+<?= $form->field($search, 'snp') ?>
+<?php ActiveForm::end(); ?>
 
 <div id = "map" class="map"></div>
 
