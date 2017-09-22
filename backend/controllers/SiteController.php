@@ -195,6 +195,11 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionMap()
+    {
+        return $this->render('map');
+    }
+
     /**
      * Вход пользователя
      * @return string|\yii\web\Response

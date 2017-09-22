@@ -37,6 +37,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [];
+    $menuItems[] = ['label' => 'Карта', 'url' => ['map']];
     if (Yii::$app->user->can('admin'))
         $menuItems[] = ['label' => 'Администрирование', 'url' => ['admin/site/admin']];
     elseif (Yii::$app->user->can('it'))

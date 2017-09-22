@@ -35,14 +35,14 @@ class CoordinateSearch extends Coordinate
 
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $floor)
     {
         $query = Coordinate::find();
+
+        if ($floor) { $query->where(['floor' => $floor]); }
 
         // add conditions that should always apply here
 

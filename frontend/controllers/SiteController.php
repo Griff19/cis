@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use backend\models\StartEmployeesSearch;
+use backend\models\CoordinateSearch;
 
 /**
  * Site controller
@@ -79,7 +80,24 @@ class SiteController extends Controller
         return $this->render('start', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
 
+    /**
+     * Отображаем страницу с картой
+     * @param int $floor
+     * @return string
+     */
+    public function actionMap($floor = 1)
+    {
+        $search = new CoordinateSearch();
+        $dataProvider = $search->search(Yii::$app->request->queryParams, $floor);
+
+
+
+        return $this->render('map', [
+            'dataProvider' => $dataProvider,
+            'floor' => $floor
         ]);
     }
 

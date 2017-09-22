@@ -38,7 +38,7 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Главная', 'url' => ['/site/index']]
+        ['label' => 'Карта', 'url' => Yii::$app->urlManagerFrontend->createUrl(['site/map'])]
     ];
     if (Yii::$app->user->can('admin')) {
         $label = Html::tag('span', Message::CountNewMessage() ? : Message::CountMessage(),
