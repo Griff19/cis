@@ -63,4 +63,14 @@ class Coordinate extends \yii\db\ActiveRecord
     {
     	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
     }
+
+    public static function getOwners($floor = 1)
+    {
+    	return Coordinate::find()->select('snp')
+		    ->leftJoin('wp_owners', 'wp_owners.workplace_id = coordinate.workplace_id')
+		    ->rightJoin('employees', 'employees.id = wp_owners.employee_id')
+		    ->where(['floor' => $floor])
+		    ->groupBy('snp')
+		    ->all();
+    }
 }
