@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use backend\assets\MapAsset;
+use backend\models\Workplaces;
 
 MapAsset::register($this);
 
@@ -32,4 +33,26 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
     var floor = <?= $model->floor ?>;
     var edit = true;
+    var points = [];
+    <?php
+    $owners = [];
+    foreach ( $allCoord->models as $coordinate) {
+    if ($coordinate->workplace_id == $model->workplace_id) {continue;}
+    $workplace = Workplaces::findOne($coordinate->workplace_id);
+    $title = '';
+    if ($workplace->owner) {
+        if ($workplace->owner[0]){
+            $title = $workplace->owner[0]->snp . '<br>' . $workplace->owner[0]->job_title;
+            $owners[$workplace->owner[0]->snp] = $workplace->owner[0]->snp;
+        }
+    }
+    if (Yii::$app->user->can('it')) {
+        $balloon = Html::a('<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title, ['/admin/workplaces/view', 'id' => $workplace->id]) . '<br>' . $title;
+    } else {
+        $balloon = '<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title . '<br>' . $title;
+    }
+    ?>
+    points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $balloon ?>', preset: 'islands#grayDotIcon'});
+<?php } ?>
+
 </script>

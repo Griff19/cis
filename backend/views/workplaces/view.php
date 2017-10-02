@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a('Добавить пользователя', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
 	                <br>
                     <?= Html::a('<<< Установить координаты',
-                        ['coordinate/create', 'id_wp' => $model->id],
+                        ['coordinate/set-coord', 'id_wp' => $model->id],
                         ['class' => 'btn btn-default', 'style' => 'margin-top: 10px'])
                     ?>
                 <?php } ?>
@@ -302,7 +302,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } else { ?>
         var floor = 1;
     <?php }
-    $allCoord = $model->getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1);
+    $allCoord = Workplaces::getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1);
     foreach ( $allCoord as $coordinate ){ ?>
         points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#darkOrangeDotIcon'})
     <?php } ?>

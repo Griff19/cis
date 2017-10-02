@@ -56,6 +56,16 @@ class CoordinateController extends Controller
         ]);
     }
 
+    public function actionSetCoord($id_wp)
+    {
+        $model = Coordinate::findOne(['workplace_id' => $id_wp]);
+        if ($model) {
+            return $this->redirect(['update', 'id' => $model->id]);
+        } else {
+            return $this->redirect(['create', 'id_wp' => $id_wp]);
+        }
+    }
+
     /**
      * Добавляем новую точку на карту.
      * При совпадении идентификатора рабочего места - старая точка удаляется
@@ -67,6 +77,8 @@ class CoordinateController extends Controller
         $model->workplace_id = $id_wp;
         $model->floor = $floor;
 		$old_model = Coordinate::findOne(['workplace_id' => $id_wp]);
+
+		$allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
 
 		if ($model->load(Yii::$app->request->post())) {
 	        if ($model->save())
@@ -85,26 +97,41 @@ class CoordinateController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+	            'allCoord' => $allCoord,
 	            'mod' => $mod
             ]);
         }
     }
 
     /**
-     * Updates an existing Coordinate model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Изменяем метку
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id, $mod = 0)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $model->floor);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save())
+            {
+                if ($mod == 1) {
+                    return $this->redirect(['index']);
+                } elseif ($mod == 2){
+                    return $this->redirect(['workplaces/list-unset']);
+                } else {
+                    return $this->redirect(['workplaces/view', 'id' => $model->workplace_id]);
+                }
+            } else {
+                Yii::$app->session->setFlash('error', serialize($model->errors));
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'allCoord' => $allCoord,
+                'mod' => $mod
             ]);
         }
     }

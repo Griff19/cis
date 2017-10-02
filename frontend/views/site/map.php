@@ -9,6 +9,11 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
+/**
+ * @var $this \yii\web\View
+ * @var $floor integer
+ * @var $dataProvider \yii\data\ActiveDataProvider
+ */
 MapAsset::register($this);
 
 $this->title = 'Карта сайта';

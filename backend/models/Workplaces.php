@@ -139,7 +139,7 @@ class Workplaces extends \yii\db\ActiveRecord
 	/**
 	 * @return array|\yii\db\ActiveRecord[]
 	 */
-    public function getAllCoordinate($floor) {
+    public static function getAllCoordinate($floor) {
     	return Coordinate::find()->where(['workplace_id' => 0])->andWhere(['floor' => $floor])->all();
     }
 

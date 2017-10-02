@@ -47,7 +47,7 @@ class CoordinateSearch extends Coordinate
 	        ->leftJoin('employees', 'employees.id = wp_owners.employee_id');
 
 
-        if ($floor) { $query->where(['floor' => $floor]); }
+        //if ($floor) { $query->where(['floor' => $floor]); }
 
         // add conditions that should always apply here
 
@@ -78,6 +78,22 @@ class CoordinateSearch extends Coordinate
             ->andFilterWhere(['like', 'preset', $this->preset])
             ->andFilterWhere(['like', 'comment', $this->comment])
             ->andFilterWhere(['ilike', 'employees.snp', $this->snp]);
+
+        return $dataProvider;
+    }
+
+    /**
+     * Функция не работает. Возможно не нужна...
+     * @param $floor
+     * @return ActiveDataProvider
+     */
+    public function searchOnFloor($floor)
+    {
+        $query = Coordinate::find()->where();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
 
         return $dataProvider;
     }
