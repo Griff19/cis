@@ -47,7 +47,7 @@ class CoordinateSearch extends Coordinate
 	        ->leftJoin('employees', 'employees.id = wp_owners.employee_id');
 
 
-        //if ($floor) { $query->where(['floor' => $floor]); }
+        if ($floor) { $query->where(['floor' => $floor]); }
 
         // add conditions that should always apply here
 
