@@ -108,11 +108,11 @@ class CoordinateController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id, $mod = 0)
+    public function actionUpdate($id, $mod = 0, $floor = null)
     {
         $model = $this->findModel($id);
-
-        $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $model->floor);
+        $floor = $floor ? : $model->floor;
+        $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save())
@@ -131,7 +131,9 @@ class CoordinateController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'allCoord' => $allCoord,
-                'mod' => $mod
+                'mod' => $mod,
+                'floor' => $floor
+
             ]);
         }
     }
