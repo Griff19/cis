@@ -81,7 +81,9 @@ class CoordinateController extends Controller
 		$allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
 
 		if ($model->load(Yii::$app->request->post())) {
-	        if ($model->save())
+	        $model->preset = trim($model->preset);
+	        $model->content = trim($model->content);
+			if ($model->save())
 	        {
 		        if ($old_model) {$old_model->delete();}
 	        	if ($mod == 1 || $id_wp == null) {

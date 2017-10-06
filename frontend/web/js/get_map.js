@@ -68,14 +68,16 @@ ymaps.ready(function () {
             // restrictMapArea: [[0, 0], [PIC_HEIGHT, PIC_WIDTH]]
         });
     map.cursors.push('crosshair');
-
-
-    //получаем метки из представления где будет отображаться карта
+    /**
+     * Для того чтобы установить метки на карту нужно в представлении, где будет отображаться карта,
+     * заполнить массив points[]
+     */
     if (typeof (points) != "undefined") {
         for (let value of points) {
-
             var point = new ymaps.Placemark([value.y, value.x], {
-                balloonContent: value.balloonContent
+                balloonContent: value.balloonContent,
+                iconContent: value.content,
+                iconCaption: value.content
             }, {
                 preset: value.preset
             });

@@ -56,8 +56,16 @@ $this->title = 'Карта сайта';
         } else {
             $balloon = '<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title . '<br>' . $title;
         }
+        if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
+            $preset = 'islands#blueDotIcon';
+        else
+            $preset = trim($coordinate->preset);
+        if (ctype_space($coordinate->content) || empty($coordinate->content))
+            $content = '';
+        else
+            $content = trim($coordinate->content);
     ?>
-        points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $balloon ?>', preset: 'islands#blueDotIcon'})
+        points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $balloon ?>', preset: '<?= $preset ?>', content: '<?= $content ?>'});
     <?php } ?>
 </script>
 
@@ -67,11 +75,12 @@ $this->title = 'Карта сайта';
 <?php $form = ActiveForm::begin([
 	'action' => ['site/map?floor='.$floor],
 	'method' => 'get',
-
 ]); ?>
-<?= $form->field($search, 'snp')->dropDownList(ArrayHelper::map(Coordinate::getOwners($floor), 'snp', 'snp'), [
-        'prompt' => 'Пустой фильтр...'
-]) ?>
+<?= $form->field($search, 'snp')->dropDownList(
+        ArrayHelper::map(
+                Coordinate::getOwners($floor), 'snp', 'snp'
+        ), ['prompt' => 'Пустой фильтр...'])
+?>
 <?= Html::submitButton('Фильтровать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>
 <?php ActiveForm::end(); ?>
 

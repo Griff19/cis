@@ -39,7 +39,7 @@ class CoordinateSearch extends Coordinate
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params, $floor)
+    public function search($params, $floor = null)
     {
         $query = Coordinate::find();
         $query->joinWith('workplace')
@@ -68,7 +68,7 @@ class CoordinateSearch extends Coordinate
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'workplace_id' => $this->workplace_id,
+            'wp_owners.workplace_id' => $this->workplace_id,
             'floor' => $this->floor,
             'x' => $this->x,
             'y' => $this->y,

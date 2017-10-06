@@ -72,7 +72,9 @@ ymaps.ready(function () {
         for (let value of points) {
 
             var point = new ymaps.Placemark([value.y, value.x], {
-                balloonContent: value.balloonContent
+                balloonContent: value.balloonContent,
+                iconContent: value.content,
+                iconCaption: value.content
             }, {
                 preset: value.preset
             });

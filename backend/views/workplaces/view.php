@@ -296,15 +296,29 @@ $this->params['breadcrumbs'][] = $this->title;
     var points = [];
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
-        <?php foreach ( $model->coordinate as $coordinate) {?>
-            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $model->workplaces_title . '<br>' .$coordinate->balloon ?>', preset: 'islands#blueDotIcon'})
+        <?php foreach ( $model->coordinate as $coordinate) {
+            if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
+                $preset = 'islands#blueDotIcon';
+            else
+                $preset = trim($coordinate->preset);
+            if (ctype_space($coordinate->content) || empty($coordinate->content))
+                $content = '';
+            else
+                $content = trim($coordinate->content);
+        ?>
+            points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $model->workplaces_title . '<br>' .$coordinate->balloon ?>', preset: '<?= $preset ?>', content: '<?= $content?>'});
         <?php } ?>
     <?php } else { ?>
         var floor = 1;
     <?php }
     $allCoord = Workplaces::getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1);
-    foreach ( $allCoord as $coordinate ){ ?>
-        points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: 'islands#darkOrangeDotIcon'})
+    foreach ( $allCoord as $coordinate ){
+        if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
+            $preset = 'islands#blueDotIcon';
+        else
+            $preset = trim($coordinate->preset);
+    ?>
+        points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $coordinate->balloon ?>', preset: '<?= $preset ?>'})
     <?php } ?>
 </script>
 

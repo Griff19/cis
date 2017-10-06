@@ -15,6 +15,7 @@ use Yii;
  * @property string $balloon
  * @property string $preset
  * @property string $comment
+ * @property string $content
  * @property string $snp
  */
 class Coordinate extends \yii\db\ActiveRecord
@@ -37,6 +38,7 @@ class Coordinate extends \yii\db\ActiveRecord
             [['workplace_id', 'floor'], 'integer'],
 	        [['x', 'y'], 'number'],
             [['comment', 'snp'], 'string'],
+	        ['content', 'string', 'max' => 32],
             [['balloon', 'preset'], 'string', 'max' => 256],
         ];
     }
@@ -48,13 +50,14 @@ class Coordinate extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'workplace_id' => 'Workplace ID',
-            'floor' => 'Floor',
+            'workplace_id' => 'Рабочее место',
+            'floor' => 'Этаж',
             'x' => 'X',
             'y' => 'Y',
-            'balloon' => 'Balloon',
-            'preset' => 'Preset',
-            'comment' => 'Comment',
+            'balloon' => 'Подсказка',
+            'preset' => 'Вид',
+            'comment' => 'Комментарий',
+	        'content' => 'Контент',
 	        'snp' => 'Владелец:'
         ];
     }
@@ -64,6 +67,12 @@ class Coordinate extends \yii\db\ActiveRecord
     	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
     }
 
+	/**
+	 * Функция для сбора данных о владельцах рабочих мест
+	 * эти данные используются для формирования фильтра на странице глобальной карты (site/map)
+	 * @param int $floor
+	 * @return array|\yii\db\ActiveRecord[]
+	 */
     public static function getOwners($floor = 1)
     {
     	return Coordinate::find()->select('snp')

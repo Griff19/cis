@@ -46,7 +46,13 @@ use yii\widgets\ActiveForm;
     </div>
     <?= $form->field($model, 'balloon')->textInput(['maxlength' => true]) ?>
 
+    Для получения подробной информации по видам меток посетите страницу:
+    <?= Html::a('Предустановленные опции',
+        'https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/option.presetStorage-docpage',
+        ['target' => '_blank']) ?>
     <?= $form->field($model, 'preset')->textInput(['maxlength' => true]) ?>
+
+	<?= $form->field($model, 'content')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
