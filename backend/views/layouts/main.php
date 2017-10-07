@@ -75,6 +75,17 @@ AppAsset::register($this);
     NavBar::end();
     ?>
     <div class="container">
+        <script>
+            if (navigator.userAgent.indexOf('MSIE') >= 0 || navigator.userAgent.indexOf('.NET') >= 0) {
+                document.writeln(
+                    "<div class='alert alert-danger'>" +
+                    "Внимание! При использовании данного браузера возможна не корректная работа системы.<br/>" +
+                    "Для корректной работы рекомендуем использовать браузер " +
+                    "<a href='https://www.google.ru/chrome/browser/desktop/index.html' target='_blank'>Google Chrome</a>" +
+                    "</div>"
+                );
+            }
+        </script>
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>

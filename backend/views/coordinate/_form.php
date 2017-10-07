@@ -46,12 +46,14 @@ use yii\widgets\ActiveForm;
     </div>
     <?= $form->field($model, 'balloon')->textInput(['maxlength' => true]) ?>
 
-    Для получения подробной информации по видам меток посетите страницу:
+    В поле "<?= $model->attributeLabels()['preset'] ?>" записывается стока, определяющая вид метки. Для получения подробной информации по видам меток посетите страницу:
     <?= Html::a('Предустановленные опции',
         'https://tech.yandex.ru/maps/doc/jsapi/2.1/ref/reference/option.presetStorage-docpage',
-        ['target' => '_blank']) ?>
+        ['target' => '_blank']) ?>.
+    Для отображения стандартной метки оставьте поле пустым.
     <?= $form->field($model, 'preset')->textInput(['maxlength' => true]) ?>
 
+    Поле "<?= $model->attributeLabels()['content']?>" содержит строку, которая будет выводится вместе с меткой (содержимое метки).
 	<?= $form->field($model, 'content')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
