@@ -135,7 +135,6 @@ class CoordinateController extends Controller
                 'allCoord' => $allCoord,
                 'mod' => $mod,
                 'floor' => $floor
-
             ]);
         }
     }
@@ -149,7 +148,6 @@ class CoordinateController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 

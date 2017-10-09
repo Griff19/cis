@@ -217,15 +217,15 @@ class Main
         //отмечаем всех сотрудников "уволенными" после обработки они останутся таковыми
         //если не будут обнаружены в файле загрузки
         $db->exec("UPDATE employees SET status = 0, employee_number = ''");
-        //запрос на получение идентификатор польоватебя по ФИО
+        /** @var PDOStatement $employees запрос на получение идентификатора сотрудника по его УИД */
         $employees = $db->prepare("SELECT id FROM employees WHERE unique_1c_number = ?");
         //$employees = $db->prepare("SELECT id FROM employees WHERE snp = ?");
         //запрос на добавление нового пользователя
         $new_employee = $db->prepare("INSERT INTO employees (snp, surname, name, patronymic, employee_number, branch_id, job_title, unique_1c_number) VALUES (:snp, :surname, :name, :patronymic, :employee_number, :branch_id, :job_title, :unique_1c_number)");
         //запрос на получение идентификатора подразделения по его наименованию
         $branches = $db->prepare("SELECT id FROM branches WHERE branch_title = ?");
-        //запрос на обновление данных о пользователе
-        $update_employee = $db->prepare("UPDATE employees SET unique_1c_number = :unique_1c_number, employee_number = :employee_number, status = 1 WHERE id = :id");
+        /** @var PDOStatement $update_employee запрос на обновление данных о сотруднике */
+        $update_employee = $db->prepare("UPDATE employees SET job_title = :job_title, employee_number = :employee_number, status = 1 WHERE id = :id");
         //запрос на "увольнение" сотрудника
         //$del_employee = $db->prepare("UPDATE employees SET status = 0 WHERE id = ?");
         while ($str = fgets($readfile, 1024)){
@@ -243,21 +243,23 @@ class Main
             if ($items[1] == 'Код') continue;
 
             //echo iconv_strlen($items[0]) . " ";
+            /** Ищем сотрудника по УИД */
             $employees->execute([str_replace(chr(13).chr(10), "", $items[7])]);
             //$employees->execute([$items[0]]);
             $emp = $employees->fetch(PDO::FETCH_LAZY);
             //var_dump($emp);
             //echo "\n\r";
             if($emp) {
-                // обновляем уникальный номер сотрудника
+                /** обновляем данные сотрудника если он найден */
                 if ($emp->id == 4205)
                     echo 'update Employee ' . $emp->id . "\n\r";
                 if ($update_employee->execute([
-                    'unique_1c_number' => str_replace(chr(13).chr(10), "", $items[7]),
+                    'job_title' => $items[1],
                     'employee_number' => $items[3],
                     'id' => (int)$emp->id,
                 ])) {} else echo "NOT UPDATE! ";
             } else {
+                /** если сотрудник не найден то создаем нового */
                 echo "\n\r new Employee " . $items[7];
                 //получаем ФИО
                 $_snp = $items[0];
