@@ -10,6 +10,7 @@ use backend\models\Images;
 use backend\models\DeviceType;
 use backend\models\Devices;
 use backend\assets\MapAsset;
+use backend\models\Coordinate;
 use yii\widgets\Pjax;
 
 MapAsset::register($this);
@@ -106,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Html::a('Добавить пользователя', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
 	                <br>
                     <?= Html::a('<<< Установить координаты',
-                        ['coordinate/set-coord', 'id_wp' => $model->id],
+                        ['coordinate/set-coord', 'id_wp' => $model->id, 'branch' => $model->branch_id],
                         ['class' => 'btn btn-default', 'style' => 'margin-top: 10px'])
                     ?>
                 <?php } ?>
@@ -294,6 +295,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script type="text/javascript">
     var points = [];
+    var branch = <?= $model->branch_id ?>;
+    var max_zoom = <?= Coordinate::$mapParams[$model->branch_id]['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::$mapParams[$model->branch_id]['pic_width'] ?>;
+    var pic_height = <?= Coordinate::$mapParams[$model->branch_id]['pic_height']?>;
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
         <?php foreach ( $model->coordinate as $coordinate) {
@@ -311,7 +316,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php } else { ?>
         var floor = 1;
     <?php }
-    $allCoord = Workplaces::getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1);
+    $allCoord = Workplaces::getAllCoordinate($model->coordinate ? $model->coordinate[0]->floor : 1, $model->branch_id);
     foreach ( $allCoord as $coordinate ){
         if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
             $preset = 'islands#blueDotIcon';

@@ -18,7 +18,7 @@ class CoordinateSearch extends Coordinate
     public function rules()
     {
         return [
-            [['id', 'workplace_id', 'floor'], 'integer'],
+            [['id', 'workplace_id', 'floor', 'branch_id'], 'integer'],
 	        [['x', 'y'], 'number'],
             [['balloon', 'preset', 'comment'], 'safe'],
 	        ['snp', 'string']
@@ -39,17 +39,15 @@ class CoordinateSearch extends Coordinate
      * @param array $params
      * @return ActiveDataProvider
      */
-    public function search($params, $floor = null)
+    public function search($params, $floor = null, $branch = null)
     {
         $query = Coordinate::find();
         $query->joinWith('workplace')
             ->leftJoin('wp_owners', 'wp_owners.workplace_id = workplaces.id')
 	        ->leftJoin('employees', 'employees.id = wp_owners.employee_id');
 
-
-        if ($floor) { $query->where(['floor' => $floor]); }
-
-        // add conditions that should always apply here
+        if ($floor) $query->where(['floor' => $floor]);
+        if ($branch) $query->andWhere(['coordinate.branch_id' => $branch]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -70,6 +68,7 @@ class CoordinateSearch extends Coordinate
             'id' => $this->id,
             'wp_owners.workplace_id' => $this->workplace_id,
             'floor' => $this->floor,
+            'coordinate.branch_id' => $this->branch_id,
             'x' => $this->x,
             'y' => $this->y,
         ]);

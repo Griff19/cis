@@ -84,20 +84,28 @@ class SiteController extends Controller
     }
 
     /**
-     * Отображаем страницу с картой
+     * Отображаем страницу с картой.
+     * Если в представлении вбран фильтр по филиалу то отображаем карту этого филиала
      * @param int $floor
      * @return string
      */
-    public function actionMap($floor = 1)
+    public function actionMap($floor = 1, $branch = 1)
     {
         $search = new CoordinateSearch();
-
-        $dataProvider = $search->search(Yii::$app->request->queryParams, $floor);
+	    $params = Yii::$app->request->queryParams;
+		/** @var integer $branch - проверяем какой показать филиал */
+	    //$branch = 1;
+	    if (array_key_exists('CoordinateSearch', $params))
+	    	if ($params['CoordinateSearch']['branch_id'])
+	    	    $branch = $params['CoordinateSearch']['branch_id'];
+		$search->branch_id = $branch;
+        $dataProvider = $search->search(Yii::$app->request->queryParams, $floor, $branch);
 
         return $this->render('map', [
         	'search' => $search,
             'dataProvider' => $dataProvider,
-            'floor' => $floor
+            'floor' => $floor,
+	        'branch' => $branch
         ]);
     }
 

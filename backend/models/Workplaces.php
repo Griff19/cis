@@ -13,6 +13,7 @@ use backend\models\Coordinate;
  *
  * @property integer $id              Идентификатор рабочего места
  * @property integer $room_id         Идентификатор кабинета
+ * @property integer $branch_id       Идентификатор филиала
  * @property boolean $mu              Многопользовательское рабочее место
  * @property string $workplaces_title Описание рабочего места
  * @property integer $voip            Внутренний номер
@@ -139,8 +140,8 @@ class Workplaces extends \yii\db\ActiveRecord
 	/**
 	 * @return array|\yii\db\ActiveRecord[]
 	 */
-    public static function getAllCoordinate($floor) {
-    	return Coordinate::find()->where(['workplace_id' => 0])->andWhere(['floor' => $floor])->all();
+    public static function getAllCoordinate($floor, $branch) {
+    	return Coordinate::find()->where(['workplace_id' => 0])->andWhere(['floor' => $floor])->andWhere(['branch_id' => $branch])->all();
     }
 
     /**

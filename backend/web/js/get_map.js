@@ -1,15 +1,14 @@
 var map;
 ymaps.ready(function () {
 
-
     var LAYER_NAME = 'user#layer',
         MAP_TYPE_NAME = 'user#customMap',
         
-        TILES_PATH = '/admin/map/floor' + floor,
-       
-        MAX_ZOOM = 6,
-        PIC_WIDTH = 9560,
-        PIC_HEIGHT = 7214;
+        TILES_PATH = '/admin/map/'+ branch+ '_' + floor,
+
+        MAX_ZOOM = max_zoom,
+        PIC_WIDTH = pic_width,
+        PIC_HEIGHT = pic_height;
 
     //Создаем свой слой.
     var Layer = function () {

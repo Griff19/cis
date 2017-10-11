@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use backend\assets\MapAsset;
 use backend\models\Workplaces;
+use backend\models\Coordinate;
 
 MapAsset::register($this);
 
@@ -12,7 +13,7 @@ MapAsset::register($this);
  * @var $allCoord \yii\data\ActiveDataProvider
  */
 
-$this->title = 'Update Coordinate: ' . $model->id;
+$this->title = 'Редактировать точку: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Coordinates', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -20,9 +21,9 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="coordinate-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Html::a('Этаж 1', ['update', 'id' => $model->id, 'mod' => $mod, 'floor' => 1],
+    <?= Html::a('Этаж 1', ['update', 'id' => $model->id, 'mod' => $mod, 'floor' => 1, 'branch' => $model->branch_id],
         ['class' => 'btn btn-default', 'style' => $floor == 1 ? 'font-weight: 600' : ''])?>
-    <?= Html::a('Этаж 2', ['update', 'id' => $model->id, 'mod' => $mod, 'floor' => 2],
+    <?= Html::a('Этаж 2', ['update', 'id' => $model->id, 'mod' => $mod, 'floor' => 2, 'branch' => $model->branch_id],
         ['class' => 'btn btn-default', 'style' => $floor == 2 ? 'font-weight: 600' : ''])?>
     <div id="map" class="map"></div>
 
@@ -33,9 +34,13 @@ $this->params['breadcrumbs'][] = 'Update';
 </div>
 
 <script>
-    var floor = <?= $floor ?>;
+    var floor = <?= $model->floor ?>;
+    var branch = <?= $model->branch_id ?>;
     var edit = true;
     var points = [];
+    var max_zoom = <?= Coordinate::$mapParams[$model->branch_id]['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::$mapParams[$model->branch_id]['pic_width'] ?>;
+    var pic_height = <?= Coordinate::$mapParams[$model->branch_id]['pic_height']?>;
     <?php
     $owners = [];
     foreach ( $allCoord->models as $coordinate ) {

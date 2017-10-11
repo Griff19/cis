@@ -32,16 +32,19 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-3">
-    <?= $form->field($model, 'workplace_id')->textInput() ?>
+            <?= $form->field($model, 'workplace_id')->textInput() ?>
         </div>
         <div class="col-md-3">
-    <?= $form->field($model, 'floor')->textInput() ?>
+            <?= $form->field($model, 'floor')->textInput() ?>
         </div>
-        <div class="col-md-3">
-    <?= $form->field($model, 'x')->textInput() ?>
+        <div class="col-md-2">
+		    <?= $form->field($model, 'branch_id')->textInput() ?>
         </div>
-        <div class="col-md-3">
-    <?= $form->field($model, 'y')->textInput() ?>
+        <div class="col-md-2">
+            <?= $form->field($model, 'x')->textInput() ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($model, 'y')->textInput() ?>
         </div>
     </div>
     <?= $form->field($model, 'balloon')->textInput(['maxlength' => true]) ?>

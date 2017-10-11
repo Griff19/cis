@@ -8,11 +8,11 @@ ymaps.ready(function () {
     var LAYER_NAME = 'user#layer',
         MAP_TYPE_NAME = 'user#customMap',
 
-        TILES_PATH = '/map/floor' + floor,
+        TILES_PATH = '/map/'+ branch + '_' + floor,
        
-        MAX_ZOOM = 6,
-        PIC_WIDTH = 9560,
-        PIC_HEIGHT = 7214;
+        MAX_ZOOM = max_zoom,
+        PIC_WIDTH = pic_width,
+        PIC_HEIGHT = pic_height;
 
     //Создаем свой слой.
     var Layer = function () {
@@ -70,7 +70,7 @@ ymaps.ready(function () {
     map.cursors.push('crosshair');
     /**
      * Для того чтобы установить метки на карту нужно в представлении, где будет отображаться карта,
-     * заполнить массив points[]
+     * заполнить массив points[] через js
      */
     if (typeof (points) != "undefined") {
         for (let value of points) {
@@ -110,4 +110,6 @@ ymaps.ready(function () {
         });
     }
 });
+
+
 

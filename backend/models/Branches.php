@@ -58,7 +58,7 @@ class Branches extends \yii\db\ActiveRecord
     }
 
     public static function arrayBranches(){
-        return Branches::find()->select('branch_title as value, branch_title as label, id as id')->asArray()->all();
+        return Branches::find()->select('branch_title as value, branch_title as label, id as id')->orderBy('id')->asArray()->all();
     }
 
 }

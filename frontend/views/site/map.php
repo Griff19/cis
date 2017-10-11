@@ -4,6 +4,7 @@
  */
 use backend\models\Workplaces;
 use backend\models\Coordinate;
+use backend\models\Branches;
 use frontend\assets\MapAsset;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
@@ -11,7 +12,8 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var $this \yii\web\View
- * @var $floor integer
+ * @var $floor integer - номер этажа
+ * @var $branch integer - идентификатор филиала
  * @var $dataProvider \yii\data\ActiveDataProvider
  */
 MapAsset::register($this);
@@ -26,23 +28,51 @@ $this->title = 'Карта сайта';
         margin: 0 0 10px;
         outline: auto;
     }
-    .field-coordinatesearch-snp, #w0 {
+    .field-coordinatesearch-snp, .field-coordinatesearch-branch_id, #w0 {
         display: inline-flex;
+        margin-left: 5px;
     }
     #w0 {
         display: inline-flex;
         height: 33px;
     }
-    #coordinatesearch-snp {
+    #coordinatesearch-snp, #coordinatesearch-branch_id {
         margin-top: -5px;
     }
 </style>
+
+<?= Html::a('1 Этаж', ['map', 'floor' => 1, 'branch' => $branch], ['class' => 'btn btn-default', 'style' => $floor == 1 ? 'font-weight: 600' : '']) ?>
+<?= Html::a('2 Этаж', ['map', 'floor' => 2, 'branch' => $branch], ['class' => 'btn btn-default', 'style' => $floor == 2 ? 'font-weight: 600' : '']) ?>
+
+<?php $form = ActiveForm::begin([
+	'action' => ['site/map?floor='.$floor],
+	'method' => 'get',
+]); ?>
+<?= $form->field($search, 'snp')->dropDownList(
+	ArrayHelper::map(
+		Coordinate::getOwners($floor, $branch), 'snp', 'snp'
+	), ['prompt' => 'Пустой фильтр...'])
+?>
+<?= $form->field($search, 'branch_id')->dropDownList(
+	ArrayHelper::map(
+		Branches::arrayBranches(), 'id', 'value'
+	)
+)?>
+<?= Html::submitButton('Фильтровать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>
+<?php ActiveForm::end(); ?>
+
+<div id = "map" class="map"></div>
+
 <script type="text/javascript">
     var points = [];
     var floor = <?= $floor ?>;
+    var branch = <?= $branch ?>;
+    var max_zoom = <?= Coordinate::$mapParams[$branch]['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::$mapParams[$branch]['pic_width'] ?>;
+    var pic_height = <?= Coordinate::$mapParams[$branch]['pic_height']?>;
     <?php
     $owners = [];
-    foreach ( $dataProvider->models as $coordinate) {
+    foreach ( $dataProvider->models as $coordinate ) {
         $workplace = Workplaces::findOne($coordinate->workplace_id);
         $title = '';
         if ($workplace->owner) {
@@ -67,21 +97,5 @@ $this->title = 'Карта сайта';
     ?>
         points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $balloon ?>', preset: '<?= $preset ?>', content: '<?= $content ?>'});
     <?php } ?>
+
 </script>
-
-<?= Html::a('1 Этаж', ['map', 'floor' => 1], ['class' => 'btn btn-default', 'style' => $floor == 1 ? 'font-weight: 600' : '']) ?>
-<?= Html::a('2 Этаж', ['map', 'floor' => 2], ['class' => 'btn btn-default', 'style' => $floor == 2 ? 'font-weight: 600' : '']) ?>
-
-<?php $form = ActiveForm::begin([
-	'action' => ['site/map?floor='.$floor],
-	'method' => 'get',
-]); ?>
-<?= $form->field($search, 'snp')->dropDownList(
-        ArrayHelper::map(
-                Coordinate::getOwners($floor), 'snp', 'snp'
-        ), ['prompt' => 'Пустой фильтр...'])
-?>
-<?= Html::submitButton('Фильтровать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>
-<?php ActiveForm::end(); ?>
-
-<div id = "map" class="map"></div>

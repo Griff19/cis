@@ -56,29 +56,41 @@ class CoordinateController extends Controller
         ]);
     }
 
-    public function actionSetCoord($id_wp)
+	/**
+	 * Функция опрделеляет нужно создать новые координаты или обновить старые
+	 * @param $id_wp
+	 * @return \yii\web\Response
+	 */
+    public function actionSetCoord($id_wp, $branch)
     {
         $model = Coordinate::findOne(['workplace_id' => $id_wp]);
         if ($model) {
-            return $this->redirect(['update', 'id' => $model->id]);
+            return $this->redirect(['update', 'id' => $model->id, 'branch' => $branch]);
         } else {
-            return $this->redirect(['create', 'id_wp' => $id_wp]);
+            return $this->redirect(['create', 'id_wp' => $id_wp, 'branch' => $branch]);
         }
     }
 
-    /**
-     * Добавляем новую точку на карту.
-     * При совпадении идентификатора рабочего места - старая точка удаляется
-     * @return mixed
-     */
-    public function actionCreate($id_wp = null, $floor = 1, $mod = 0)
+	/**
+	 * Добавляем новую точку на карту.
+	 * При совпадении идентификатора рабочего места - старая точка удаляется
+	 *
+	 * @param null $id_wp - идентификатор рабочего места
+	 * @param int  $floor -  номер этажа
+	 * @param int  $branch - идентификатор филиала
+	 * @param int  $mod - режим работы (определяет место возврата)
+	 *
+	 * @return mixed
+	 */
+    public function actionCreate($id_wp = null, $floor = 1, $branch = 1, $mod = 0)
     {
         $model = new Coordinate();
         $model->workplace_id = $id_wp;
         $model->floor = $floor;
+        $model->branch_id = $branch;
 		$old_model = Coordinate::findOne(['workplace_id' => $id_wp]);
 
-		$allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
+		$allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor, $branch);
 
 		if ($model->load(Yii::$app->request->post())) {
 	        $model->preset = trim($model->preset);
@@ -110,10 +122,10 @@ class CoordinateController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id, $mod = 0, $floor = null)
+    public function actionUpdate($id, $mod = 0, $floor = 1)
     {
         $model = $this->findModel($id);
-        $floor = $floor ? : $model->floor;
+        $model->floor = $floor;
         $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
 
         if ($model->load(Yii::$app->request->post())) {

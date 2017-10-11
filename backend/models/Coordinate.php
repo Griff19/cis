@@ -17,10 +17,25 @@ use Yii;
  * @property string $comment
  * @property string $content
  * @property string $snp
+ * @property integer $branch_id
  */
 class Coordinate extends \yii\db\ActiveRecord
 {
     public $snp;
+
+    public static $mapParams = [
+    	1 => [ //Буланиха
+    		'max_zoom' => 6,
+		    'pic_width' => 9560,
+		    'pic_height' => 7214
+	    ],
+	    8 => [ //Томск
+		    'max_zoom' => 6,
+		    'pic_width' => 2160,
+		    'pic_height' => 1200
+	    ],
+    ];
+
 	/**
      * @inheritdoc
      */
@@ -35,7 +50,7 @@ class Coordinate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['workplace_id', 'floor'], 'integer'],
+            [['workplace_id', 'floor', 'branch_id'], 'integer'],
 	        [['x', 'y'], 'number'],
             [['comment', 'snp'], 'string'],
 	        ['content', 'string', 'max' => 32],
@@ -52,6 +67,7 @@ class Coordinate extends \yii\db\ActiveRecord
             'id' => 'ID',
             'workplace_id' => 'Рабочее место',
             'floor' => 'Этаж',
+	        'branch_id' => 'Филиал:',
             'x' => 'X',
             'y' => 'Y',
             'balloon' => 'Подсказка',
@@ -73,12 +89,12 @@ class Coordinate extends \yii\db\ActiveRecord
 	 * @param int $floor
 	 * @return array|\yii\db\ActiveRecord[]
 	 */
-    public static function getOwners($floor = 1)
+    public static function getOwners($floor = 1, $branch = 1)
     {
     	return Coordinate::find()->select('snp')
 		    ->leftJoin('wp_owners', 'wp_owners.workplace_id = coordinate.workplace_id')
 		    ->rightJoin('employees', 'employees.id = wp_owners.employee_id')
-		    ->where(['floor' => $floor])
+		    ->where(['floor' => $floor])->andWhere(['coordinate.branch_id' => $branch])
 		    ->groupBy('snp')
 		    ->all();
     }
