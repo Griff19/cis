@@ -55,7 +55,8 @@ $this->title = 'Карта сайта';
 ?>
 <?= $form->field($search, 'branch_id')->dropDownList(
 	ArrayHelper::map(
-		Branches::arrayBranches(), 'id', 'value'
+        Coordinate::getBranches(), 'id', 'value'
+	        //Branches::arrayBranches(), 'id', 'value'
 	)
 )?>
 <?= Html::submitButton('Фильтровать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>

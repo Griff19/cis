@@ -2,8 +2,6 @@
 
 namespace backend\models;
 
-use Yii;
-
 /**
  * This is the model class for table "coordinate".
  *
@@ -16,8 +14,9 @@ use Yii;
  * @property string $preset
  * @property string $comment
  * @property string $content
- * @property string $snp
- * @property integer $branch_id
+ * @property string $snp - для фильтрации по владельцам рабочих мест
+ * @property integer $branch_id - идентификатор филиала
+ * @property array $mapParams - массив настроек карт для каждого филиала, используется для составления списка филиалов, у которых уже есть карта
  */
 class Coordinate extends \yii\db\ActiveRecord
 {
@@ -96,6 +95,18 @@ class Coordinate extends \yii\db\ActiveRecord
 		    ->rightJoin('employees', 'employees.id = wp_owners.employee_id')
 		    ->where(['floor' => $floor])->andWhere(['coordinate.branch_id' => $branch])
 		    ->groupBy('snp')
+		    ->all();
+    }
+
+	/**
+	 * Получаем массыв филиалов у которых есть карта
+	 * @return array|\yii\db\ActiveRecord[]
+	 */
+    public static function getBranches(){
+    	return Branches::find()->select('branches.id AS id, branch_title AS value')
+		    ->where(['in', 'id', array_keys(self::$mapParams)])
+		    ->orderBy('id')
+		    ->asArray()
 		    ->all();
     }
 }
