@@ -3,7 +3,7 @@
 namespace backend\models;
 
 /**
- * This is the model class for table "coordinate".
+ * Модель для таблицы "coordinate".
  *
  * @property integer $id
  * @property integer $workplace_id
@@ -21,19 +21,6 @@ namespace backend\models;
 class Coordinate extends \yii\db\ActiveRecord
 {
     public $snp;
-
-    public static $mapParams = [
-    	1 => [ //Буланиха
-    		'max_zoom' => 6,
-		    'pic_width' => 9560,
-		    'pic_height' => 7214
-	    ],
-	    8 => [ //Томск
-		    'max_zoom' => 6,
-		    'pic_width' => 2160,
-		    'pic_height' => 1200
-	    ],
-    ];
 
 	/**
      * @inheritdoc
@@ -75,6 +62,31 @@ class Coordinate extends \yii\db\ActiveRecord
 	        'content' => 'Контент',
 	        'snp' => 'Владелец:'
         ];
+    }
+
+	/**
+	 * Определяем настройки карты для каждого филиала, возвращаем их в зависимости от номера филиала
+	 * @param $id -  номер/идентификатор филиала
+	 * @return mixed
+	 */
+    public static function getMapParams($id){
+	    $mapParams = [
+		    1 => [ //Буланиха
+			    'max_zoom' => 6,
+			    'pic_width' => 9560,
+			    'pic_height' => 7214
+		    ],
+		    8 => [ //Томск
+			    'max_zoom' => 6,
+			    'pic_width' => 2160,
+			    'pic_height' => 1200
+		    ],
+	    ];
+
+    	if (array_key_exists($id, $mapParams))
+    		return $mapParams[$id];
+    	else
+    		return $mapParams[1];
     }
 
     public function getWorkplace()

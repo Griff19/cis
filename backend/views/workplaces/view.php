@@ -296,9 +296,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
     var points = [];
     var branch = <?= $model->branch_id ?>;
-    var max_zoom = <?= Coordinate::$mapParams[$model->branch_id]['max_zoom'] ?>;
-    var pic_width = <?= Coordinate::$mapParams[$model->branch_id]['pic_width'] ?>;
-    var pic_height = <?= Coordinate::$mapParams[$model->branch_id]['pic_height']?>;
+    var max_zoom = <?= Coordinate::getMapParams($model->branch_id)['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::getMapParams($model->branch_id)['pic_width'] ?>;
+    var pic_height = <?= Coordinate::getMapParams($model->branch_id)['pic_height']?>;
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
         <?php foreach ( $model->coordinate as $coordinate) {
