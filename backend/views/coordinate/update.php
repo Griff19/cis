@@ -38,9 +38,9 @@ $this->params['breadcrumbs'][] = 'Update';
     var branch = <?= $model->branch_id ?>;
     var edit = true;
     var points = [];
-    var max_zoom = <?= Coordinate::$mapParams[$model->branch_id]['max_zoom'] ?>;
-    var pic_width = <?= Coordinate::$mapParams[$model->branch_id]['pic_width'] ?>;
-    var pic_height = <?= Coordinate::$mapParams[$model->branch_id]['pic_height']?>;
+    var max_zoom = <?= Coordinate::getMapParams($model->branch_id)['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::getMapParams($model->branch_id)['pic_width'] ?>;
+    var pic_height = <?= Coordinate::getMapParams($model->branch_id)['pic_height']?>;
     <?php
     $owners = [];
     foreach ( $allCoord->models as $coordinate ) {

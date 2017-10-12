@@ -68,9 +68,9 @@ $this->title = 'Карта сайта';
     var points = [];
     var floor = <?= $floor ?>;
     var branch = <?= $branch ?>;
-    var max_zoom = <?= Coordinate::$mapParams[$branch]['max_zoom'] ?>;
-    var pic_width = <?= Coordinate::$mapParams[$branch]['pic_width'] ?>;
-    var pic_height = <?= Coordinate::$mapParams[$branch]['pic_height']?>;
+    var max_zoom = <?= Coordinate::getMapParams($branch)['max_zoom'] ?>;
+    var pic_width = <?= Coordinate::getMapParams($branch)['pic_width'] ?>;
+    var pic_height = <?= Coordinate::getMapParams($branch)['pic_height']?>;
     <?php
     $owners = [];
     foreach ( $dataProvider->models as $coordinate ) {

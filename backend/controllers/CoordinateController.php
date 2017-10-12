@@ -122,10 +122,11 @@ class CoordinateController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id, $mod = 0, $floor = 1)
+    public function actionUpdate($id, $mod = 0, $floor = 0)
     {
         $model = $this->findModel($id);
-        $model->floor = $floor;
+        if ($floor > 0)
+        	$model->floor = $floor;
         $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
 
         if ($model->load(Yii::$app->request->post())) {

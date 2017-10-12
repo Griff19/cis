@@ -82,11 +82,13 @@ class Coordinate extends \yii\db\ActiveRecord
 			    'pic_height' => 1200
 		    ],
 	    ];
-
-    	if (array_key_exists($id, $mapParams))
-    		return $mapParams[$id];
-    	else
-    		return $mapParams[1];
+		if ($id > 0)
+	        if (array_key_exists($id, $mapParams))
+	            return $mapParams[$id];
+	        else
+	            return $mapParams[1];
+	    else
+	    	return array_keys($mapParams);
     }
 
     public function getWorkplace()
@@ -116,7 +118,7 @@ class Coordinate extends \yii\db\ActiveRecord
 	 */
     public static function getBranches(){
     	return Branches::find()->select('branches.id AS id, branch_title AS value')
-		    ->where(['in', 'id', array_keys(self::$mapParams)])
+		    ->where(['in', 'id', self::getMapParams(0)])
 		    ->orderBy('id')
 		    ->asArray()
 		    ->all();
