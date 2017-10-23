@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\grid\Column;
-//use yii\bootstrap\Modal;
+//use yii\bootstrap\Modal; //если нужно будет показать картинку
 use backend\models\Workplaces;
 use backend\models\Images;
 use backend\models\DeviceType;
@@ -19,7 +19,7 @@ MapAsset::register($this);
  * @var $this yii\web\View
  * @var $model backend\models\Workplaces
  *
- **/
+ */
 
 $this->title = $model->workplaces_title;
 $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['index']];
@@ -44,7 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                     echo ' ';
                 }
-
                 echo Html::a('Инвентаризация', ['inventory-acts/index', 'id_wp' => $model->id], ['class' => 'btn btn-primary']);
                 ?>
             </p>
@@ -115,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="col-xs-12 col-md-8 col-md-pull-4">
-            <!--
+            <!-- отображение картинки пока отключено в пользу карты
             <div class="img-thumbnail" style="margin-top: 20px">
                 <?php
                 $key = md5('workplace' . $model->id);
@@ -133,7 +132,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            //'room_id',
             [
                 'attribute' => 'branch_id',
                 'value' => $model->branch ? $model->branch->branch_title : '-',
@@ -146,10 +144,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ],
             'workplaces_title',
-            //'mu:boolean',
             [
+                'attribute' => 'mu',
                 'label' => 'Многопользовательское рабочее место',
-                'value' => $model->mu ? 'Да' : 'Нет'
+                'format' => 'boolean'
             ]
         ],
     ]) ?>
@@ -292,8 +290,16 @@ $this->params['breadcrumbs'][] = $this->title;
         ?>
     </div>
 </div>
-
 <script type="text/javascript">
+    /**
+     * Скрипт готовит данные для формирования карты и меток на ней.
+     * @var points array массив хранит данные о метках, устанавливаемых на карте
+     * @var branch integer идентификатор филиала для которого формируется карта
+     * @var floor integer номер отображаемого этажа. По умолчанию 1, а если стоит точка то берется этаж точки
+     * @var max_zoom integer максимальный зум для текущей карты
+     * @var pic_width integer ширина текущей карты
+     * @var pic_height integer высота текущей карты
+     */
     var points = [];
     var branch = <?= $model->branch_id ?>;
     var max_zoom = <?= Coordinate::getMapParams($model->branch_id)['max_zoom'] ?>;

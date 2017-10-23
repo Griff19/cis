@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Контроллер для модели VoipNumbers "Внутренние номера".
+ */
 namespace backend\controllers;
 
 use Yii;
@@ -11,9 +13,6 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
 
-/**
- * VoipnumbersController implements the CRUD actions for VoipNumbers model.
- */
 class VoipnumbersController extends Controller
 {
     public function behaviors()
@@ -23,7 +22,7 @@ class VoipnumbersController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','view','create','update', 'choicewp', 'choicenull', 'delete', 'readfile', 'uploatform'],
+                        'actions' => ['index','view','create','update', 'delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -68,8 +67,7 @@ class VoipnumbersController extends Controller
     }
 
     /**
-     * Creates a new VoipNumbers model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
+     * Создаем новый внутренний номер
      * @return mixed
      */
     public function actionCreate($id_dev = 0)

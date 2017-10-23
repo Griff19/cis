@@ -66,7 +66,7 @@ class StartEmployeesSearch extends StartEmployees
             ->leftJoin('workplaces', 'workplaces.id = wp_owners.workplace_id')
             ->leftJoin('rooms', 'rooms.id = workplaces.room_id')
             //->leftJoin('devices', 'devices.workplace_id = workplaces.id AND devices.type_id = 3')
-            ->leftJoin('voip_numbers', 'voip_numbers.workplace_id = workplaces.id AND voip_numbers.status = 1')
+            ->leftJoin('voip_numbers', 'voip_numbers.workplace_id = workplaces.id')
             ->where("cell_number > '' OR voip_number > 0 OR email_address > '' OR workplaces_title > ''");
             if ($mode == 1)
                 $query->andWhere('employees.status > 0');

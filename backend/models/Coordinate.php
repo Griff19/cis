@@ -65,12 +65,11 @@ class Coordinate extends \yii\db\ActiveRecord
     }
 
 	/**
-	 * Определяем настройки карты для каждого филиала, возвращаем их в зависимости от номера филиала
-	 * @param $id -  номер/идентификатор филиала
-	 * @return mixed
+	 * Готовим массив с параметрами карты для разных филиалов
+	 * @return array
 	 */
-    public static function getMapParams($id){
-	    $mapParams = [
+    public static function arrMapParams(){
+    	return [
 		    1 => [ //Буланиха
 			    'max_zoom' => 6,
 			    'pic_width' => 9560,
@@ -82,6 +81,15 @@ class Coordinate extends \yii\db\ActiveRecord
 			    'pic_height' => 1200
 		    ],
 	    ];
+    }
+
+	/**
+	 * Определяем настройки карты для каждого филиала, возвращаем их в зависимости от номера филиала
+	 * @param $id -  номер/идентификатор филиала
+	 * @return mixed
+	 */
+    public static function getMapParams($id){
+	    $mapParams = self::arrMapParams();
 		if ($id > 0)
 	        if (array_key_exists($id, $mapParams))
 	            return $mapParams[$id];
@@ -91,6 +99,10 @@ class Coordinate extends \yii\db\ActiveRecord
 	    	return array_keys($mapParams);
     }
 
+	/**
+	 * Связываем модель с моделью "Рабочее место"
+	 * @return \yii\db\ActiveQuery
+	 */
     public function getWorkplace()
     {
     	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
