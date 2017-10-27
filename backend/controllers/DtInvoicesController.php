@@ -35,7 +35,7 @@ class DtInvoicesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['delete'],
+                        'actions' => ['delete', 'save'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
