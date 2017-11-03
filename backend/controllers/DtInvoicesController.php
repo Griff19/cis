@@ -30,7 +30,8 @@ class DtInvoicesController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status', 'pdf'],
+                        'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status',
+	                        'set-status-payment','pdf'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
