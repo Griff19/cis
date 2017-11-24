@@ -64,23 +64,28 @@ class Coordinate extends \yii\db\ActiveRecord
         ];
     }
 
-	/**
-	 * Готовим массив с параметрами карты для разных филиалов
-	 * @return array
-	 */
-    public static function arrMapParams(){
-    	return [
-		    1 => [ //Буланиха
-			    'max_zoom' => 6,
-			    'pic_width' => 9560,
-			    'pic_height' => 7214
-		    ],
-		    8 => [ //Томск
-			    'max_zoom' => 6,
-			    'pic_width' => 2160,
-			    'pic_height' => 1200
-		    ],
-	    ];
+    /**
+     * Готовим массив с настройками карт для разных филиалов
+     * @return array
+     */
+    public function arrMapParams(){
+        return [
+            1 => [ //Буланиха
+                'max_zoom' => 6,
+                'pic_width' => 9560,
+                'pic_height' => 7214
+            ],
+            2 => [ //Бийск
+                'max_zoom' => 6,
+                'pic_width' => 1280,
+                'pic_height' => 1024
+            ],
+            8 => [ //Томск
+                'max_zoom' => 6,
+                'pic_width' => 2160,
+                'pic_height' => 1200
+            ],
+        ];
     }
 
 	/**
@@ -99,10 +104,6 @@ class Coordinate extends \yii\db\ActiveRecord
 	    	return array_keys($mapParams);
     }
 
-	/**
-	 * Связываем модель с моделью "Рабочее место"
-	 * @return \yii\db\ActiveQuery
-	 */
     public function getWorkplace()
     {
     	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
