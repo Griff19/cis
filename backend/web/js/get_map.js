@@ -96,7 +96,7 @@ ymaps.ready(function () {
             // Если нет – создаем.
             else {
                 myPlacemark = new ymaps.Placemark(coords, {
-                    iconCaption: 'поиск...'
+                    iconCaption: ''
                 }, {
                     preset: 'islands#dotIcon',
                     draggable: true
