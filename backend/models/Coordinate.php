@@ -64,24 +64,37 @@ class Coordinate extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * Готовим массив с настройками карт для разных филиалов
+     * @return array
+     */
+    public function arrMapParams(){
+        return [
+            1 => [ //Буланиха
+                'max_zoom' => 6,
+                'pic_width' => 9560,
+                'pic_height' => 7214
+            ],
+            2 => [ //Бийск
+                'max_zoom' => 6,
+                'pic_width' => 1280,
+                'pic_height' => 1024
+            ],
+            8 => [ //Томск
+                'max_zoom' => 6,
+                'pic_width' => 2160,
+                'pic_height' => 1200
+            ],
+        ];
+    }
+
 	/**
 	 * Определяем настройки карты для каждого филиала, возвращаем их в зависимости от номера филиала
 	 * @param $id -  номер/идентификатор филиала
 	 * @return mixed
 	 */
     public static function getMapParams($id){
-	    $mapParams = [
-		    1 => [ //Буланиха
-			    'max_zoom' => 6,
-			    'pic_width' => 9560,
-			    'pic_height' => 7214
-		    ],
-		    8 => [ //Томск
-			    'max_zoom' => 6,
-			    'pic_width' => 2160,
-			    'pic_height' => 1200
-		    ],
-	    ];
+	    $mapParams = self::arrMapParams();
 		if ($id > 0)
 	        if (array_key_exists($id, $mapParams))
 	            return $mapParams[$id];
