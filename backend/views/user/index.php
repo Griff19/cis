@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Создать пользователя', ['create'], ['class' => 'btn btn-success']) ?>
+        &#8195;
+        <span class="glyphicon glyphicon-info-sign"></span> У сотрудника, для которого создается пользователь, должен быть указан email.
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -35,15 +37,5 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => '\yii\grid\ActionColumn']
         ]
     ])?>
-
-
-    <?php //echo ListView::widget([
-//        'dataProvider' => $dataProvider,
-//        'itemOptions' => ['class' => 'item'],
-//        'itemView' => function ($model, $key, $index, $widget) {
-//            return Html::a(Html::encode($model->username), ['view', 'id' => $model->id]);
-//        },
-//    ])
-    ?>
 
 </div>
