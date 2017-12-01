@@ -104,10 +104,6 @@ class Coordinate extends \yii\db\ActiveRecord
 	    	return array_keys($mapParams);
     }
 
-	/**
-	 * Связываем модель с моделью "Рабочее место"
-	 * @return \yii\db\ActiveQuery
-	 */
     public function getWorkplace()
     {
     	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
