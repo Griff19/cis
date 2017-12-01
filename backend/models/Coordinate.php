@@ -77,8 +77,8 @@ class Coordinate extends \yii\db\ActiveRecord
             ],
             2 => [ //Бийск
                 'max_zoom' => 6,
-                'pic_width' => 1280,
-                'pic_height' => 1024
+                'pic_width' => 2000,
+                'pic_height' => 1600
             ],
             8 => [ //Томск
                 'max_zoom' => 6,
