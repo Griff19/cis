@@ -28,6 +28,9 @@ use yii\grid\GridView;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'layout' => '{items}',
+        'rowOptions' => function ($model) {
+            return ['class' => $model->dtEnquiry ? '' : 'danger'];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -41,10 +44,10 @@ use yii\grid\GridView;
             ],
             ['attribute' => 'dt_enquiries_id',
                 'value' => function ($model) {
-                    if ($model->dt_enquiries_id)
+                    if ($model->dt_enquiries_id && $model->dtEnquiry)
                         return Html::a('Заявка №' . $model->dt_enquiries_id .' от '. $model->dtEnquiry->create_date, ['dt-enquiries/view', 'id' => $model->dt_enquiries_id]);
                     else
-                        return '';
+                        return '<span class="text-danger">Заявка отсутствует</span>';
                 },
                 'format' => 'raw'
             ],

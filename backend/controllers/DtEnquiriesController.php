@@ -70,12 +70,13 @@ class DtEnquiriesController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
-    /**
-     * Открыть документ "Заявка на оборудование"
-     * @param integer $id
-     * @return mixed
-     */
+	
+	/**
+	 * Открыть документ "Заявка на оборудование"
+	 * @param integer $id
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionView($id)
     {
         $dedSearch = new DtEnquiryDevicesSearch();
@@ -153,12 +154,13 @@ class DtEnquiriesController extends Controller
             ]);
         }
     }
-
-    /**
-     * Редактирование документа
-     * @param integer $id
-     * @return mixed
-     */
+	
+	/**
+	 * Редактирование документа
+	 * @param integer $id
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 */
     public function actionUpdate($id)
     {
         /* @var $model DtEnquiries */
@@ -178,19 +180,28 @@ class DtEnquiriesController extends Controller
             ]);
         }
     }
-
-    /**
-     * Удаление документа "Заявка на оборудование" и его табличной части
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
+	
+	/**
+	 * Удаление документа "Заявка на оборудование" и его табличной части
+	 * @param integer $id идентификатор документа
+	 * @param boolean $del принудительное удаление
+	 * @return mixed
+	 * @throws NotFoundHttpException
+	 * @throws \Exception
+	 * @throws \yii\db\StaleObjectException
+	 */
+    public function actionDelete($id, $del = false)
     {
         $model = $this->findModel($id);
+        if ($model->invoices && !$del){
+        	Yii::$app->session->setFlash('error', 'Эта заявка связана с документом <b>"Счет"</b> №'. $model->invoices[0]->id
+				. ' все равно удалить? ' . Html::a('Удалить', ['delete', 'id' => $id, 'del' => true], ['class' => 'btn btn-danger', 'data-method' => 'post'])
+			);
+			return $this->redirect(['index']);
+		}
         DtEnquiryDevices::deleteAll(['dt_enquiries_id' => $model->id]);
         if ($model->delete()) {
         } else Yii::$app->session->setFlash('error', 'Ошибка при удалении документа');
-
 
         return $this->redirect(['index']);
     }
