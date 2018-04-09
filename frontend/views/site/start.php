@@ -75,7 +75,7 @@ echo GridView::widget([
             'attribute' => 'snp',
             'value' => function ($model) {
                 //var_dump($model);
-                return '<a href ="/admin/employees/view?id=' .$model->emp_id. '&mode=start">' .$model->snp. ' </a>';
+                return '<a href ="/employees/view?id=' .$model->emp_id. '&mode=start">' .$model->snp. ' </a>';
             },
             'format' => 'raw'
         ],
