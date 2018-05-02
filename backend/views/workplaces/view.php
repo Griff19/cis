@@ -18,37 +18,40 @@ MapAsset::register($this);
 /**
  * @var $this yii\web\View
  * @var $model backend\models\Workplaces
- *
  */
 
 $this->title = $model->workplaces_title;
 $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style> .glyphicon-map-marker{font-size: 20px} </style>
 <div class="workplaces-view" style="position: relative">
     <div class="row">
         <div class="col-xs-12 col-md-4 col-md-push-8">
-
-            <h1><?= Html::encode($this->title) ?></h1>
-
-            <p>
+            <div style="float:right">
                 <?php if (Yii::$app->user->can('admin')) {
-                    echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
-                    echo Html::a('Удалить', ['delete', 'id' => $model->id], [
-                        'class' => 'btn btn-danger',
-                        //'style' => 'float:right',
-                        'data' => [
-                            'confirm' => 'Уверенны что хотите удалить это рабочее место?',
-                            'method' => 'post',
-                        ],
+                    echo Html::a('<span class="glyphicon glyphicon-map-marker"></span>',
+                        ['coordinate/set-coord', 'id_wp' => $model->id, 'branch' => $model->branch_id],
+                        ['class' => 'btn btn-default', 'title' => 'Установить координаты', 'style' => 'padding: 5px 8px 3px 6px']);
+                    echo ' ';
+                    echo Html::a('<span class="glyphicon glyphicon-user"></span>', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id],
+                        ['class' => 'btn btn-primary', 'title' => 'Добавить пользователя']);
+                    echo ' ';
+                    echo Html::a('<span class="glyphicon glyphicon-pencil"></span>', ['update', 'id' => $model->id],
+                        ['class' => 'btn btn-default', 'title' => 'Редактировать']);
+                    echo ' ';
+                    echo Html::a('<span class="glyphicon glyphicon-remove"></span>', ['delete', 'id' => $model->id], [
+                        'class' => 'btn btn-danger', 'title' => 'Удалить',
+                        'data' => ['confirm' => 'Уверенны что хотите удалить это рабочее место?', 'method' => 'post'],
                     ]);
                     echo ' ';
                 }
-                echo Html::a('Инвентаризация', ['inventory-acts/index', 'id_wp' => $model->id], ['class' => 'btn btn-primary']);
+                echo Html::a('<span class="glyphicon glyphicon-list-alt"></span>', ['inventory-acts/index', 'id_wp' => $model->id],
+                    ['class' => 'btn btn-primary', 'title' => 'Инвентаризация']);
                 ?>
-            </p>
-
-            <div class="employees-wp-view" style="float: left; /*width: 50%;*/ margin-bottom: 10px">
+            </div>
+            <h1><?= Html::encode($this->title) ?></h1>
+            <div class="employees-wp-view" style="min-height: 180px">
                 <?= Html::a('История', ['storyworkplace/index', 'id_wp' => $model->id]) ?>
                 <?php $colums = [
                     ['class' => 'yii\grid\SerialColumn'], //0
@@ -67,12 +70,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                     ['class' => Column::className(), //3
                         'content' => function ($modem) use ($model) {
-                            return Html::a('', ['wpowners/delete',
+                            return Html::a('<span class="glyphicon glyphicon-remove"></span>', ['wpowners/delete',
                                 'workplace_id' => $modem->workplace_id,
                                 'employee_id' => $modem->employee_id,
                                 'id_wp' => $model->id],
-                                ['class' => 'cross',
-                                    'title' => 'Удалить ответственого...', 'data-method' => 'post']);
+                                ['title' => 'Удалить ответственого...', 'data-method' => 'post']);
                         },
                         'options' => ['style' => 'width:10px']
                     ],
@@ -81,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             /* @var $wpowner \backend\models\WpOwners */
                             if ($wpowner->status == 1) return '';
                             else
-                                return Html::a(Html::img('/admin/img/note.png', ['style' => 'width:24px']),
+                                return Html::a('<span class="glyphicon glyphicon-pushpin"></span>',
                                     ['wpowners/directwp', 'workplace_id' => $wpowner->workplace_id, 'employee_id' => $wpowner->employee_id],
                                     ['title' => 'Закрепить это рабочее место за пользователем...']);
                         },
@@ -97,20 +99,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= GridView::widget([
                     'dataProvider' => $employeeProvider,
+                    'tableOptions' => ['class' => 'table-condensed'],
                     'layout' => "{items}",
                     'columns' => $colums,
                 ]); ?>
-
-                <?php if (Yii::$app->user->can('admin')) { ?>
-                    <br>
-                    <?= Html::a('Добавить пользователя', ['employees/index', 'mode' => 'select', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
-	                <br>
-                    <?= Html::a('<<< Установить координаты',
-                        ['coordinate/set-coord', 'id_wp' => $model->id, 'branch' => $model->branch_id],
-                        ['class' => 'btn btn-default', 'style' => 'margin-top: 10px'])
-                    ?>
-                <?php } ?>
-
+            </div>
+            <div>
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'options' => ['class' => 'table table-condensed'],
+                    'attributes' => [
+                        'id',
+                        [
+                            'attribute' => 'branch_id',
+                            'value' => $model->branch ? $model->branch->branch_title : '-',
+                            'format' => 'raw'
+                        ],
+                        [
+                            'attribute' => 'room_id',
+                            'value' => $model->room ? $model->room->room_title : '-',
+                            'format' => 'raw'
+            
+                        ],
+                        'workplaces_title',
+                        [
+                            'attribute' => 'mu',
+                            'label' => 'Многопользовательское',
+                            'format' => 'boolean'
+                        ]
+                    ],
+                ]) ?>
             </div>
         </div>
         <div class="col-xs-12 col-md-8 col-md-pull-4">
@@ -127,169 +145,150 @@ $this->params['breadcrumbs'][] = $this->title;
             <div id="map" class="map"></div>
         </div>
     </div>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            [
-                'attribute' => 'branch_id',
-                'value' => $model->branch ? $model->branch->branch_title : '-',
-                'format' => 'raw'
-            ],
-            [
-                'attribute' => 'room_id',
-                'value' => $model->room ? $model->room->room_title : '-',
-                'format' => 'raw'
-
-            ],
-            'workplaces_title',
-            [
-                'attribute' => 'mu',
-                'label' => 'Многопользовательское рабочее место',
-                'format' => 'boolean'
-            ]
-        ],
-    ]) ?>
-
 </div>
-<div style="margin: 5px">
-    <h4> Внутренние номера </h4>
-    <?= GridView::widget([
-        'dataProvider' => $voipProvider,
-        'layout' => "{items}",
-        'columns' => [
-            'id',
-            'voip_number',
-            //'secret',
-            [
-                'attribute' => 'secret',
-                'value' => function ($voip) {
-                    return Html::a($voip->secret ? '* * *' : '', '', ['title' => $voip->secret]);
-                },
-                'format' => 'raw',
-                'visible' => Yii::$app->user->can('it'),
-            ],
-            'description',
-            'context',
-            ['class' => Column::className(),
-                'content' => function ($voip) use ($model) {
-                    if (Yii::$app->user->can('admin'))
-                        return Html::a('', ['voipnumbers/choicenull', 'id' => $voip->id, 'id_dev' => 0, 'id_wp' => $model->id],
-                            ['class' => 'cross',
-                                'title' => 'Снять номер с рабочего места (остается в базе)']);
-                    else
-                        return '';
-                }
-            ]
-        ]
-    ])
-    ?>
-    <?php if (Yii::$app->user->can('admin')) { ?>
-        <?= Html::a('Добавить номер', ['voipnumbers/index', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
-    <?php } ?>
-</div>
-<div style="margin: 5px">
-    <h4> Сетевые интерфейсы </h4>
-    <?= GridView::widget([
-        'dataProvider' => Workplaces::getNetintsProvider($model->id),
-        'layout' => "{sorter}\n{pager}\n{items}",
-        'columns' => [
-            ['attribute' => 'title',
-                'header' => 'Тип устройства',
-                'value' => 'title'
-            ],
-            ['attribute' => 'dev_id',
-                'header' => 'Устройство',
-                'value' => function ($arr) {
-                    return Html::a($arr['dev_id'], ['devices/view', 'id' => $arr['dev_id']]);
-                },
-                'format' => 'raw'
-            ],
-            ['attribute' => 'ip',
-                'header' => 'IP адрес',
-                'value' => 'ip'
-            ]
-        ]
-    ])
-    ?>
-</div>
-<div style="margin: 5px">
 
-    <div class="devices-index">
-        <h4> Закрепленные устройства: </h4>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#devices" data-toggle="tab">Закрепленные устройства</a></li>
+    <li><a href="#advance" data-toggle="tab">Дополнително</a></li>
+</ul>
 
-        <?php if (Yii::$app->user->can('admin')) { ?>
-            <?= Html::a('Добавить устройство', ['devices/index', 'mode' => 'wps', 'target' => 'devices/addtowp', 'target_id' => $model->id, 'id_wp' => $model->id], ['class' => 'btn btn-success']) ?>
-            <?= Html::button('Дополнительно >>>', ['class' => 'btn btn-default', 'data-toggle' => 'collapse', 'data-target' => '#accordion']) ?>
-            <div id="accordion" class="collapse" style="float: right">
-                <form name="test" action="/it_base/backend/web/index.php?r=devices/autocreate&id_wp= <?= $model->id ?> "
-                      method="post">
-                    <label><input type="checkbox" name="sys" value="1"> Системный блок </label><br>
-                    <label><input type="checkbox" name="mon" value="1"> Монитор </label><br>
-                    <label><input type="checkbox" name="tel" value="1"> Телефон </label><br>
-                    <label><input type="checkbox" name="ibp" value="1"> ИБП </label><br>
-                    <?= Html::submitButton('Создать автоматом', ['class' => 'btn btn-success']) ?>
-                </form>
-            </div>
-        <?php } ?>
-        <?php
-        //формируем массив с идентификаторами родителей
-        $arrParent = Devices::arrayParentId($model->id);
-        //var_dump($arrParent);
-
-        $col1 = [
-            'id' => 'devices',
-            'dataProvider' => $deviceProvider,
-            'filterModel' => $searchDeviceModel,
-            'tableOptions' => ['class' => 'table table-bordered table-hover'],
-            'rowOptions' => function ($model) use ($arrParent) {
-                if (in_array($model['id'], $arrParent)){
-                    return [
-                        'class' => 'info',
-                        'id' => 'row'.$model->id,
-                        'data-target' => '/admin/devices/view-table-comp?id_par=' . $model->id
-                    ];
-                } else {
-                    return null;
-                }
-            },
+<div class="tab-content">
+    <div class="tab-pane" id="advance">
+        <h4> Внутренние номера </h4>
+        <?= GridView::widget([
+            'dataProvider' => $voipProvider,
             'layout' => "{items}",
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                //'sort',
                 'id',
-                ['attribute' => 'type_id',
-                    'value' => function ($model){
-                        return '<b>'. Html::a(DeviceType::getTitle($model['type_id']), ['devices/view', 'id'=> $model['id']]) .'</b>';
+                'voip_number',
+                [
+                    'attribute' => 'secret',
+                    'value' => function ($voip) {
+                        return Html::a($voip->secret ? '* * *' : '', '', ['title' => $voip->secret]);
                     },
-                    'format' => 'raw'
+                    'format' => 'raw',
+                    'visible' => Yii::$app->user->can('it'),
                 ],
-                //'type_id',
-                'device_note',
-                'brand',
-                'model',
-                'sn',
-                'specification',
-                'parent_device_id',
+                'description',
+                'context',
                 ['class' => Column::className(),
-                    'content' => function ($moddev) use ($model){
+                    'content' => function ($voip) use ($model) {
                         if (Yii::$app->user->can('admin'))
-                            return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $model->id],['class' => 'cross']);
+                            return Html::a('', ['voipnumbers/choicenull', 'id' => $voip->id, 'id_dev' => 0, 'id_wp' => $model->id],
+                                ['class' => 'cross',
+                                    'title' => 'Снять номер с рабочего места (остается в базе)']);
                         else
                             return '';
                     }
                 ]
-            ],
-        ];
-        $this->registerAssetBundle('backend\assets\CollapseTableAsset');
-        Pjax::begin(['id' => 'workplaces_device']);
-        echo GridView::widget($col1);
-        $this->registerJs('CollapseTable();');
-        Pjax::end();
+            ]
+        ])
+        ?>
+        <?php if (Yii::$app->user->can('admin')) { ?>
+            <?= Html::a('Добавить номер', ['voipnumbers/index', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?php } ?>
+    
+        <h4> Сетевые интерфейсы </h4>
+        <?= GridView::widget([
+            'dataProvider' => Workplaces::getNetintsProvider($model->id),
+            'layout' => "{sorter}\n{pager}\n{items}",
+            'columns' => [
+                ['attribute' => 'title',
+                    'header' => 'Тип устройства',
+                    'value' => 'title'
+                ],
+                ['attribute' => 'dev_id',
+                    'header' => 'Устройство',
+                    'value' => function ($arr) {
+                        return Html::a($arr['dev_id'], ['devices/view', 'id' => $arr['dev_id']]);
+                    },
+                    'format' => 'raw'
+                ],
+                ['attribute' => 'ip',
+                    'header' => 'IP адрес',
+                    'value' => 'ip'
+                ]
+            ]
+        ])
         ?>
     </div>
+    <div class="tab-pane active" id="devices">
+        <div class="devices-index">
+            <h4> Закрепленные устройства: </h4>
+    
+            <?php if (Yii::$app->user->can('admin')) { ?>
+                <?= Html::a('Добавить устройство', ['devices/index', 'mode' => 'wps', 'target' => 'devices/addtowp', 'target_id' => $model->id, 'id_wp' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::button('Дополнительно >>>', ['class' => 'btn btn-default', 'data-toggle' => 'collapse', 'data-target' => '#accordion']) ?>
+                <div id="accordion" class="collapse" style="float: right">
+                    <form name="test" action="/it_base/backend/web/index.php?r=devices/autocreate&id_wp= <?= $model->id ?> "
+                          method="post">
+                        <label><input type="checkbox" name="sys" value="1"> Системный блок </label><br>
+                        <label><input type="checkbox" name="mon" value="1"> Монитор </label><br>
+                        <label><input type="checkbox" name="tel" value="1"> Телефон </label><br>
+                        <label><input type="checkbox" name="ibp" value="1"> ИБП </label><br>
+                        <?= Html::submitButton('Создать автоматом', ['class' => 'btn btn-success']) ?>
+                    </form>
+                </div>
+            <?php } ?>
+            <?php
+            //формируем массив с идентификаторами родителей
+            $arrParent = Devices::arrayParentId($model->id);
+            //var_dump($arrParent);
+    
+            $col1 = [
+                'id' => 'devices',
+                'dataProvider' => $deviceProvider,
+                'filterModel' => $searchDeviceModel,
+                'tableOptions' => ['class' => 'table table-bordered table-hover'],
+                'rowOptions' => function ($model) use ($arrParent) {
+                    if (in_array($model['id'], $arrParent)){
+                        return [
+                            'class' => 'info',
+                            'id' => 'row'.$model->id,
+                            'data-target' => '/admin/devices/view-table-comp?id_par=' . $model->id
+                        ];
+                    } else {
+                        return null;
+                    }
+                },
+                'layout' => "{items}",
+                'columns' => [
+                    ['class' => 'yii\grid\SerialColumn'],
+                    //'sort',
+                    'id',
+                    ['attribute' => 'type_id',
+                        'value' => function ($model){
+                            return '<b>'. Html::a(DeviceType::getTitle($model['type_id']), ['devices/view', 'id'=> $model['id']]) .'</b>';
+                        },
+                        'format' => 'raw'
+                    ],
+                    //'type_id',
+                    'device_note',
+                    'brand',
+                    'model',
+                    'sn',
+                    'specification',
+                    'parent_device_id',
+                    ['class' => Column::className(),
+                        'content' => function ($moddev) use ($model){
+                            if (Yii::$app->user->can('admin'))
+                                return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $model->id],['class' => 'cross']);
+                            else
+                                return '';
+                        }
+                    ]
+                ],
+            ];
+            $this->registerAssetBundle('backend\assets\CollapseTableAsset');
+            Pjax::begin(['id' => 'workplaces_device']);
+            echo GridView::widget($col1);
+            $this->registerJs('CollapseTable();');
+            Pjax::end();
+            ?>
+        </div>
+    </div>
 </div>
+
 <script type="text/javascript">
     /**
      * Скрипт готовит данные для формирования карты и меток на ней.
