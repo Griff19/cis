@@ -33,6 +33,7 @@ class VoipNumbers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['voip_number', 'unique'],
             [['voip_number', 'device_id', 'workplace_id', 'status'], 'integer'],
             ['voip_number', 'default'],
             //['status', 'unique', 'targetAttribute' => ['status', 'device_id']],

@@ -58,6 +58,10 @@ class WorkplacesController extends Controller
 
     /**
      * Lists all Workplaces models.
+     * @param null $mode режим отражения таблицы рабочих мест 'sel' - выбор РМ
+     * @param null $id_dev идентификатор устройства
+     * @param null $target страница с которой был вызов метода (при выборе рабочего места)
+     * @param null $target_id идентификатор элемента для которого вызван метод (при выборе рабочего места)
      * @return mixed
      */
     public function actionIndex($mode = null, $id_dev = null, $target = null, $target_id = null)
@@ -129,6 +133,7 @@ class WorkplacesController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -148,6 +153,8 @@ class WorkplacesController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -157,7 +164,7 @@ class WorkplacesController extends Controller
     }
 
     /**
-     * Готовим список рабочих мест по идентификатору кабинета
+     * Готовим список рабочих мест по идентификатору кабинета для вывода в поле ввода
      * @param $id
      */
     public static function actionList($id){
@@ -184,13 +191,17 @@ class WorkplacesController extends Controller
      * @return \yii\web\Response
      */
     public function actionSelect($id, $target, $target_id){
-        if ($target == 'dt-enquiry-workplaces/create'){
-            $options = [$target, 'id' => $target_id, 'id_wp' => $id];
+
+        switch ($target){
+            case 'dt-enquiry-workplaces/create':
+            case 'devices/addtowp':
+            case 'tmp-workplace/create':
+                $options = [$target, 'id' => $target_id, 'id_wp' => $id];
+                return $this->redirect($options);
+                break;
+            default:
+                return false;
         }
-        if ($target == 'devices/addtowp'){
-            $options = [$target, 'id' => $target_id, 'id_wp' => $id];
-        }
-        return $this->redirect($options);
     }
 
     /**

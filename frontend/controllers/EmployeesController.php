@@ -68,14 +68,17 @@ class EmployeesController extends Controller
         $emailSearch = new EmailsSearch();
         $emailProvider = $emailSearch->search(Yii::$app->request->queryParams, $id);
 
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-            'cellProvider' => $cellProvider,
-            'cellSearch' => $cellSearch,
-            'emailProvider' => $emailProvider,
-            'emailSearch' => $emailSearch,
-            'mode' => $mode
-        ]);
+        if (Yii::$app->user->can('it'))
+            return $this->redirect(['admin/employees/view', 'id' => $id]);
+        else
+            return $this->render('view', [
+                'model' => $this->findModel($id),
+                'cellProvider' => $cellProvider,
+                'cellSearch' => $cellSearch,
+                'emailProvider' => $emailProvider,
+                'emailSearch' => $emailSearch,
+                'mode' => $mode
+            ]);
     }
 
     /**

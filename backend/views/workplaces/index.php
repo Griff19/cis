@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php //чтобы таблицу можно было отсортировать и при этом в запросе остались значения mode и id_dev сохраняем их
-    //для этого можно использовать сессию но это потом
+    //PS для этого конечно можно использовать сессию но это потом
         $param = Yii::$app->request->queryParams;
         $query = '';
         if($param) $query = 'mode=' . ArrayHelper::getValue($param, 'mode')

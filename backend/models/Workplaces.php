@@ -138,6 +138,7 @@ class Workplaces extends \yii\db\ActiveRecord
     }
 
 	/**
+     * Выбираем все точки
 	 * @return array|\yii\db\ActiveRecord[]
 	 */
     public static function getAllCoordinate($floor, $branch) {
@@ -156,10 +157,11 @@ class Workplaces extends \yii\db\ActiveRecord
     }
 
     /**
+     * ??? Не понятный метод, на знаю зачем он нужен
      * @param $id
      * @return mixed
      */
-    public function getTitle($id){
+    public static function getTitle($id){
         $workplace = Workplaces::find()->select('workplaces_title')->where(['id' => $id])->asArray()->one();
         return $workplace['workplaces_title'];
     }
@@ -172,10 +174,8 @@ class Workplaces extends \yii\db\ActiveRecord
     public function getSummary($mode = 0)
     {
         $res = '';
-        if ($mode == 0)
-            $sep = ", ";
-        else
-            $sep = "\n";
+        if ($mode == 0) $sep = ", ";
+        else $sep = "\n";
 
         $res .= '№' . $this->id . ', ';
         $res .= $this->room->branch->branch_title . $sep;

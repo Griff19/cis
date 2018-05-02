@@ -22,7 +22,7 @@ use yii\data\ActiveDataProvider;
  * @property integer parent_device_id
  * @property boolean dev_comp
  * @property DeviceType deviceType
- * @property mixed fake_device помечает устройство как фейк
+ * @property mixed fake_device помечает устройство как фейк (при работе с актами инвентаризации)
  * @property string fullWorkplace полное имя рабочего места
  * @property string summary Краткая информация об устройстве
  */

@@ -41,26 +41,10 @@ class DevicesController extends Controller
                 'rules' => [
                     [
                         'actions' => [
-                            'index',
-                            'index-to-enquiry',
-                            'index-comp',
-                            'view',
-                            'view-table-comp',
-                            'update',
-                            'create-from-doc',
-                            'validation',
-                            'addcomp',
-                            'change-by-attr',
-                            'get-brands',
-                            'get-models',
-                            'get-specifications',
-                            'set-specification-auto',
-                            'set-type-id',
-                            'delfromwp',
-                            'delcomp',
-                            'find-device',
-                            'find-all-devices',
-                            'addtowp'
+                            'index', 'index-to-enquiry', 'index-comp', 'view', 'view-table-comp', 'update',
+                            'create-from-doc', 'validation', 'addcomp', 'change-by-attr', 'get-brands', 'get-models',
+                            'get-specifications', 'set-specification-auto', 'set-type-id', 'delfromwp', 'delcomp',
+                            'find-device', 'find-all-devices', 'addtowp'
                         ],
                         'allow' => true,
                         'roles' => ['it'],
@@ -134,6 +118,7 @@ class DevicesController extends Controller
     }
 
     /**
+     * Комплектующие
      * @param null $target
      * @return string
      */
