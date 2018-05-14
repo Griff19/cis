@@ -114,9 +114,9 @@ class Workplaces extends \yii\db\ActiveRecord
         $provider = new ActiveDataProvider(['query' => $query]);
         return $provider;
     }
-
+    
     /**
-     * @return $this
+     * @return \yii\db\ActiveQuery
      */
     public function getNetints(){
         return $this->hasMany(Netints::className(), ['device_id' => 'id'])->viaTable('devices', ['workplace_id' => 'id']);
@@ -183,6 +183,5 @@ class Workplaces extends \yii\db\ActiveRecord
         $res .= $this->workplaces_title;
 
         return $res;
-
     }
 }

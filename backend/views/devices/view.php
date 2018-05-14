@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\grid\Column;
+use yii\bootstrap\ButtonDropdown;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Devices */
@@ -24,22 +25,31 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?> <?= $model->fake_device == 1 ? '<span class="text-danger">Фейк</span>' : '' ?> </h1>
 
-    <p>
-        <?= Html::a('Редактировать', ['update', 'id' => $model->id, ], ['class' => 'btn btn-primary', 'data-method' => 'POST']) ?>
-        <?= Html::a('Назначить рабочее место', ['workplaces/index', 'mode' => 'sel', 'target' => 'devices/addtowp', 'target_id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('История', ['storydevice/index', 'id_dev' => $model->id])?>
-		<?php
-        if (Yii::$app->user->can('admin'))
-            echo Html::a('Удалить', ['delete', 'id' => $model->id], [
-                'class' => 'btn btn-danger',
-                'style' => 'float:right',
-                'data' => [
-                    'confirm' => 'Удалить '. $this->title .'?',
-                    'method' => 'post',
-                ],
-            ]);
-        ?>
-    </p>
+    
+    <?= Html::a('Редактировать', ['update', 'id' => $model->id, ], ['class' => 'btn btn-primary', 'data-method' => 'POST']) ?>
+    
+    <?= ButtonDropdown::widget([
+        'label' => 'Назначить рабочее место...',
+        'dropdown' => [
+            'items' => [
+                ['label' => 'Немедленно', 'url' => ['workplaces/index', 'mode' => 'sel', 'target' => 'devices/addtowp', 'target_id' => $model->id]],
+                ['label' => 'Виртуально', 'url' => ['tmp-moving/create', 'device_id' => $model->id, 'workplace_from' => $model->workplace_id]],
+            ],
+        ],
+    ]);?>
+    
+    <?= Html::a('История', ['storydevice/index', 'id_dev' => $model->id])?>
+    
+    <?php if (Yii::$app->user->can('admin'))
+        echo Html::a('Удалить', ['delete', 'id' => $model->id], [
+            'class' => 'btn btn-danger',
+            'style' => 'float:right',
+            'data' => [
+                'confirm' => 'Удалить '. $this->title .'?',
+                'method' => 'post',
+            ],
+        ]);
+    ?>
 
     <?= DetailView::widget([
         'model' => $model,

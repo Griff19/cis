@@ -2,19 +2,17 @@
 
 namespace backend\controllers;
 
-use backend\models\TmpDeviceSearch;
 use Yii;
-use backend\models\TmpWorkplace;
-use backend\models\TmpWorkplaceSearch;
+use backend\models\TmpMoving;
+use backend\models\TmpMovingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
 
 /**
- * TmpWorkplaceController implements the CRUD actions for TmpWorkplace model.
+ * TmpMovingController implements the CRUD actions for TmpMoving model.
  */
-class TmpWorkplaceController extends Controller
+class TmpMovingController extends Controller
 {
     /**
      * @inheritdoc
@@ -22,21 +20,6 @@ class TmpWorkplaceController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['index', 'view'],
-                        'allow' => true,
-                        'roles' => ['it'],
-                    ],
-                    [
-                        'actions' => ['create', 'delete'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -47,12 +30,12 @@ class TmpWorkplaceController extends Controller
     }
 
     /**
-     * Lists all TmpWorkplace models.
+     * Lists all TmpMoving models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new TmpWorkplaceSearch();
+        $searchModel = new TmpMovingSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -62,34 +45,30 @@ class TmpWorkplaceController extends Controller
     }
 
     /**
-     * Displays a single TmpWorkplace model.
+     * Displays a single TmpMoving model.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
-        $searchTmpDevice = new TmpDeviceSearch();
-        $dataTmpDevice = $searchTmpDevice->search(Yii::$app->request->queryParams);
-
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'dataTmpDevice' => $dataTmpDevice,
-            'searchTmpDevice' => $searchTmpDevice,
         ]);
     }
 
     /**
-     * Creates a new TmpWorkplace model.
+     * Creates a new TmpMoving model.
      * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param null $id_wp
      * @return mixed
      */
-    public function actionCreate($id_wp = null)
+    public function actionCreate($device_id, $workplace_from, $workplace_where = null)
     {
-        $model = new TmpWorkplace();
-        if ($id_wp) $model->workplaces_id = $id_wp;
-
+        $model = new TmpMoving();
+        $model->device_id = $device_id;
+        $model->workplace_from = $workplace_from;
+        $model->workplace_where = $workplace_where;
+        $model->user_id = Yii::$app->user->id;
+        $model->status = $model::STATUS_DEFAULT;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -100,11 +79,10 @@ class TmpWorkplaceController extends Controller
     }
 
     /**
-     * Updates an existing TmpWorkplace model.
+     * Updates an existing TmpMoving model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -120,12 +98,10 @@ class TmpWorkplaceController extends Controller
     }
 
     /**
-     * Deletes an existing TmpWorkplace model.
+     * Deletes an existing TmpMoving model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
-     * @throws NotFoundHttpException
-     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -135,15 +111,15 @@ class TmpWorkplaceController extends Controller
     }
 
     /**
-     * Finds the TmpWorkplace model based on its primary key value.
+     * Finds the TmpMoving model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return TmpWorkplace the loaded model
+     * @return TmpMoving the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = TmpWorkplace::findOne($id)) !== null) {
+        if (($model = TmpMoving::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -59,7 +59,7 @@ class WorkplacesController extends Controller
     /**
      * Lists all Workplaces models.
      * @param null $mode режим отражения таблицы рабочих мест 'sel' - выбор РМ
-     * @param null $id_dev идентификатор устройства
+     * @param null $id_dev идентификатор устройства для которого выбираем РМ
      * @param null $target страница с которой был вызов метода (при выборе рабочего места)
      * @param null $target_id идентификатор элемента для которого вызван метод (при выборе рабочего места)
      * @return mixed
@@ -190,18 +190,21 @@ class WorkplacesController extends Controller
      * @param $target_id int идентификатор назначения
      * @return \yii\web\Response
      */
-    public function actionSelect($id, $target, $target_id){
+    public function actionSelect($id, $target, $target_id, $id_dev = null){
 
         switch ($target){
             case 'dt-enquiry-workplaces/create':
             case 'devices/addtowp':
-            case 'tmp-workplace/create':
                 $options = [$target, 'id' => $target_id, 'id_wp' => $id];
-                return $this->redirect($options);
+                break;
+            case 'tmp-moving/create':
+                $options = [$target, 'device_id' => $id_dev, 'workplace_from' => $target_id, 'workplace_where' => $id];
                 break;
             default:
                 return false;
         }
+        
+        return $this->redirect($options);
     }
 
     /**

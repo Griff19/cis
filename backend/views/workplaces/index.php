@@ -9,6 +9,8 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\WorkplacesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $id_dev integer идентификатор устройства для которого выбираем РМ */
+/* @var $mode string режим отображения таблицы */
 
 $this->title = 'Рабочие места';
 $this->params['breadcrumbs'][] = $this->title;
@@ -79,8 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => \yii\grid\Column::className(), //6
             'content' => function($model) use ($id_dev, $target, $target_id){
                 return Html::a('<span class="glyphicon glyphicon-ok"></span>',
-                   // ['devices/addtowp', 'id' => $id_dev, 'id_wp' => $model->id]);
-                    ['select', 'id' => $model->id, 'target' => $target, 'target_id' => $target_id]);
+                    ['select', 'id' => $model->id, 'target' => $target, 'target_id' => $target_id, 'id_dev' => $id_dev]);
             }
         ],
         ['attribute' => 'inventoryDate', //7
