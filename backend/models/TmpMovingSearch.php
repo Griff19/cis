@@ -54,7 +54,14 @@ class TmpMovingSearch extends TmpMoving
         }
         if ($this->summary) {
             $query->joinWith('device');
-            $query->leftJoin('device_type', 'devices.type_id = device_type.id');
+            $query->leftJoin('device_type', 'device_type.id = devices.type_id');
+        }
+        if ($this->workplace_from) {
+            $query->leftJoin('workplaces', 'workplaces.id = workplace_from')
+                ->leftJoin('rooms', 'rooms.id = workplaces.room_id')
+                ->leftJoin('branches', 'branches.id = workplaces.branch_id')
+            ;
+
         }
         // grid filtering conditions
         $query->andFilterWhere([
@@ -78,7 +85,16 @@ class TmpMovingSearch extends TmpMoving
         if (is_numeric($this->workplace_from))
             $query->andFilterWhere(['workplace_from' => $this->workplace_from]);
         else
-            $query->andFilterWhere(['ilike', 'workplace_from', $this->workplace_from]);
+            $query->andFilterWhere(['ilike', 'workplaces.workplaces_title', $this->workplace_from])
+                ->orFilterWhere(['ilike', 'rooms.room_title', $this->workplace_from])
+                ->orFilterWhere(['ilike', 'branches.branch_title', $this->workplace_from])
+            ;
+
+        if (is_numeric($this->workplace_where))
+            $query->andFilterWhere(['workplace_where' => $this->workplace_where]);
+        else
+            $query->andFilterWhere(['ilike', 'workplace_where', $this->workplace_where])
+            ;
         
         return $dataProvider;
     }

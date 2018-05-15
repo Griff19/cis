@@ -6,11 +6,9 @@ use yii\helpers\Html;
 
 ?>
 <div class="site-index">
-
     <div align="center">
         <p class="lead"> Система учета и контроля орг-техники на предприятии "Алтайская Буренка"</p>
     </div>
-
     <div class="body-content">
         <div class="row"> <!-- 1 -->
             <div class="col-sm-3">
@@ -110,6 +108,10 @@ use yii\helpers\Html;
             <div class="col-sm-3">
                 <?= Html::a('Страница сотрудника IT',['site/employee-it'],['class'=>'btn btn-default'])?>
                 <p>Основная рабочая страница сотрудника IT</p>
+            </div>
+            <div class="col-sm-3">
+                <?= Html::a('Перемещения',['/tmp-moving'],['class'=>'btn btn-default'])?>
+                <p>Виртуальные перемещения</p>
             </div>
         </div>
     </div>

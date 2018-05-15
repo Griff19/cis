@@ -178,7 +178,7 @@ class Workplaces extends \yii\db\ActiveRecord
         else $sep = "\n";
 
         $res .= '№' . $this->id . ', ';
-        $res .= $this->room->branch->branch_title . $sep;
+        $res .= $this->branch->branch_title . $sep;
         $res .= $this->room->room_title . $sep;
         $res .= $this->workplaces_title;
 

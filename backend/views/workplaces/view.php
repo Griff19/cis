@@ -50,8 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => 'btn btn-primary', 'title' => 'Инвентаризация']);
                 ?>
             </div>
-            <h1><?= Html::encode($this->title) ?></h1>
-            <div class="employees-wp-view" style="min-height: 180px">
+            <br />
+            <h3><?= Html::encode($this->title) ?></h3>
+            <div class="employees-wp-view">
                 <?= Html::a('История', ['storyworkplace/index', 'id_wp' => $model->id]) ?>
                 <?php $colums = [
                     ['class' => 'yii\grid\SerialColumn'], //0
@@ -81,7 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ['class' => Column::className(), //4
                         'content' => function ($wpowner) {
                             /* @var $wpowner \backend\models\WpOwners */
-                            if ($wpowner->status == 1) return '';
+                            if ($wpowner->status == 1)
+                                return '';
                             else
                                 return Html::a('<span class="glyphicon glyphicon-pushpin"></span>',
                                     ['wpowners/directwp', 'workplace_id' => $wpowner->workplace_id, 'employee_id' => $wpowner->employee_id],

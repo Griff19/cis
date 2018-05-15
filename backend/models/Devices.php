@@ -36,6 +36,11 @@ class Devices extends \yii\db\ActiveRecord
     const DEVICE_FAKE = 1; //фейк устройство
     const DEVICE_RESERVED = 2; //зарезервировано
 
+    const SHOW_DEF = 'def'; //обычное отображение таблицы
+    const SHOW_WPS = 'wps'; //при выборе устройства для РМ
+    const SHOW_DVS = 'dvs'; //при выборе комплектующего
+    const SHOW_FWP = 'fwp'; //полное отображение РМ
+
     public $branch_id;
     public $room_id;
     public $count;

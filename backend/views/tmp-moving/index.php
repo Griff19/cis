@@ -29,8 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['attribute' => 'workplace_from', 'value' => 'workplaceFrom.summary'],
             ['attribute' => 'workplace_where', 'value' => 'workplaceWhere.summary'],
             'user.employee.snp',
+            ['class' => '\yii\grid\Column',
+                'content' => function ($model) {
+                    return Html::a('<span class="glyphicon glyphicon-ok"></span>', ['devices/addtowp', 'id' => $model->device_id, 'id_wp' => $model->workplace_where]);
+                }
+            ],
             // 'status',
-
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

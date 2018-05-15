@@ -48,6 +48,7 @@ class TmpMovingController extends Controller
      * Displays a single TmpMoving model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -70,7 +71,8 @@ class TmpMovingController extends Controller
         $model->user_id = Yii::$app->user->id;
         $model->status = $model::STATUS_DEFAULT;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect('index');
         } else {
             return $this->render('create', [
                 'model' => $model,

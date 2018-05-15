@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\TmpMoving;
 use Yii;
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
@@ -24,7 +25,6 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 use yii\filters\AccessControl;
-
 
 
 /**
@@ -79,13 +79,14 @@ class DevicesController extends Controller
 
     /**
      * Список устройств.
-     * $mode = 'def' - стандартный вид
-     * $mode = 'wps' - выбираем устройство для рабочего места
-     * $mode = 'dvs' - выбираем устройство как комплектующее
-     * @param string $mode
-     * @param null $target
-     * @param null $id_dev
-     * @param null $id_wp
+     * @param string $mode = 'def' - стандартный вид
+     *          'wps' - выбираем устройство для рабочего места
+     *          'dvs' - выбираем устройство как комплектующее
+     *          'fwp' - полное отображение рабочего места
+     *
+     * @param null $target адрес перенаправления после выбора
+     * @param null $id_dev ид устройства для выбора комплектующего
+     * @param null $id_wp ид рабочего места
      * @return mixed
      */
     public function actionIndex($mode = 'def', $target = null, $id_dev = null, $id_wp = null)
@@ -535,11 +536,10 @@ class DevicesController extends Controller
     /**
      * Добавляем устройство к рабочему месту
      * @param integer $id идентификатор устройства
-     * @param null $id_wp идентификатор рабочего места
-     * @param $param
+     * @param null|integer $id_wp идентификатор рабочего места
+     * @param null|array $param параметры URL строки
      * @return \yii\web\Response
      * @throws NotFoundHttpException
-     * @internal param $id_wp
      */
     public function actionAddtowp($id, $id_wp = null, $param = null)
     {
@@ -566,8 +566,10 @@ class DevicesController extends Controller
             throw new NotFoundHttpException('Осутствуе обязательный параметр "Идентификатор рабочего места"');
 
         if (!$err)
-            if ($model->save())
+            if ($model->save()) {
                 Devices::updateAll(['workplace_id' => $id_wp], ['parent_device_id' => $model->id]);
+                TmpMoving::deleteAll(['device_id' => $id]);
+            }
 
         $query = Yii::$app->request->queryParams;
         $target = ArrayHelper::getValue($query, 'target');
