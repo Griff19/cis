@@ -35,10 +35,10 @@ if($target && $param) {
     <p>
         <?php
         if (Yii::$app->user->can('admin')) {
-            echo Html::a('Комплектующие автоматом', ['autocomp'], [
-                    'class' => 'btn btn-success', 'data' => [
-                            'confirm' => "Произвести автоматическую установку комплектуюдщих \r\n для одиноких системников?"
-                ]]) . ' ';
+//            echo Html::a('Комплектующие автоматом', ['autocomp'], [
+//                    'class' => 'btn btn-success', 'data' => [
+//                            'confirm' => "Произвести автоматическую установку комплектуюдщих \r\n для одиноких системников?"
+//                ]]) . ' ';
             echo Html::a('Добавить устройство', ['devices/create?'. $query], ['class' => 'btn btn-success']);
         }?>
         <?= Html::a('<span class="glyphicon glyphicon-search"></span> Общий склад',

@@ -19,7 +19,6 @@ use backend\models\Parameters;
 use yii\bootstrap\Html;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
-use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -590,7 +589,6 @@ class DevicesController extends Controller
      * @param int $id идентификатор комплектующего
      * @param null $param параметры из строки УРЛ
      * @return \yii\web\Response
-     * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @internal param int $id_dev идентификатор родителя
      * @internal param int $id_wp идентификатор рабочего места кудв вернуться после исполнения
@@ -640,6 +638,8 @@ class DevicesController extends Controller
      * Удаление устройств лучше исключить но для отладки пока нужно оставить
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -653,85 +653,85 @@ class DevicesController extends Controller
     /**
      * Автоматически добавляем комплектующие
      */
-    public function actionAutocomp()
-    {
-        $models = Devices::findAll(['type_id' => 1]);
-        $arr = [373, 363, 262, 202, 146];
-        $valid = false;
-        $i = 0;
-        $v = 0;
-        $n = 0;
-        foreach ($models as $model) {
-            if (in_array($model->id, $arr)) continue;
-            $count_comp = Devices::find()->where(['parent_device_id' => $model->id])->count();
-            //echo $model->id . ' ' . $count_comp . '<br>';
-            if ($count_comp > 0) continue;
-            //отсеяли лишние системники, создаем комплектующие
-            $i++;
-            $comp = new Devices();
-            $comp->type_id = 18;
-            $comp->device_note = 'Блок питания';
-            $comp->workplace_id = 119;
-            $comp->parent_device_id = $model->id;
-            if ($comp->validate()) {
-                $comp->save();
-                $valid = true;
-                $v++;
-            }
-
-            $comp = new Devices();
-            $comp->type_id = 25;
-            $comp->device_note = 'Материнская плата';
-            $comp->workplace_id = 119;
-            $comp->parent_device_id = $model->id;
-            if ($comp->validate()) {
-                $v++;
-                if ($comp->save()) {
-                    $net = new Netints(); //создаем сетевой интефейс со значениями по умолчанию
-                    $net->device_id = $comp->id;
-                    if ($net->validate()) {
-                        $n++;
-                        $net->save();
-                    }
-                }
-            }
-
-            $comp = new Devices();
-            $comp->type_id = 28;
-            $comp->device_note = 'Процессор';
-            $comp->workplace_id = 119;
-            $comp->parent_device_id = $model->id;
-            if ($comp->validate()) {
-                $comp->save();
-                $v++;
-            }
-
-            $comp = new Devices();
-            $comp->type_id = 29;
-            $comp->device_note = 'DDR';
-            $comp->workplace_id = 119;
-            $comp->parent_device_id = $model->id;
-            if ($comp->validate()) {
-                $comp->save();
-                $v++;
-            }
-
-            $comp = new Devices();
-            $comp->type_id = 30;
-            $comp->device_note = 'SSD';
-            $comp->workplace_id = 119;
-            $comp->parent_device_id = $model->id;
-            if ($comp->validate()) {
-                $comp->save();
-                $v++;
-            }
-
-            $comp = null;
-        }
-        if ($valid) Yii::$app->session->setFlash('success', 'Обработка прошла успешно! Добавлено ' . $v . ' устройств. '
-            . $n . ' сетевых интерфейсов для ' . $i . 'устройств');
-        return $this->redirect(['index']);
-    }
+//    public function actionAutocomp()
+//    {
+//        $models = Devices::findAll(['type_id' => 1]);
+//        $arr = [373, 363, 262, 202, 146];
+//        $valid = false;
+//        $i = 0;
+//        $v = 0;
+//        $n = 0;
+//        foreach ($models as $model) {
+//            if (in_array($model->id, $arr)) continue;
+//            $count_comp = Devices::find()->where(['parent_device_id' => $model->id])->count();
+//            //echo $model->id . ' ' . $count_comp . '<br>';
+//            if ($count_comp > 0) continue;
+//            //отсеяли лишние системники, создаем комплектующие
+//            $i++;
+//            $comp = new Devices();
+//            $comp->type_id = 18;
+//            $comp->device_note = 'Блок питания';
+//            $comp->workplace_id = 119;
+//            $comp->parent_device_id = $model->id;
+//            if ($comp->validate()) {
+//                $comp->save();
+//                $valid = true;
+//                $v++;
+//            }
+//
+//            $comp = new Devices();
+//            $comp->type_id = 25;
+//            $comp->device_note = 'Материнская плата';
+//            $comp->workplace_id = 119;
+//            $comp->parent_device_id = $model->id;
+//            if ($comp->validate()) {
+//                $v++;
+//                if ($comp->save()) {
+//                    $net = new Netints(); //создаем сетевой интефейс со значениями по умолчанию
+//                    $net->device_id = $comp->id;
+//                    if ($net->validate()) {
+//                        $n++;
+//                        $net->save();
+//                    }
+//                }
+//            }
+//
+//            $comp = new Devices();
+//            $comp->type_id = 28;
+//            $comp->device_note = 'Процессор';
+//            $comp->workplace_id = 119;
+//            $comp->parent_device_id = $model->id;
+//            if ($comp->validate()) {
+//                $comp->save();
+//                $v++;
+//            }
+//
+//            $comp = new Devices();
+//            $comp->type_id = 29;
+//            $comp->device_note = 'DDR';
+//            $comp->workplace_id = 119;
+//            $comp->parent_device_id = $model->id;
+//            if ($comp->validate()) {
+//                $comp->save();
+//                $v++;
+//            }
+//
+//            $comp = new Devices();
+//            $comp->type_id = 30;
+//            $comp->device_note = 'SSD';
+//            $comp->workplace_id = 119;
+//            $comp->parent_device_id = $model->id;
+//            if ($comp->validate()) {
+//                $comp->save();
+//                $v++;
+//            }
+//
+//            $comp = null;
+//        }
+//        if ($valid) Yii::$app->session->setFlash('success', 'Обработка прошла успешно! Добавлено ' . $v . ' устройств. '
+//            . $n . ' сетевых интерфейсов для ' . $i . 'устройств');
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * @return string
