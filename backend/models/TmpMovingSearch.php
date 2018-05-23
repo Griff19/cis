@@ -56,6 +56,7 @@ class TmpMovingSearch extends TmpMoving
             $query->joinWith('device');
             $query->leftJoin('device_type', 'device_type.id = devices.type_id');
         }
+
         if ($this->workplace_from || $this->workplace_where) {
             $query->leftJoin('workplaces', 'workplaces.id = workplace_from OR workplaces.id = workplace_where')
                 ->leftJoin('rooms', 'rooms.id = workplaces.room_id')
@@ -78,7 +79,6 @@ class TmpMovingSearch extends TmpMoving
                 ->orFilterWhere(['ilike', 'devices.brand', $this->summary])
                 ->orFilterWhere(['ilike', 'devices.model', $this->summary])
             ;
-        
         if (is_numeric($this->workplace_from))
             $query->andFilterWhere(['workplace_from' => $this->workplace_from]);
         else
@@ -86,7 +86,6 @@ class TmpMovingSearch extends TmpMoving
                 ->orFilterWhere(['ilike', 'rooms.room_title', $this->workplace_from])
                 ->orFilterWhere(['ilike', 'branches.branch_title', $this->workplace_from])
             ;
-
         if (is_numeric($this->workplace_where))
             $query->andFilterWhere(['workplace_where' => $this->workplace_where]);
         else
@@ -94,7 +93,7 @@ class TmpMovingSearch extends TmpMoving
                 ->orFilterWhere(['ilike', 'rooms.room_title', $this->workplace_where])
                 ->orFilterWhere(['ilike', 'branches.branch_title', $this->workplace_where])
             ;
-        
+
         return $dataProvider;
     }
 }

@@ -545,7 +545,7 @@ class DevicesController extends Controller
         $err = false; //обнаружены ошибки в работе;
         //$target = ArrayHelper::getValue(Yii::$app->request->queryParams, 'target');
         //var_dump($target); die;
-        /** @var Devices $model */
+        /** @var $model Devices */
         $model = $this->findModel($id);
         $oldwp = $model->workplace_id; //старое рабочее место
         if ($oldwp == 127) {
@@ -564,11 +564,15 @@ class DevicesController extends Controller
         else
             throw new NotFoundHttpException('Осутствуе обязательный параметр "Идентификатор рабочего места"');
 
-        if (!$err)
+        if (!$err) {
+            $model->fake_device = Devices::DEVICE_DEF;
             if ($model->save()) {
                 Devices::updateAll(['workplace_id' => $id_wp], ['parent_device_id' => $model->id]);
                 TmpMoving::deleteAll(['device_id' => $id]);
+            } else {
+                throw new NotFoundHttpException("Не удалось выполнить перемещение. \n" . serialize($model->errors));
             }
+        }
 
         $query = Yii::$app->request->queryParams;
         $target = ArrayHelper::getValue($query, 'target');

@@ -23,7 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="devices-view">
 
-    <h1><?= Html::encode($this->title) ?> <?= $model->fake_device == 1 ? '<span class="text-danger">Фейк</span>' : '' ?> </h1>
+    <h1><?= Html::encode($this->title) ?> <?= $model->fake_device > $model::DEVICE_DEF
+            ? '<a title="Зарезервированное устройство"><span class="glyphicon glyphicon-warning-sign text-warning"></span></a>'
+            : '' ?> </h1>
 
     
     <?= Html::a('Редактировать', ['update', 'id' => $model->id, ], ['class' => 'btn btn-primary', 'data-method' => 'POST']) ?>

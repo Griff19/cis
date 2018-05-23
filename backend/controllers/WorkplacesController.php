@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Devices;
 use Yii;
 use backend\models\Workplaces;
 use backend\models\WorkplacesSearch;
@@ -66,6 +67,15 @@ class WorkplacesController extends Controller
      */
     public function actionIndex($mode = null, $id_dev = null, $target = null, $target_id = null)
     {
+        if ($mode == 'sel') {
+            /* @var $device Devices */
+            $device = Devices::findOne($target_id);
+            if ($device->fake_device != Devices::DEVICE_DEF) {
+                Yii::$app->session->setFlash('error', 'Операция не выполнена. Устройство зарезервировано либо уже перемещается.');
+                return $this->redirect(['devices/view', 'id' => $target_id]);
+            }
+        }
+
         $searchModel = new WorkplacesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

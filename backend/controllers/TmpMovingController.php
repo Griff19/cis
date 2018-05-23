@@ -2,12 +2,14 @@
 
 namespace backend\controllers;
 
+use backend\models\Devices;
 use Yii;
 use backend\models\TmpMoving;
 use backend\models\TmpMovingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TmpMovingController implements the CRUD actions for TmpMoving model.
@@ -20,6 +22,21 @@ class TmpMovingController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => ['it'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete'],
+                        'allow' => true,
+                        'roles' => ['admin'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -60,10 +77,19 @@ class TmpMovingController extends Controller
     /**
      * Creates a new TmpMoving model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $device_id
+     * @param $workplace_from
+     * @param null $workplace_where
      * @return mixed
      */
     public function actionCreate($device_id, $workplace_from, $workplace_where = null)
     {
+        /* @var $device Devices */
+        $device = Devices::findOne($device_id);
+        if ($device->fake_device != Devices::DEVICE_DEF) {
+            Yii::$app->session->setFlash('error', 'Операция не выполнена. Устройство в резерве либо уже перемещается.');
+            return $this->redirect(['devices/view', 'id' => $device_id]);
+        }
         $model = new TmpMoving();
         $model->device_id = $device_id;
         $model->workplace_from = $workplace_from;
@@ -71,7 +97,8 @@ class TmpMovingController extends Controller
         $model->user_id = Yii::$app->user->id;
         $model->status = $model::STATUS_DEFAULT;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //return $this->redirect(['view', 'id' => $model->id]);
+            $device->fake_device = Devices::DEVICE_RESERVED;
+            $device->save();
             return $this->redirect('index');
         } else {
             return $this->render('create', [
@@ -85,6 +112,7 @@ class TmpMovingController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -104,6 +132,8 @@ class TmpMovingController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
