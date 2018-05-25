@@ -54,7 +54,7 @@ class DevicesController extends Controller
                         'roles' => ['admin'],
                     ],
 	                [
-	                	'actions' => ['view-table-comp', 'view', 'index'],
+	                	'actions' => ['view-table-comp', 'view', 'index', ],
 		                'allow' => true,
 		                'roles' => ['auditor']
 	                ],
@@ -752,7 +752,7 @@ class DevicesController extends Controller
     }
 
     /**
-     * todo: Метод должен выводить список всех устройств закрепленных за пользователем на всех рабочих местах...
+     * Выбираем все рабочие места, закрепленные за пользователем, и все устройства на этих местах
      * @return string
      */
     public function actionFindAllDevices($employee_id = null)
@@ -800,7 +800,7 @@ class DevicesController extends Controller
     /**
      * Экшн вызывается через ajax получает массив "спецификаций" и выводит в форме в формате Json
      * @param string $term значение вводимое в поле Модель на форме
-     * @return Json
+     * @return void
      */
     public function actionGetSpecifications($term)
     {
