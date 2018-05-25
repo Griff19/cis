@@ -15,9 +15,10 @@ use yii\jui\AutoComplete;
 <div class="workplaces-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?php if (Yii::$app->user->can('admin')) {?>
-    <?= $form->field($model, 'branch_id')->dropDownList(
-        ArrayHelper::map(Branches::find()->all(), 'id', 'branch_title'),
+    <?php if (Yii::$app->user->can('auditor')) {?>
+
+        <?= $form->field($model, 'branch_id')->dropDownList(
+            ArrayHelper::map(Branches::getList(), 'id', 'branch_title'),
         ['prompt' => 'Выберите подраздление...',
         'onchange' => '$.post("/admin/rooms/list?id='.'"+$(this).val(), function(data) {
             $("select#workplaces-room_id").html(data);
@@ -28,14 +29,12 @@ use yii\jui\AutoComplete;
     <?= //$form->field($model, 'room_id')->textInput()
         $form->field($model, 'room_id')->dropDownList(
         ArrayHelper::map(Rooms::find()->all(), 'id', 'room_title'),
-        ['prompt'=>'Выберите отдел/кабинет...']
-        )
+        ['prompt'=>'Выберите отдел/кабинет...'])
     ?>
     <?php } else {
         echo '<p><b>Подразделение: </b>'. $model->branch->branch_title. '</p>';
         echo '<p><b>Кабинет: </b>'. $model->room->room_title. '</p>';
     }?>
-
 
     <?= $form->field($model, 'workplaces_title')->textInput(['maxlength' => true])?>
     <?= $form->field($model, 'mu')->checkbox() ?>

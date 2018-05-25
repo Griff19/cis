@@ -61,4 +61,17 @@ class Branches extends \yii\db\ActiveRecord
         return Branches::find()->select('branch_title as value, branch_title as label, id as id')->orderBy('id')->asArray()->all();
     }
 
+    /**
+     * Выбираем подразделения в зависимости от роли пользователя
+     * Аудитор не должен видеть Буланиху
+     * @return $this|array|\yii\db\ActiveRecord[]
+     */
+    public static function getList()
+    {
+        if (Yii::$app->user->can('admin'))
+            return Branches::find()->all();
+        if (Yii::$app->user->can('auditor'))
+            return Branches::find()->where(['<>', 'id', 1])->all();
+    }
+
 }

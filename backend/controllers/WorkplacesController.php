@@ -24,7 +24,7 @@ class WorkplacesController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['index'],
@@ -42,14 +42,14 @@ class WorkplacesController extends Controller
                         'roles' => ['admin'],
                     ],
 	                [
-	                    'actions' => ['index', 'view'],
+	                    'actions' => ['index', 'view', 'create'],
 		                'allow' => true,
 		                'roles' => ['auditor'],
 	                ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['post'],
                 ],
@@ -164,6 +164,7 @@ class WorkplacesController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
+     * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)

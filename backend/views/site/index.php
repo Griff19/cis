@@ -114,5 +114,9 @@ use yii\helpers\Html;
                 <p>Виртуальные перемещения</p>
             </div>
         </div>
+
+        <div>
+            <?= "PHP " . phpversion() ?>
+        </div>
     </div>
 </div>

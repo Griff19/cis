@@ -30,15 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if (Yii::$app->user->can('admin'))
-            echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success', 'style' => 'margin-bottom: 5px'])
+        if (Yii::$app->user->can('auditor'))
+            echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success', 'style' => 'margin-bottom: 5px']);
+        if (yii::$app->user->can('admin'))
+            echo Html::a('Найти РМ без координат', ['list-unset'], ['class' => 'btn btn-info']);
         ?><br>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Общий склад', ['index?'. $query .'&WorkplacesSearch%5Broom_id%5D=Каб.17+%28ИТ-служба%3B+склад%29'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Установленные комплектующие', ['index?'. $query .'&WorkplacesSearch%5Bworkplaces_title%5D=установленные+комплектующие'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Неисправное оборудование', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=неисправное+оборудование'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=потерянные'], ['class' => 'btn btn-default'])?>
         <?= Html::a(Html::img('/admin/img/cross.png',['width' => '16px']) . 'Сбросить фильтр', ['index?' . $query], ['class' => 'btn btn-default'])?>
-        <?= Html::a('Найти РМ без координат', ['list-unset'], ['class' => 'btn btn-info'])?>
     </p>
 
     <?php
