@@ -2,8 +2,9 @@
 
 namespace backend\controllers;
 
-use backend\models\TmpMoving;
+use backend\models\Workplaces;
 use Yii;
+use backend\models\TmpMoving;
 use backend\models\DeviceType;
 use backend\models\DtEnquiryDevices;
 use backend\models\DtInvoiceDevices;
@@ -36,7 +37,7 @@ class DevicesController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => [
@@ -49,19 +50,24 @@ class DevicesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create', 'delete'],
+                        'actions' => ['delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
 	                [
-	                	'actions' => ['view-table-comp', 'view', 'index', ],
+	                	'actions' => [
+                            'index', 'index-to-enquiry', 'index-comp', 'view', 'view-table-comp', 'create', 'update',
+                            'create-from-doc', 'validation', 'addcomp', 'change-by-attr', 'get-brands', 'get-models',
+                            'get-specifications', 'set-specification-auto', 'set-type-id', 'delfromwp', 'delcomp',
+                            'find-device', 'find-all-devices', 'addtowp'
+                        ],
 		                'allow' => true,
 		                'roles' => ['auditor']
 	                ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['post'],
                     'update' => ['post'],
@@ -248,12 +254,16 @@ class DevicesController extends Controller
 
         $query = Yii::$app->request->queryString;
         $model = new Devices(['scenario' => Devices::SCENARIO_INSERT]);
-        //var_dump($model->scenarios()); die;
+        //Получаем сохраненное РМ и заполняем поля
+        if (Yii::$app->session->has('workplace_id')){
+            $workplace = Workplaces::findOne(Yii::$app->session->get('workplace_id'));
+            $model->branch_id = $workplace->branch_id;
+            $model->room_id = $workplace->room_id;
+        }
+
         $model->workplace_id = $id_wp;
 
         if ($model->load(Yii::$app->request->post())) {
-            $mode = '';
-
             if ($id_dev > 0) { //если устройство создается при выборе комплектующего то сразу добавляем ему родителя
                 $model->parent_device_id = $id_dev;
             }
@@ -269,6 +279,8 @@ class DevicesController extends Controller
                         $net->save();
                     }
                     StoryDevice::addStory($id_wp, $model->id, StoryDevice::EVENT_CREATE, '' . $target . ' ' . $target_id);
+                    //Сохраняем РМ чтобы каждый раз не вводить одно и то же
+                    Yii::$app->session->set('workplace_id', $model->workplace_id);
                 }
                 if ($model->chekMode) {
                     $model->sn = 'SN' . $model->id;
@@ -780,7 +792,8 @@ class DevicesController extends Controller
         $type_id = Yii::$app->session->get('type_id');
         //$brands = Devices::arrayBrands($type_id, $term);
         $brands = Devices::arrBrands($type_id, $term);
-        echo Json::encode($brands);
+        //echo Json::encode($brands);
+        return Json::encode($brands);
 
     }
 

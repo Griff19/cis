@@ -23,6 +23,8 @@ use backend\models\Coordinate;
  * @property string summary           Сводная информация о рабочем месте
  * @property Coordinate[] coordinate    Координаты рабочего места на карте
  * @property Coordinate[] allCoordinate Все координаты доступные на данном слое
+ * @property Branches branch
+ * @property Rooms room
  */
 class Workplaces extends \yii\db\ActiveRecord
 {

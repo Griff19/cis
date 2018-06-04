@@ -46,6 +46,7 @@ class BranchesController extends Controller
      * Displays a single Branches model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {

@@ -64,6 +64,7 @@ class StoryDevice extends ActiveRecord
      * @param $id_dev
      * @param $event
      * @param $note
+     * @return bool
      */
     public static function addStory($id_wp, $id_dev, $event, $note = null){
         $story = new StoryDevice();
@@ -76,6 +77,7 @@ class StoryDevice extends ActiveRecord
         else {
             Yii::$app->session->setFlash('error', serialize($story->errors));
         }
+        return true;
     }
 
     /**

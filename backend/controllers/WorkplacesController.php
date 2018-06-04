@@ -42,7 +42,7 @@ class WorkplacesController extends Controller
                         'roles' => ['admin'],
                     ],
 	                [
-	                    'actions' => ['index', 'view', 'create'],
+	                    'actions' => ['index', 'view', 'create', 'list'],
 		                'allow' => true,
 		                'roles' => ['auditor'],
 	                ],

@@ -110,7 +110,7 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
     ])->label(false);
 
     echo $form->field($model, 'sn')->textInput()->widget(
-        AutoComplete::className(), [
+        AutoComplete::class, [
         'clientOptions' => [
             'source' => $model::arraySns(),
             'minLength' => 3,
@@ -123,7 +123,7 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
         echo $form->field($model, 'device_mac')->textInput(['tabindex' => 1002]);
 
     echo $form->field($model, 'brand')->textInput(['maxlength' => true])->widget(
-        AutoComplete::className(), [
+        AutoComplete::class, [
         'clientOptions' => ['source' => Url::to(['devices/get-brands']),
             'autoFill' => true,
             'create' => new JsExpression('function(event, ui) {
@@ -140,7 +140,7 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
         ]);
 
     echo $form->field($model, 'model')->textInput(['maxlength' => true])->widget(
-        AutoComplete::className(), [
+        AutoComplete::class, [
         'clientOptions' => ['source' => Url::to(['devices/get-models']),
             'autoFill' => true,
             'select' => new JsExpression('function (event, ui){
@@ -154,19 +154,19 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 
     if ($dt_imei) {
         echo $form->field($model, 'imei1')->textInput(['maxlength' => true])->widget(
-            AutoComplete::className(), [
+            AutoComplete::class, [
             'clientOptions' => ['source' => $model::arrayImei1()],
             'options' => ['class' => 'form-control', 'tabindex' => 1005]
         ]);
         echo $form->field($model, 'imei2')->textInput(['maxlength' => true])->widget(
-            AutoComplete::className(), [
+            AutoComplete::class, [
             'clientOptions' => ['source' => $model::arrayImei2()],
             'options' => ['class' => 'form-control', 'tabindex' => 1006]
         ]);
     }
 
     echo $form->field($model, 'specification')->textInput(['maxlength' => true])->widget(
-        AutoComplete::className(), [
+        AutoComplete::class, [
         'clientOptions' => ['source' => Url::to(['devices/get-specifications']),
             'create' => new JsExpression('function(event, ui) {
                 $("#devices-specification").autocomplete("instance")._renderItem = function(ul, item) {
@@ -192,8 +192,10 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
 </div>
 
 <?php
-    $this->registerJs('
-        $(".field-devices-room_id").hide();
-        $(".field-devices-workplace_id").hide();
-    ');
+    if (!$model->branch_id) {
+        $this->registerJs('
+            $(".field-devices-room_id").hide();
+            $(".field-devices-workplace_id").hide();        
+        ');
+    }
 ?>

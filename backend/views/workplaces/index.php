@@ -30,16 +30,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if (Yii::$app->user->can('auditor'))
-            echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success', 'style' => 'margin-bottom: 5px']);
+        if (Yii::$app->user->can('auditor')) {
+            echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success']) . ' ';
+            echo Html::a('Создать Отдел/Кабинет', ['rooms/create'], ['class' => 'btn btn-primary']) . ' ';
+            echo Html::a('Создать Подразделение', ['branches/create'], ['class' => 'btn btn-primary']);
+        }
         if (yii::$app->user->can('admin'))
             echo Html::a('Найти РМ без координат', ['list-unset'], ['class' => 'btn btn-info']);
-        ?><br>
-        <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Общий склад', ['index?'. $query .'&WorkplacesSearch%5Broom_id%5D=Каб.17+%28ИТ-служба%3B+склад%29'], ['class' => 'btn btn-default'])?>
-        <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Установленные комплектующие', ['index?'. $query .'&WorkplacesSearch%5Bworkplaces_title%5D=установленные+комплектующие'], ['class' => 'btn btn-default'])?>
-        <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Неисправное оборудование', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=неисправное+оборудование'], ['class' => 'btn btn-default'])?>
-        <?= Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=потерянные'], ['class' => 'btn btn-default'])?>
-        <?= Html::a(Html::img('/admin/img/cross.png',['width' => '16px']) . 'Сбросить фильтр', ['index?' . $query], ['class' => 'btn btn-default'])?>
+        ?>
+    </p>
+    <p>
+        <?=Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Общий склад', ['index?'. $query .'&WorkplacesSearch%5Broom_id%5D=Каб.17+%28ИТ-служба%3B+склад%29'], ['class' => 'btn btn-default'])?>
+        <?=Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Установленные комплектующие', ['index?'. $query .'&WorkplacesSearch%5Bworkplaces_title%5D=установленные+комплектующие'], ['class' => 'btn btn-default'])?>
+        <?=Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Неисправное оборудование', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=неисправное+оборудование'], ['class' => 'btn btn-default'])?>
+        <?=Html::a(Html::img('/admin/img/search.png',['width' => '16px']) . 'Потерянные', ['index?' . $query . '&WorkplacesSearch%5Bworkplaces_title%5D=потерянные'], ['class' => 'btn btn-default'])?>
+        <?=Html::a(Html::img('/admin/img/cross.png',['width' => '16px']) . 'Сбросить фильтр', ['index?' . $query], ['class' => 'btn btn-default'])?>
     </p>
 
     <?php
@@ -49,26 +54,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['style' => 'width:30px'],
             'filterOptions' => ['style' => 'padding: 8px 1px 0px 1px']
         ],
-        // подразделение
-        [ //2
+        [ //2 подразделение
             'attribute' => 'branch_id',
             'value' => 'branch.branch_title'
         ],
-        // кабинет, отдел
-        [ //3
+        [ //3 кабинет, отдел
             'attribute' => 'room_id',
             'value' => 'room.room_title'
         ],
-        // описание рабочего места
-        [ //4
+        [ //4 описание рабочего места
             'attribute' => 'workplaces_title',
             'value' => function($model){
                 return Html::a($model->workplaces_title, ['workplaces/view', 'id' => $model->id]);
             },
             'format' => 'raw',
         ],
-        // ответственный
-        [ //5
+        [ //5 ответственный
             'attribute' => '_owner',
             'value' => function($model){
                 if ($model->owner) return $model->owner[0]['snp'];
@@ -78,14 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         // признак многопользовательского места
         //'mu:boolean',
-        //при установке устройства на рабочее место:
-        ['class' => \yii\grid\Column::className(), //6
+        [ //6 активно при установке устройства на рабочее место:
+            'class' => \yii\grid\Column::class,
             'content' => function($model) use ($id_dev, $target, $target_id){
                 return Html::a('<span class="glyphicon glyphicon-ok"></span>',
                     ['select', 'id' => $model->id, 'target' => $target, 'target_id' => $target_id, 'id_dev' => $id_dev]);
             }
         ],
-        ['attribute' => 'inventoryDate', //7
+        [ //7 дата инвентаризации
+            'attribute' => 'inventoryDate',
             'value' => function ($model) {
                 return $model->inventoryDate ? $model->inventoryDate : '-';
             },
