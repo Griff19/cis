@@ -192,9 +192,9 @@ class DevicesController extends Controller
     {
 		$model = $this->findModel($id);
 		//Запрещаем Аудитору просматривать устройства Буланихи
-		if (Yii::$app->user->can('auditor') && $model->workplace->branch_id == 1){
-			throw new NotFoundHttpException('Запрашиваемой страницы не существует.');
-		}
+		//if (Yii::$app->user->can('auditor') && $model->workplace->branch_id == 1){
+	    //	throw new NotFoundHttpException('Запрашиваемой страницы не существует.');
+		//}
     	$param_model = Parameters::findOne(['id_device' => $id]);
 
         $netSearch = new NetintsSearch();
