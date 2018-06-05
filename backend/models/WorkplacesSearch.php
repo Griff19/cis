@@ -52,7 +52,7 @@ class WorkplacesSearch extends Workplaces
         $query->joinWith('netints');
         $query->joinWith('inventory');
 		//Аудитору не показываем Буланиху
-        if (Yii::$app->user->can('auditor')){
+        if (!Yii::$app->user->can('auditor')){
         	$query->where(['>', 'workplaces.branch_id', 1]);
         }
 
