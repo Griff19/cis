@@ -55,7 +55,6 @@ class WorkplacesSearch extends Workplaces
         if (!Yii::$app->user->can('auditor')){
         	$query->where(['>', 'workplaces.branch_id', 1]);
         }
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false

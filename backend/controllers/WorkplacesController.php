@@ -99,9 +99,9 @@ class WorkplacesController extends Controller
     {
         $model = $this->findModel($id);
         //Аудитору запрещаем просмотр Буланихи
-        if (Yii::$app->user->can('auditor') && $model->branch_id == 1){
-	        throw new NotFoundHttpException('Запрашиваемая страница не доступна.');
-        }
+        //if (Yii::$app->user->can('auditor') && $model->branch_id == 1){
+	    //    throw new NotFoundHttpException('Запрашиваемая страница не доступна.');
+        //}
     	$searchEmployeeModel = new WpOwnersSearch();
         $employeeProvider = $searchEmployeeModel->search(Yii::$app->request->queryParams, $id);
 
