@@ -34,7 +34,7 @@ if($target && $param) {
 
     <p>
         <?php
-        if (Yii::$app->user->can('auditor')) {
+        if (Yii::$app->user->can('auditor') || Yii::$app->user->can('admin')) {
 //            echo Html::a('Комплектующие автоматом', ['autocomp'], [
 //                    'class' => 'btn btn-success', 'data' => [
 //                            'confirm' => "Произвести автоматическую установку комплектуюдщих \r\n для одиноких системников?"

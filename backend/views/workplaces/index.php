@@ -2,9 +2,9 @@
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-//use dosamigos\datepicker\DatePicker;
 use yii\jui\DatePicker;
 use yii\grid\GridView;
+use backend\models\Branches;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\WorkplacesSearch */
@@ -30,10 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if (Yii::$app->user->can('auditor')) {
+        if (Yii::$app->user->can('auditor') || Yii::$app->user->can('admin')) {
             echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success']) . ' ';
             echo Html::a('Создать Отдел/Кабинет', ['rooms/create'], ['class' => 'btn btn-primary']) . ' ';
-            echo Html::a('Создать Подразделение', ['branches/create'], ['class' => 'btn btn-primary']);
+            echo Html::a('Создать Подразделение', ['branches/create'], ['class' => 'btn btn-primary']) . ' ';
         }
         if (yii::$app->user->can('admin'))
             echo Html::a('Найти РМ без координат', ['list-unset'], ['class' => 'btn btn-info']);
@@ -56,7 +56,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [ //2 подразделение
             'attribute' => 'branch_id',
-            'value' => 'branch.branch_title'
+            'value' => 'branch.branch_title',
+            'filter' => ArrayHelper::map(Branches::find()->orderBy('id')->all(), 'branch_title', 'branch_title'),
         ],
         [ //3 кабинет, отдел
             'attribute' => 'room_id',

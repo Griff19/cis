@@ -40,13 +40,13 @@ AppAsset::register($this);
     $menuItems[] = ['label' => 'Карта', 'url' => ['map']];
     if (Yii::$app->user->can('admin'))
         $menuItems[] = ['label' => 'Администрирование', 'url' => ['admin/site/admin']];
+    elseif (Yii::$app->user->can('auditor')) {
+        $menuItems[] = ['label' => 'Рабочие места', 'url' => ['admin/workplaces/index']];
+        $menuItems[] = ['label' => 'Список устройств', 'url' => ['admin/devices/index']];
+    }
     elseif (Yii::$app->user->can('it'))
         $menuItems[] = ['label' => 'Администрирование', 'url' => ['admin/site/admin_workplace']];
-    elseif (Yii::$app->user->can('auditor')) {
-	    $menuItems[] = ['label' => 'Рабочие места', 'url' => ['admin/workplaces/index']];
-	    $menuItems[] = ['label' => 'Список устройств', 'url' => ['admin/devices/index']];
-    }
-
+    
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Регистрация', 'url' => ['/site/signup']];
         $menuItems[] = ['label' => 'Авторизация', 'url' => ['/site/login']];

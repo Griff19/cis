@@ -52,7 +52,7 @@ class WorkplacesSearch extends Workplaces
         $query->joinWith('netints');
         $query->joinWith('inventory');
 		//Аудитору не показываем Буланиху
-        if (!Yii::$app->user->can('auditor')){
+        if (Yii::$app->user->can('auditor')){
         	$query->where(['>', 'workplaces.branch_id', 1]);
         }
         $dataProvider = new ActiveDataProvider([
@@ -65,7 +65,7 @@ class WorkplacesSearch extends Workplaces
                 'room_id',
                 'workplaces_title' => [
                     'asc' => [
-                        'branches.branch_title' => SORT_ASC,
+                        'branches.id' => SORT_ASC,
                         'rooms.room_title' => SORT_ASC,
                         'workplaces.workplaces_title' => SORT_ASC
                     ],

@@ -46,7 +46,9 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Сообщения ' . $label, 'url' => ['/message']];
         $menuItems[] = ['label' => 'Страница Админа', 'url' => ['/site/admin']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/inventory-acts']];
-
+    } elseif (Yii::$app->user->can('auditor')) {
+        $menuItems[] = ['label' => 'Рабочие места', 'url' => ['workplaces/index']];
+        $menuItems[] = ['label' => 'Список устройств', 'url' => ['devices/index']];
     } elseif (Yii::$app->user->can('it')) {
         $label = Html::tag('span', Message::CountNewMessage() ? : Message::CountMessage(),
             ['class' => Message::CountNewMessage() ? 'label label-danger' : 'label label-default']);
@@ -54,9 +56,6 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Для сотруднков IT', 'url' => ['/site/employee-it']];
         //$menuItems[] = ['label' => 'Рабочие места', 'url' => ['/site/admin_workplace']];
         $menuItems[] = ['label' => 'Инвентаризация', 'url' => ['/workplaces']];
-    } elseif (Yii::$app->user->can('auditor')) {
-	    $menuItems[] = ['label' => 'Рабочие места', 'url' => ['workplaces/index']];
-	    $menuItems[] = ['label' => 'Список устройств', 'url' => ['devices/index']];
     }
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Логин', 'url' => ['/site/login']];

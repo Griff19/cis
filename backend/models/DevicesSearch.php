@@ -101,7 +101,7 @@ class DevicesSearch extends Devices
                     . 'd.model,	d.sn,	d.specification,	d.imei1,'
                     . 'd.parent_device_id,	d.workplace_id,	workplaces.workplaces_title');
 
-            if (!Yii::$app->user->can('auditor')){
+            if (Yii::$app->user->can('auditor')){
 		        $query->where(['>', 'workplaces.branch_id', 1]);
 	        }
         }
