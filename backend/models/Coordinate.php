@@ -106,7 +106,7 @@ class Coordinate extends \yii\db\ActiveRecord
 
     public function getWorkplace()
     {
-    	return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
+    	return $this->hasOne(Workplaces::class, ['id' => 'workplace_id']);
     }
 
 	/**

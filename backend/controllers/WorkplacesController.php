@@ -2,8 +2,8 @@
 
 namespace backend\controllers;
 
-use backend\models\Devices;
 use Yii;
+use backend\models\Devices;
 use backend\models\Workplaces;
 use backend\models\WorkplacesSearch;
 use backend\models\WpOwnersSearch;

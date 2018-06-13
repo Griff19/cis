@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'format' => 'raw'
                     ],
-                    ['class' => Column::className(), //3
+                    ['class' => Column::class, //3
                         'content' => function ($modem) use ($model) {
                             return Html::a('<span class="glyphicon glyphicon-remove"></span>', ['wpowners/delete',
                                 'workplace_id' => $modem->workplace_id,
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'options' => ['style' => 'width:10px']
                     ],
-                    ['class' => Column::className(), //4
+                    ['class' => Column::class, //4
                         'content' => function ($wpowner) {
                             /* @var $wpowner \backend\models\WpOwners */
                             if ($wpowner->status == 1)
@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'description',
                 'context',
-                ['class' => Column::className(),
+                ['class' => Column::class,
                     'content' => function ($voip) use ($model) {
                         if (Yii::$app->user->can('admin'))
                             return Html::a('', ['voipnumbers/choicenull', 'id' => $voip->id, 'id_dev' => 0, 'id_wp' => $model->id],
@@ -219,7 +219,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <h4> Закрепленные устройства: </h4>
     
             <?php if (Yii::$app->user->can('admin')) { ?>
-                <?= Html::a('Добавить устройство', ['devices/index', 'mode' => 'wps', 'target' => 'devices/addtowp', 'target_id' => $model->id, 'id_wp' => $model->id], ['class' => 'btn btn-success']) ?>
+                <?= Html::a('Добавить устройство',
+                    ['devices/index',
+                        'mode' => 'wps',
+                        'target' => 'devices/addtowp',
+                        'target_id' => $model->id,
+                        'id_wp' => $model->id],
+                    ['class' => 'btn btn-success', 'title' => 'Выбрать из списка устройств...']) ?>
                 <?= Html::button('Дополнительно >>>', ['class' => 'btn btn-default', 'data-toggle' => 'collapse', 'data-target' => '#accordion']) ?>
                 <div id="accordion" class="collapse" style="float: right">
                     <form name="test" action="/it_base/backend/web/index.php?r=devices/autocreate&id_wp= <?= $model->id ?> "
@@ -271,7 +277,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'sn',
                     'specification',
                     'parent_device_id',
-                    ['class' => Column::className(),
+                    ['class' => Column::class,
                         'content' => function ($moddev) use ($model){
                             if (Yii::$app->user->can('admin'))
                                 return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $model->id],['class' => 'cross']);

@@ -77,7 +77,7 @@ if($target && $param) {
             'format' => 'raw'
         ],
         'device_note', //9
-        ['class' => Column::className(), //10
+        ['class' => Column::class, //10
             'content' => function ($model) use ($mode) {
                 if ($model->workplace_id == 1 || $model->workplace_id == null) return '';
                 if ($mode == Devices::SHOW_FWP) {
@@ -93,7 +93,7 @@ if($target && $param) {
             }
         ],
         // активно при выборе устройства как комплектующее
-        ['class' => Column::className(), //11
+        ['class' => Column::class, //11
             'content' => function ($model) use ($target) {
                 return Html::a(Html::img('/admin/img/ok.png', ['style' => 'height:24px;']),
                     //['devices/addcomp', 'id_dev' => $id_dev, 'id_comp' => $model->id, 'id_wp' => $id_wp]
@@ -101,7 +101,7 @@ if($target && $param) {
                 );
             }
         ],
-        ['class' => Column::className(), //12
+        ['class' => Column::class, //12
             'content' => function ($model) {
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                     ['devices/view', 'id' => $model->id], ['title' => 'Просмотр и редактирование...']);

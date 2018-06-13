@@ -27,7 +27,7 @@ class DtInvoicesController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['view', 'index', 'create', 'create-pdf', 'pdf-agree', 'set-status',
@@ -43,7 +43,7 @@ class DtInvoicesController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],

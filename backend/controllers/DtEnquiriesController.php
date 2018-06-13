@@ -32,7 +32,7 @@ class DtEnquiriesController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'rules' => [
                     [
                         'actions' => ['create', 'index', 'view', 'save', 'pdf', 'set-status',
@@ -48,7 +48,7 @@ class DtEnquiriesController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],

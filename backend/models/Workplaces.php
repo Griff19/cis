@@ -74,27 +74,27 @@ class Workplaces extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getRoom(){
-        return $this->hasOne(Rooms::className(), ['id' => 'room_id']);
+        return $this->hasOne(Rooms::class, ['id' => 'room_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getBranch(){
-        return $this->hasOne(Branches::className(), ['id' => 'branch_id']);
+        return $this->hasOne(Branches::class, ['id' => 'branch_id']);
     }
 
     /**
      * @return $this
      */
     public function getOwner(){
-        $res = $this->hasMany(Employees::className(), ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'id']);
+        $res = $this->hasMany(Employees::class, ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'id']);
         //var_dump($res);
         return $res;
     }
 
     public function getVoips(){
-        return $this->hasMany(VoipNumbers::className(), ['workplace_id' => 'id']);
+        return $this->hasMany(VoipNumbers::class, ['workplace_id' => 'id']);
     }
 
     /**
@@ -121,14 +121,14 @@ class Workplaces extends \yii\db\ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getNetints(){
-        return $this->hasMany(Netints::className(), ['device_id' => 'id'])->viaTable('devices', ['workplace_id' => 'id']);
+        return $this->hasMany(Netints::class, ['device_id' => 'id'])->viaTable('devices', ['workplace_id' => 'id']);
     }
 
     /**
      * Связываем рабочее место и акты инвентаризации
      */
     public function getInventory(){
-        return $this->hasMany(InventoryActs::className(), ['workplace_id' => 'id'])->orderBy('act_date DESC');
+        return $this->hasMany(InventoryActs::class, ['workplace_id' => 'id'])->orderBy('act_date DESC');
     }
 
 	/**
@@ -136,7 +136,7 @@ class Workplaces extends \yii\db\ActiveRecord
 	 * @return \yii\db\ActiveQuery
 	 */
     public function getCoordinate() {
-    	return $this->hasMany(Coordinate::className(), ['workplace_id' => 'id']);
+    	return $this->hasMany(Coordinate::class, ['workplace_id' => 'id']);
     }
 
 	/**
