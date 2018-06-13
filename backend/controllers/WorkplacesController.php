@@ -69,10 +69,10 @@ class WorkplacesController extends Controller
     {
         if ($mode == 'sel') {
             /* @var $device Devices */
-            $device = Devices::findOne($target_id);
+            $device = Devices::findOne($id_dev);
             if ($device->fake_device != Devices::DEVICE_DEF) {
                 Yii::$app->session->setFlash('error', 'Операция не выполнена. Устройство зарезервировано либо уже перемещается.');
-                return $this->redirect(['devices/view', 'id' => $target_id]);
+                return $this->redirect(['devices/view', 'id' => $id_dev]);
             }
         }
 
