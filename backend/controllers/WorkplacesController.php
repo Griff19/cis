@@ -68,17 +68,17 @@ class WorkplacesController extends Controller
     public function actionIndex($mode = null, $id_dev = null, $target = null, $target_id = null)
     {
         if ($mode == 'sel') {
+            $device_id = $target == 'tmp-moving/create' ? $id_dev : $target_id;
             /* @var $device Devices */
-            $device = Devices::findOne($id_dev);
+            $device = Devices::findOne($device_id);
             if ($device->fake_device != Devices::DEVICE_DEF) {
                 Yii::$app->session->setFlash('error', 'Операция не выполнена. Устройство зарезервировано либо уже перемещается.');
-                return $this->redirect(['devices/view', 'id' => $id_dev]);
+                return $this->redirect(['devices/view', 'id' => $device_id]);
             }
         }
 
         $searchModel = new WorkplacesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
