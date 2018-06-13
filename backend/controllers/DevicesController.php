@@ -50,7 +50,7 @@ class DevicesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['delete'],
+                        'actions' => ['delete', 'create'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
