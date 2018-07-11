@@ -22,7 +22,7 @@ class VoipnumbersController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index','view','create','update', 'delete'],
+                        'actions' => ['index','view','create', 'choicewp', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -58,6 +58,7 @@ class VoipnumbersController extends Controller
      * Displays a single VoipNumbers model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -93,6 +94,7 @@ class VoipnumbersController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -111,7 +113,11 @@ class VoipnumbersController extends Controller
      * Deletes an existing VoipNumbers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
+     * @param int $id_dev
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id, $id_dev = 0)
     {
@@ -180,9 +186,10 @@ class VoipnumbersController extends Controller
         else $stat = 1;
         $model->workplace_id = $id_wp;
         $model->status = $stat;
-        if ($model->save())
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Номер установлен на рабочее место');
             return $this->redirect(['workplaces/view', 'id' => $id_wp]);
-        else {
+        } else {
             Yii::$app->session->setFlash('error', 'Не удалось сохранить');
             return $this->redirect('');
         }
