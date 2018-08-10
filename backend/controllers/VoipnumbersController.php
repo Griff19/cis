@@ -22,7 +22,7 @@ class VoipnumbersController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index','view','create', 'choicewp', 'update', 'delete'],
+                        'actions' => ['index','view','create', 'choicewp', 'choicenull', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
