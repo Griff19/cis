@@ -26,7 +26,6 @@ class VoipnumbersController extends Controller
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
-
                 ],
             ],
             'verbs' => [
