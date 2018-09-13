@@ -148,7 +148,7 @@ class Devices extends \yii\db\ActiveRecord
      */
     public function getDeviceType()
     {
-        return $this->hasOne(DeviceType::className(), ['id' => 'type_id']);
+        return $this->hasOne(DeviceType::class, ['id' => 'type_id']);
     }
 
     /**
@@ -157,7 +157,7 @@ class Devices extends \yii\db\ActiveRecord
      */
     public function getWorkplace()
     {
-        return $this->hasOne(Workplaces::className(), ['id' => 'workplace_id']);
+        return $this->hasOne(Workplaces::class, ['id' => 'workplace_id']);
     }
 
     /**
@@ -182,17 +182,17 @@ class Devices extends \yii\db\ActiveRecord
 
     public function getVoip()
     {
-        return $this->hasMany(VoipNumbers::className(), ['device_id' => 'id']);
+        return $this->hasMany(VoipNumbers::class, ['device_id' => 'id']);
     }
 
     public function getEmployee()
     {
-        return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
+        return $this->hasOne(Employees::class, ['id' => 'employee_id'])->viaTable('wp_owners', ['workplace_id' => 'workplace_id']);
     }
 
     public function getNetints()
     {
-        return $this->hasMany(Netints::className(), ['device_id' => 'id']);
+        return $this->hasMany(Netints::class, ['device_id' => 'id']);
     }
 
     /**

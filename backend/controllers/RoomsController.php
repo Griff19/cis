@@ -11,6 +11,7 @@ use backend\models\RoomsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 class RoomsController extends Controller
 {
@@ -26,7 +27,7 @@ class RoomsController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['index', 'view'],
+                        'actions' => ['index', 'view', 'list'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
@@ -36,7 +37,7 @@ class RoomsController extends Controller
                         'roles' => ['admin'],
                     ],
                     [
-                        'actions' => ['create','update'],
+                        'actions' => ['create','update', 'list'],
                         'allow' => true,
                         'roles' => ['auditor'],
                     ],

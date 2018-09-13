@@ -655,6 +655,7 @@ class DevicesController extends Controller
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException
+     * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
@@ -785,7 +786,7 @@ class DevicesController extends Controller
     /**
      * Экшн вызывается через ajax получает массив "брендов" и выводит в форме в формате Json
      * @param string $term значение вводимое в поле Бренд на форме
-     * @return Json
+     * @return string
      */
     public function actionGetBrands($term)
     {
@@ -800,7 +801,7 @@ class DevicesController extends Controller
     /**
      * Экшн вызывается через ajax получает массив "моделей" и выводит в форме в формате Json
      * @param string $term значение вводимое в поле Модель на форме
-     * @return Json
+     *
      */
     public function actionGetModels($term)
     {
@@ -813,13 +814,13 @@ class DevicesController extends Controller
     /**
      * Экшн вызывается через ajax получает массив "спецификаций" и выводит в форме в формате Json
      * @param string $term значение вводимое в поле Модель на форме
-     * @return void
+     * @return string
      */
     public function actionGetSpecifications($term)
     {
         $type_id = Yii::$app->session->get('type_id');
         $specifications = Devices::arrSpecifications($type_id, $term);
-        echo Json::encode($specifications);
+        return Json::encode($specifications);
     }
 
     /**

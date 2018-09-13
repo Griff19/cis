@@ -168,6 +168,7 @@ $this->registerAssetBundle('backend\assets\ValidDeviceAsset');
     echo $form->field($model, 'specification')->textInput(['maxlength' => true])->widget(
         AutoComplete::class, [
         'clientOptions' => ['source' => Url::to(['devices/get-specifications']),
+            'autoFill' => true,
             'create' => new JsExpression('function(event, ui) {
                 $("#devices-specification").autocomplete("instance")._renderItem = function(ul, item) {
                     if (item.sort == 0){
