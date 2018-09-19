@@ -68,7 +68,7 @@ class Branches extends \yii\db\ActiveRecord
      */
     public static function getList()
     {
-        if (Yii::$app->user->can('admin'))
+        if (Yii::$app->user->can('sysadmin'))
             return Branches::find()->all();
         if (Yii::$app->user->can('auditor'))
             return Branches::find()->where(['<>', 'id', 1])->all();

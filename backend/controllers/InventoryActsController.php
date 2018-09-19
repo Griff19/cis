@@ -38,12 +38,12 @@ class InventoryActsController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['index', 'view', 'create', 'delete', 'save', 'create-tb', 'create-pdf', 'agree'],
+                        'actions' => ['index', 'view', 'create', 'save', 'create-tb', 'create-pdf', 'agree'],
                         'allow' => true,
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['update', 'readfile', 'uploadform'],
+                        'actions' => ['update', 'delete', 'readfile', 'uploadform'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],

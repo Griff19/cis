@@ -34,7 +34,12 @@ class CellnumbersController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete', 'direct', 'readfile', 'uploadform', 'dwnftp'],
+                        'actions' => ['create','update', 'direct'],
+                        'allow' => true,
+                        'roles' => ['sysadmin'],
+                    ],
+                    [
+                        'actions' => ['delete', 'readfile', 'uploadform', 'dwnftp'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],

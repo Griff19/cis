@@ -40,11 +40,12 @@ class DevicetypesController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+    
     /**
      * Displays a single DeviceType model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {

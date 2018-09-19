@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-xs-12 col-md-4 col-md-push-8">
             <div style="float:right">
-                <?php if (Yii::$app->user->can('admin')) {
+                <?php if (Yii::$app->user->can('sysadmin')) {
                     echo Html::a('<span class="glyphicon glyphicon-map-marker"></span>',
                         ['coordinate/set-coord', 'id_wp' => $model->id, 'branch' => $model->branch_id],
                         ['class' => 'btn btn-default', 'title' => 'Установить координаты', 'style' => 'padding: 5px 8px 3px 6px']);
@@ -93,7 +93,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ];
 
-                if (Yii::$app->user->can('admin')) {
+                if (Yii::$app->user->can('sysadmin')) {
                 } else {
                     unset($colums[3]);
                     unset($colums[4]);
@@ -175,7 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'context',
                 ['class' => Column::class,
                     'content' => function ($voip) use ($model) {
-                        if (Yii::$app->user->can('admin'))
+                        if (Yii::$app->user->can('sysadmin'))
                             return Html::a('', ['voipnumbers/choicenull', 'id' => $voip->id, 'id_dev' => 0, 'id_wp' => $model->id],
                                 ['class' => 'cross',
                                     'title' => 'Снять номер с рабочего места (остается в базе)']);
@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]
         ])
         ?>
-        <?php if (Yii::$app->user->can('admin')) { ?>
+        <?php if (Yii::$app->user->can('sysadmin')) { ?>
             <?= Html::a('Добавить номер', ['voipnumbers/index', 'id_wp' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?php } ?>
     
@@ -218,7 +218,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="devices-index">
             <h4> Закрепленные устройства: </h4>
     
-            <?php if (Yii::$app->user->can('admin')) { ?>
+            <?php if (Yii::$app->user->can('sysadmin')) { ?>
                 <?= Html::a('Добавить устройство',
                     ['devices/index',
                         'mode' => 'wps',
@@ -279,7 +279,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'parent_device_id',
                     ['class' => Column::class,
                         'content' => function ($moddev) use ($model){
-                            if (Yii::$app->user->can('admin'))
+                            if (Yii::$app->user->can('sysadmin'))
                                 return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $model->id],['class' => 'cross']);
                             else
                                 return '';

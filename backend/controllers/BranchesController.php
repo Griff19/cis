@@ -95,12 +95,13 @@ class BranchesController extends Controller
 
         return $this->redirect(['index']);
     }
-
+    
     /**
      * Updates an existing Branches model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -114,12 +115,15 @@ class BranchesController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Deletes an existing Branches model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -140,7 +144,7 @@ class BranchesController extends Controller
         if (($model = Branches::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Запрашиваемая страница не доступна.');
         }
     }
 }

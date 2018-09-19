@@ -37,7 +37,12 @@ class WorkplacesController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete', 'readfile', 'uploadform', 'list-unset'],
+                        'actions' => ['create','update'],
+                        'allow' => true,
+                        'roles' => ['sysadmin'],
+                    ],
+                    [
+                        'actions' => ['delete', 'list-unset'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
@@ -232,7 +237,11 @@ class WorkplacesController extends Controller
         $res = json_encode($arr);
         return $res;
     }
-
+    
+    /**
+     * Поиск рабочих мест без координат
+     * @return string
+     */
     public function actionListUnset()
     {
     	$search = new WorkplacesSearch();

@@ -116,11 +116,14 @@ class CoordinateController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Изменяем метку
      * @param integer $id
+     * @param int     $mod
+     * @param int     $floor
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id, $mod = 0, $floor = 0)
     {
@@ -151,12 +154,15 @@ class CoordinateController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Deletes an existing Coordinate model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

@@ -32,7 +32,12 @@ class RoomsController extends Controller
                         'roles' => ['it'],
                     ],
                     [
-                        'actions' => ['create','update','delete'],
+                        'actions' => ['create','update'],
+                        'allow' => true,
+                        'roles' => ['sysadmin'],
+                    ],
+                    [
+                        'actions' => ['delete'],
                         'allow' => true,
                         'roles' => ['admin'],
                     ],

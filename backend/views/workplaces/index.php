@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <?php //чтобы таблицу можно было отсортировать и при этом в запросе остались значения mode и id_dev сохраняем их
-    //PS для этого конечно можно использовать сессию но это потом
+    //todo: для этого конечно можно использовать сессию но это потом
         $param = Yii::$app->request->queryParams;
         $query = '';
         if($param) $query = 'mode=' . ArrayHelper::getValue($param, 'mode')
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?php
-        if (Yii::$app->user->can('auditor') || Yii::$app->user->can('admin')) {
+        if (Yii::$app->user->can('auditor') || Yii::$app->user->can('sysadmin')) {
             echo Html::a('Создать рабочее место', ['create'], ['class' => 'btn btn-success']) . ' ';
             echo Html::a('Создать Отдел/Кабинет', ['rooms/create'], ['class' => 'btn btn-primary']) . ' ';
             echo Html::a('Создать Подразделение', ['branches/create'], ['class' => 'btn btn-primary']) . ' ';

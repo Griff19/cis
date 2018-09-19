@@ -88,9 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ];
     $rowscurr = Yii::$app->user->can('admin') ? $rowsadmin : $rowsuser;
     ?>
-    <?=
-    DetailView::widget($rowscurr)
-    ?>
+    <?= DetailView::widget($rowscurr) ?>
 
     <?php
     //Получаем роль выбранного пользователя и выводим её

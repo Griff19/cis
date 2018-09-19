@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'format' => 'raw'
         ]
     ];
-    if (!Yii::$app->user->can('admin')) {
+    if (!Yii::$app->user->can('sysadmin')) {
         unset($columns[3]);
     }
     echo GridView::widget([
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         'columns' => $columns,
     ]); ?>
-    <?php if (Yii::$app->user->can('admin')){ ?>
+    <?php if (Yii::$app->user->can('sysadmin')){ ?>
     <?= Html::a('+ Добавить сотовый номер', ['cellnumbers/create', 'emp_id' => $model->id], ['class' => 'btn btn-success', 'style' => 'float: right']) ?>
     <?php } ?>
     <br>
@@ -103,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $model->status == 1 ? 'Основной' : 'Сделать основным';
             }
         ],
-        ['class' => \yii\grid\Column::className(),
+        ['class' => \yii\grid\Column::class,
             'content' => function($model) {
                 return Html::a('Ред', ['emails/update', 'id' => $model->id]);
             }
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
         },
         'columns' => $columns
     ]); ?>
-    <?php if (Yii::$app->user->can('admin')){ ?>
+    <?php if (Yii::$app->user->can('sysadmin')){ ?>
     <?= Html::a('+ Добавить адрес', ['emails/create', 'emp_id' => $model->id, 'mode' => 'start'], ['class' => 'btn btn-success', 'style' => 'float: right']) ?>
     <?php } ?>
     <br>

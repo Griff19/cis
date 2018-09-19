@@ -14,7 +14,7 @@ use yii\jui\AutoComplete;
 
 <div class="workplaces-form">
     <?php $form = ActiveForm::begin(); ?>
-    <?php if (Yii::$app->user->can('auditor') || Yii::$app->user->can('admin')) {?>
+    <?php if (Yii::$app->user->can('auditor') || Yii::$app->user->can('sysadmin')) {?>
         <div class="row">
             <div class="col-sm-9">
                 <?= $form->field($model, 'branch_id')->dropDownList(

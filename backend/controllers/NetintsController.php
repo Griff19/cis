@@ -40,11 +40,12 @@ class NetintsController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+    
     /**
      * Displays a single Netints model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {

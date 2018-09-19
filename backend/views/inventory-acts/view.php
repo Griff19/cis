@@ -59,7 +59,7 @@ if ($model->status == InventoryActs::DOC_PRINTED) {
     <div class="col-xs-12 col-md-8 col-md-push-4">
     <p>
         <?php
-        if (Yii::$app->user->can('admin')) {
+        if (Yii::$app->user->can('sysadmin')) {
             if ($model->status == InventoryActs::DOC_NEW) {
                 echo Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']);
                 echo ' ';

@@ -32,10 +32,10 @@ $col1 = [
 		'sn',
 		'specification',
 		'parent_device_id',
-		['class' => Column::className(),
+		['class' => Column::class,
             'visible' => $mode,
 			'content' => function ($moddev) use ($mode) {
-				if (Yii::$app->user->can('admin'))
+				if (Yii::$app->user->can('sysadmin'))
 					return Html::a('',['devices/delfromwp', 'id' => $moddev['id'], 'id_wp' => $moddev['workplace_id']],['class' => 'cross']);
 				else
 					return '';
