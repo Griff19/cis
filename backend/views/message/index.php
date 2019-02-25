@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'date_send:datetime',
             ['attribute' => 'user_id',
                 'value' => function ($model) {
-                    return $model->userTo->username;
+                    return $model->userTo ? $model->userTo->username : 'Системное сообщение';
                 }
             ],
             'subject',

@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\PhoneBill;
+use DOMDocument;
 use Yii;
 use backend\models\Employees;
 use backend\models\CellNumbers;
@@ -68,11 +70,12 @@ class CellnumbersController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+    
     /**
      * Displays a single CellNumbers model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionView($id)
     {
@@ -102,12 +105,13 @@ class CellnumbersController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Updates an existing CellNumbers model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -121,12 +125,15 @@ class CellnumbersController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Deletes an existing CellNumbers model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
@@ -201,9 +208,96 @@ class CellnumbersController extends Controller
             ->createCommand('UPDATE cell_numbers SET employee_id = NULL, status = 1 WHERE status < 0')
             ->execute();
     }
-
+    
+    /**
+     *
+     */
+    public function costInFile(){
+        
+        $filename = 'in/costofcell.xml';
+        if ( file_exists($filename) )
+        {
+            $str_date = '';
+            $dom = DOMDocument::load( $filename );
+            $r = 0;
+            $rows = $dom->getElementsByTagName( 'Row' );
+            foreach ($rows as $row)
+            {
+                $r++; //Считаем строки чтобы достать дату из 3 строки
+                $rb = false;
+                $i = 0;
+                $str_cell = '';
+    
+                $subscription = 0;
+                $one_time = 0;
+                $online = 0;
+                $roaming = 0;
+                $cost = 0;
+                
+                $cells = $row->getElementsByTagName( 'Cell' );
+                foreach( $cells as $cell )
+                {
+                    $i++; // Считаем столбцы: Номер в 1, Сумма в 24
+                    //Получаем дату счета из 3 строки
+                    if ($r == 3){
+                        $str_date = substr($cell->textContent, -10);
+                    }
+                    
+                    //^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$ можно использовать такой шаблон для телефона
+                    if ($i == 1 && preg_match('/^\d{11}$/', $cell->textContent, $matches) == 1) {
+                        $rb = true; // Были получены данные по строке - найден номер телефона
+                        $str_cell = substr($cell->textContent, 1);
+                    }
+                    if ($i == 3 || $i == 4) {
+                        $subscription += round($cell->textContent, 2);
+                    }
+                    if ($i == 5) {
+                        $one_time += round($cell->textContent, 2);
+                    }
+                    if ($i >= 6 && $i <= 19) {
+                        $online +=  round($cell->textContent, 2);
+                    }
+                    if ($i >= 20 && $i <= 23) {
+                        $roaming += round($cell->textContent, 2);
+                    }
+                    if ($i == 24) {
+                        $cost = round($cell->textContent, 2);
+                    }
+                }
+                if ($rb){
+                    $phone_bill = PhoneBill::findOne(['number' => $str_cell, 'date' => $str_date]);
+                    if ($phone_bill) {
+                        $phone_bill->subscription = $subscription;
+                        $phone_bill->one_time = $one_time;
+                        $phone_bill->online = $online;
+                        $phone_bill->roaming = $roaming;
+                        $phone_bill->cost = $cost;
+                        $phone_bill->save();
+                    } else {
+                        $phone_bill         = new PhoneBill();
+                        $phone_bill->number = $str_cell;
+                        $phone_bill->date   = $str_date;
+                        
+                        $phone_bill->subscription = $subscription;
+                        $phone_bill->one_time = $one_time;
+                        $phone_bill->online = $online;
+                        $phone_bill->roaming = $roaming;
+                        $phone_bill->cost   = $cost;
+                        $phone_bill->save();
+                    }
+                }
+            }
+            Yii::$app->session->setFlash('success', 'Загрузка данных прошла успешно');
+            return true;
+        } else {
+            Yii::$app->session->setFlash('error', 'Ошибка чтения файла');
+            return false;
+        }
+    }
+    
     /**
      * @return string|\yii\web\Response
+     * @throws \yii\db\Exception
      */
     public function actionUploadform(){
         $model = new CellNumbers();
@@ -211,13 +305,20 @@ class CellnumbersController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->file = UploadedFile::getInstance($model, 'file');
             if($model->file){
-                $fileName = 'cellnumbers';
-                $model->file->saveAs('in/'.$fileName.'.'.$model->file->extension);
-                //$this->actionReadfile();
-                $this->actionReadFile();
-                //die;
+                if ($model->file->extension == 'xml'){
+                    $fileName = 'costofcell';
+                    $model->file->saveAs('in/' . $fileName . '.' . $model->file->extension);
+                    $this->costInFile();
+                    return $this->redirect(['/phone-bill']);
+                }
+                else {
+                    $fileName = 'cellnumbers';
+                    $model->file->saveAs('in/' . $fileName . '.' . $model->file->extension);
+                    $this->actionReadFile();
+                    return $this->redirect(['index']);
+                }
             }
-            return $this->redirect(['index']);
+            
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -226,7 +327,10 @@ class CellnumbersController extends Controller
             ]);
         }
     }
-
+    
+    /**
+     * @return \yii\web\Response
+     */
     public function actionDwnftp(){
 
         $fileloc = 'in/cellnumbers.txt';
@@ -245,13 +349,14 @@ class CellnumbersController extends Controller
 
         return $this->redirect(['index']);
     }
-
+    
     /**
      * назначаем номер "основным" status = 1
      * при этом старый "основной" получает статус текущего номера
      * @param $id
      * @return void|\yii\web\Response
      * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
      */
     public function actionDirect($id){
 

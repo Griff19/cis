@@ -19,6 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Добавить новый номер', ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Загрузить файл', ['uploadform'], ['class' => 'btn btn-success']) ?>
         <?= Html::a('Скачать с FTP', ['dwnftp'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Открыть счета за услуги связи', ['/phone-bill'], ['class' => 'btn btn-primary'])?>
     </p>
 
     <?= GridView::widget([

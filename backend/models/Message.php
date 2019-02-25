@@ -131,25 +131,25 @@ class Message extends ActiveRecord
 	}
 
 	public function getUserTo() {
-		return $this->hasOne(User::className(), ['id' => 'user_id']);
+		return $this->hasOne(User::class, ['id' => 'user_id']);
 	}
 
 	public function getUserFrom() {
-		return $this->hasOne(User::className(), ['id' => 'from_user_id']);
+		return $this->hasOne(User::class, ['id' => 'from_user_id']);
 	}
 
 	/**
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function getEmployeeTo() {
-		return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('user', ['id' => 'user_id']);
+		return $this->hasOne(Employees::class, ['id' => 'employee_id'])->viaTable('user', ['id' => 'user_id']);
 	}
-
-	/**
-	 * @return $this
-	 */
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
 	public function getEmployeeFrom() {
-		return $this->hasOne(Employees::className(), ['id' => 'employee_id'])->viaTable('user', ['id' => 'from_user_id']);
+		return $this->hasOne(Employees::class, ['id' => 'employee_id'])->viaTable('user', ['id' => 'from_user_id']);
 	}
 
 	/**

@@ -73,10 +73,11 @@ class MessageController extends Controller
             ]);
         }
     }
-
+    
     /**
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
      */
     public function actionUpdate($id)
     {
@@ -90,10 +91,13 @@ class MessageController extends Controller
             ]);
         }
     }
-
+    
     /**
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {

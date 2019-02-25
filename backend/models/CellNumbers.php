@@ -60,7 +60,7 @@ class CellNumbers extends \yii\db\ActiveRecord
      */
     public function getEmployee()
     {
-        return $this->hasOne(Employees::className(), ['id' => 'employee_id']);
+        return $this->hasOne(Employees::class, ['id' => 'employee_id']);
     }
 
     /**

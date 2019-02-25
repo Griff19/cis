@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\CellNumbers */
 
-$this->title = 'Новый номер';
+$this->title = isset($upload) ? 'Эагрузка файла...' : 'Новый номер';
 $this->params['breadcrumbs'][] = ['label' => 'Мобильные номера', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

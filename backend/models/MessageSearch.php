@@ -42,7 +42,7 @@ class MessageSearch extends Message
             $query = Message::find();
         else {
             $usrid = Yii::$app->user->id;
-            $query = Message::find()->where(['user_id' => $usrid])->orWhere(['from_user_id' => $usrid]);
+            $query = Message::find()->where(['user_id' => $usrid])->orWhere(['from_user_id' => $usrid])->orWhere(['user_id' => 0]);
         }
 
         // add conditions that should always apply here

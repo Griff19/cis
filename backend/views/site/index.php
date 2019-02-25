@@ -114,7 +114,12 @@ use yii\helpers\Html;
                 <p>Виртуальные перемещения</p>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-sm-3">
+                <?= Html::a('Счета за услуги связи', ['/phone-bill'], ['class'=>'btn btn-primary'])?>
+                <p>Данные по затратам на услуги связи</p>
+            </div>
+        </div>
         <div>
             <?= "PHP " . phpversion() ?>
         </div>
