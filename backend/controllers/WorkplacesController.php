@@ -9,6 +9,7 @@ use backend\models\WorkplacesSearch;
 use backend\models\WpOwnersSearch;
 use backend\models\DevicesSearch;
 use backend\models\VoipnumbersSearch;
+use backend\models\StorydeviceSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -115,13 +116,17 @@ class WorkplacesController extends Controller
 
         $searchVoip = new VoipnumbersSearch();
         $voipProvider = $searchVoip->search(Yii::$app->request->queryParams, 0, $id);
+        
+        $searchHistory = new StorydeviceSearch();
+        $historyProvider = $searchHistory->searchWp($id);
 
         return $this->render('view', [
             'model' => $model,
             'employeeProvider' => $employeeProvider,
             'searchDeviceModel' => $searchDeviceModel,
             'deviceProvider' => $deviceProvider,
-            'voipProvider' => $voipProvider
+            'voipProvider' => $voipProvider,
+            'historyProvider' => $historyProvider
         ]);
     }
 
@@ -188,23 +193,25 @@ class WorkplacesController extends Controller
         $countWp = Workplaces::find()->where(['room_id' => $id])->count();
 
         if ($countWp > 0) {
+            /** @var Workplaces $workplaces */
             $workplaces = Workplaces::find()->where(['room_id' => $id])->all();
             //echo '<option value="#">Выберите рабочее место...</option>';
             foreach ($workplaces as $workplace) {
-                echo '<option value="' . $workplace->id.'">' . $workplace->workplaces_title . '</option>';
+                echo '<option value="' . $workplace->id .'">' . $workplace->workplaces_title . '</option>';
             }
         } else {
             echo '<option value="0"> - </option>';
         }
     }
-
+    
     /**
      * Функция выбора рабочего места
      * Выбор должен быть универсальный для любого
-     * @param $id int идентификатор рабочего места
-     * @param $target string контроллер и экшн назначения
-     * @param $target_id int идентификатор назначения
-     * @return \yii\web\Response
+     * @param      $id int идентификатор рабочего места
+     * @param      $target string контроллер и экшн назначения
+     * @param      $target_id int идентификатор назначения
+     * @param null $id_dev
+     * @return \yii\web\Response | bool
      */
     public function actionSelect($id, $target, $target_id, $id_dev = null){
 

@@ -92,25 +92,32 @@ class StoryDevice extends ActiveRecord
      * @return \yii\db\ActiveQuery
      */
     public function getWorkplace(){
-        return $this->hasOne(Workplaces::className(), ['id' => 'id_wp']);
+        return $this->hasOne(Workplaces::class, ['id' => 'id_wp']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getDevice(){
-        return $this->hasOne(Devices::className(), ['id' => 'id_device']);
+        return $this->hasOne(Devices::class, ['id' => 'id_device']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDeviceType(){
+        return $this->hasOne(DeviceType::class, ['id' => 'type_id'])->via('device');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getUser(){
-        return $this->hasOne(User::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 
     /**
-     * Получаем историю по рабочему месту
+     * Получаем историю по рабочему месту. Используется при формировании pdf
      * @param $id_wp
      * @return array
      */
@@ -118,6 +125,7 @@ class StoryDevice extends ActiveRecord
         $query = StoryDevice::find()->where(['id_wp' => $id_wp, 'id_device' => $id_dev])
             ->andWhere("date_up >= '". $date ."'")->andWhere(['event' => StoryDevice::EVENT_OUT]);
         $provider = new ActiveDataProvider(['query' => $query]);
+        //todo: Возможно нужно отключить пагинацию, но пока проблем не было
         return $provider->models;
 
     }

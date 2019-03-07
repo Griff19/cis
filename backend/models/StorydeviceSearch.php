@@ -32,12 +32,11 @@ class StorydeviceSearch extends StoryDevice
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
-
+    
     /**
      * Creates data provider instance with search query applied
-     *
      * @param array $params
-     *
+     * @param int   $id_dev идентификатор устройства, если нужно отобрать историю по одному
      * @return ActiveDataProvider
      */
     public function search($params, $id_dev = 0)
@@ -72,6 +71,23 @@ class StorydeviceSearch extends StoryDevice
         ]);
         $query->andFilterWhere(['like', 'LOWER(workplaces.workplaces_title)', mb_strtolower($this->id_wp)]);
 
+        return $dataProvider;
+    }
+    
+    /**
+     *  Отбор истории по рабочему месту
+     * @param $id_wp
+     * @return ActiveDataProvider
+     */
+    public function searchWp($id_wp){
+        $query = StoryDevice::find()->where(['id_wp' => $id_wp]);
+        
+        //$query->joinWith('device');
+        $query->joinWith('deviceType');
+        $query->joinWith('user');
+        
+        $dataProvider = new ActiveDataProvider(['query' => $query]);
+        
         return $dataProvider;
     }
 }

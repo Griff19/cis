@@ -1,24 +1,30 @@
 <?php
 
+/**
+ * @var $this yii\web\View
+ * @var $model backend\models\Workplaces
+ * @var $employeeProvider \yii\data\ActiveDataProvider
+ * @var $voipProvider \yii\data\ActiveDataProvider
+ * @var $deviceProvider \yii\data\ActiveDataProvider
+ * @var $searchDeviceModel \backend\models\DevicesSearch
+ * @var $historyProvider \yii\data\ActiveDataProvider
+ */
+
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\grid\Column;
-//use yii\bootstrap\Modal; //если нужно будет показать картинку
 use backend\models\Workplaces;
-use backend\models\Images;
 use backend\models\DeviceType;
 use backend\models\Devices;
 use backend\assets\MapAsset;
 use backend\models\Coordinate;
 use yii\widgets\Pjax;
+//use backend\models\Images;
+//use yii\bootstrap\Modal; //если нужно будет показать картинку
 
 MapAsset::register($this);
 
-/**
- * @var $this yii\web\View
- * @var $model backend\models\Workplaces
- */
 
 $this->title = $model->workplaces_title;
 $this->params['breadcrumbs'][] = ['label' => 'Рабочие места', 'url' => ['index']];
@@ -60,7 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'date',
                         'value' => 'date',
                         'options' => ['style' => 'width:93px'],
-
                     ],
                     [ //2
                         'attribute' => 'employee_id',
@@ -93,13 +98,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
                 ];
 
-                if (Yii::$app->user->can('sysadmin')) {
-                } else {
+                if (!Yii::$app->user->can('sysadmin')) {
                     unset($colums[3]);
                     unset($colums[4]);
                 } ?>
 
-                <?= GridView::widget([
+                <?=
+                GridView::widget([
                     'dataProvider' => $employeeProvider,
                     'tableOptions' => ['class' => 'table-condensed'],
                     'layout' => "{items}",
@@ -121,7 +126,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'room_id',
                             'value' => $model->room ? $model->room->room_title : '-',
                             'format' => 'raw'
-            
                         ],
                         'workplaces_title',
                         [
@@ -137,10 +141,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <!-- отображение картинки пока отключено в пользу карты
             <div class="img-thumbnail" style="margin-top: 20px">
                 <?php
-                $key = md5('workplace' . $model->id);
-                echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '200px', 'alt' => 'Отсутствует изображение']) . '<br>';
-                if (Yii::$app->user->can('admin'))
-                    echo Html::a('Изменить', ['images/index', 'owner' => $key, 'owner_id' => $model->id, 'target' => 'workplaces/view']);
+                //$key = md5('workplace' . $model->id);
+                //echo Html::img('/admin/' . Images::getLinkfile($key), ['width' => '200px', 'alt' => 'Отсутствует изображение']) . '<br>';
+                //if (Yii::$app->user->can('admin'))
+                //    echo Html::a('Изменить', ['images/index', 'owner' => $key, 'owner_id' => $model->id, 'target' => 'workplaces/view']);
                 ?>
             </div>
             -->
@@ -152,6 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <ul class="nav nav-tabs">
     <li class="active"><a href="#devices" data-toggle="tab">Закрепленные устройства</a></li>
     <li><a href="#advance" data-toggle="tab">Дополнително</a></li>
+    <li><a href="#history" data-toggle="tab">История</a></li>
 </ul>
 
 <div class="tab-content">
@@ -295,6 +300,20 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
     </div>
+    <div class="tab-pane" id="history">
+        <?= GridView::widget([
+            'id' => 'history',
+            'dataProvider' => $historyProvider,
+            'columns' => [
+                'id_device',
+                'deviceType.title',
+                'date_up',
+                'user.username',
+                'event',
+                'note'
+            ]
+        ])?>
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -315,7 +334,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if ($model->coordinate) { ?>
         var floor = <?= $model->coordinate[0]->floor ?>;
         <?php foreach ( $model->coordinate as $coordinate) {
-            if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
+            if (ctype_space($coordinate->preset) || empty($coordinate->preset) )
                 $preset = 'islands#blueDotIcon';
             else
                 $preset = trim($coordinate->preset);
