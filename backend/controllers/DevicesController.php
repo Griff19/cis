@@ -244,11 +244,10 @@ class DevicesController extends Controller
     }
 
     /**
-     * Создаем устройство. При создании получаем строку параметров.
-     * @param $param
+     * Создаем устройство. При создании получаем и разбираем строку параметров.
      * @return mixed
      */
-    public function actionCreate($param = null)
+    public function actionCreate()
     {
         /* @var $model Devices */
         parse_str(Yii::$app->request->queryString, $arr);
@@ -262,8 +261,12 @@ class DevicesController extends Controller
         //Получаем сохраненное РМ и заполняем поля
         if (Yii::$app->session->has('workplace_id')){
             $workplace = Workplaces::findOne(Yii::$app->session->get('workplace_id'));
-            $model->branch_id = $workplace->branch_id;
-            $model->room_id = $workplace->room_id;
+            if ($workplace) {
+                $model->branch_id = $workplace->branch_id;
+                $model->room_id   = $workplace->room_id;
+            } else {
+                Yii::$app->session->remove('workplace_id');
+            }
         }
 
         $model->workplace_id = $id_wp;
@@ -285,7 +288,8 @@ class DevicesController extends Controller
                     }
                     StoryDevice::addStory($id_wp, $model->id, StoryDevice::EVENT_CREATE, '' . $target . ' ' . $target_id);
                     //Сохраняем РМ чтобы каждый раз не вводить одно и то же
-                    Yii::$app->session->set('workplace_id', $model->workplace_id);
+                    if ($model->workplace_id)
+                        Yii::$app->session->set('workplace_id', $model->workplace_id);
                 }
                 if ($model->chekMode) {
                     $model->sn = 'SN' . $model->id;
@@ -296,7 +300,7 @@ class DevicesController extends Controller
                 Yii::$app->session->setFlash('error', serialize($model->errors));
             }
 
-            //готовим возврат во view
+            //готовим возврат во view чтобы вернуться в то место откуда была вызвана функция
             if ($target == 'new-dev') {
                 $act_id = ArrayHelper::getValue($arr, 'act_id');
                 $id_wp = ArrayHelper::getValue($arr, 'id_wp');
