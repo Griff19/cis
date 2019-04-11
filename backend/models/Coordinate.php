@@ -66,6 +66,7 @@ class Coordinate extends \yii\db\ActiveRecord
 
 	/**
 	 * Готовим массив с параметрами карты для разных филиалов
+     * Ключ массива это номер подразделения, значение - параметры карты
 	 * @return array
 	 */
     public static function arrMapParams(){
@@ -80,6 +81,11 @@ class Coordinate extends \yii\db\ActiveRecord
 				'pic_width' => 2000,
 				'pic_height' => 1600
 			],
+            3 => [ //Барнаул
+                'max_zoom' => 6,
+                'pic_width' => 1500,
+                'pic_height' => 865
+            ],
 		    8 => [ //Томск
 			    'max_zoom' => 6,
 			    'pic_width' => 2160,

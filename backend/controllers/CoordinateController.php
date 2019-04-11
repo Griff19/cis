@@ -70,18 +70,18 @@ class CoordinateController extends Controller
             return $this->redirect(['create', 'id_wp' => $id_wp, 'branch' => $branch]);
         }
     }
-
-	/**
-	 * Добавляем новую точку на карту.
-	 * При совпадении идентификатора рабочего места - старая точка удаляется
-	 *
-	 * @param null $id_wp - идентификатор рабочего места
-	 * @param int  $floor -  номер этажа
-	 * @param int  $branch - идентификатор филиала
-	 * @param int  $mod - режим работы (определяет место возврата)
-	 *
-	 * @return mixed
-	 */
+    
+    /**
+     * Добавляем новую точку на карту.
+     * При совпадении идентификатора рабочего места - старая точка удаляется
+     * @param null $id_wp - идентификатор рабочего места
+     * @param int  $floor -  номер этажа
+     * @param int  $branch - идентификатор филиала
+     * @param int  $mod - режим работы (определяет место возврата)
+     * @return mixed
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
     public function actionCreate($id_wp = null, $floor = 1, $branch = 1, $mod = 0)
     {
         $model = new Coordinate();
