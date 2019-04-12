@@ -103,12 +103,13 @@ class Workplaces extends \yii\db\ActiveRecord
      */
     public static function getNetintsProvider($id){
         $queryNet = (new Query())
-            ->select("title, devices.id AS dev_id, device_note, parent_device_id, type_id, netints.id AS net_id, netints.ipaddr AS ip")
+            ->select("title, devices.id AS dev_id, device_note, parent_device_id, type_id, netints.id AS net_id,
+                netints.ipaddr AS ip, domain_name")
             ->from("devices, netints, device_type")
             ->where("parent_device_id > 0 AND netints.device_id = devices.id AND devices.type_id = device_type.id");
 
         $query = (new Query())
-            ->select("devices.workplace_id AS wp_id, title, s.dev_id AS dev_id, s.device_note, s.ip AS ip")
+            ->select("devices.workplace_id AS wp_id, title, s.dev_id AS dev_id, s.device_note, s.ip AS ip, domain_name")
             ->from(['s' => $queryNet, 'devices'])
             ->where("devices.id = s.parent_device_id")
             ->andWhere(['workplace_id' => $id]);

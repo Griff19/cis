@@ -211,6 +211,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'format' => 'raw'
                 ],
+                ['attribute' => 'domain_name',
+                    'header' => 'Domain Name',
+                    'value' => 'domain_name'
+
+                ],
                 ['attribute' => 'ip',
                     'header' => 'IP адрес',
                     'value' => 'ip'
