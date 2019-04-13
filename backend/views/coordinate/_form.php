@@ -8,43 +8,24 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<style>
-/*
-    .field-coordinate-floor, .field-coordinate-x, .field-coordinate-y, .field-coordinate-workplace_id {
-    display: inline-flex;
-}
-
-.field-coordinate-floor label, .field-coordinate-x label, .field-coordinate-y label, .field-coordinate-workplace_id label {
-    margin-right: 10px;
-    padding-top: 7px;
-    width: 100%;
-    text-align: right;
-}
-
-.field-coordinate-floor input, .field-coordinate-x input, .field-coordinate-y input, .field-coordinate-workplace_id input {
-    margin-right: 10px;
-}
-*/
-</style>
-
 <div class="coordinate-form">
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
         <div class="col-md-3">
-            <?= $form->field($model, 'workplace_id')->textInput() ?>
+            <?= $form->field($model, 'workplace_id')->textInput(['disabled' => true]) ?>
         </div>
         <div class="col-md-3">
-            <?= $form->field($model, 'floor')->textInput() ?>
+            <?= $form->field($model, 'floor')->textInput(['disabled' => true]) ?>
         </div>
         <div class="col-md-2">
-		    <?= $form->field($model, 'branch_id')->textInput() ?>
+		    <?= $form->field($model, 'branch_id')->textInput(['disabled' => true]) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'x')->textInput() ?>
+            <?= $form->field($model, 'x')->hiddenInput()->label(false) ?>
         </div>
         <div class="col-md-2">
-            <?= $form->field($model, 'y')->textInput() ?>
+            <?= $form->field($model, 'y')->hiddenInput()->label(false) ?>
         </div>
     </div>
     <?= $form->field($model, 'balloon')->textInput(['maxlength' => true]) ?>

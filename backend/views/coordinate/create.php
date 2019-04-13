@@ -32,33 +32,33 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <script>
-    var floor = <?= $model->floor ?>;
-    var branch = <?= $model->branch_id ?>;
-    var edit = true;
-    var points = [];
-    var max_zoom = <?= Coordinate::getMapParams($model->branch_id)['max_zoom'] ?>;
-    var pic_width = <?= Coordinate::getMapParams($model->branch_id)['pic_width'] ?>;
-    var pic_height = <?= Coordinate::getMapParams($model->branch_id)['pic_height']?>;
+    let floor = <?= $model->floor ?>;
+    let branch = <?= $model->branch_id ?>;
+    let edit = true;
+    let points = [];
+    let max_zoom = <?= Coordinate::getMapParams($model->branch_id)['max_zoom'] ?>;
+    let pic_width = <?= Coordinate::getMapParams($model->branch_id)['pic_width'] ?>;
+    let pic_height = <?= Coordinate::getMapParams($model->branch_id)['pic_height'] ?>;
 
     <?php
     $owners = [];
-    foreach ( $allCoord->models as $coordinate) {
-    if ($coordinate->workplace_id == $model->workplace_id) {continue;}
-    $workplace = Workplaces::findOne($coordinate->workplace_id);
-    $title = '';
-    if ($workplace->owner) {
-        if ($workplace->owner[0]){
-            $title = $workplace->owner[0]->snp . '<br>' . $workplace->owner[0]->job_title;
-            $owners[$workplace->owner[0]->snp] = $workplace->owner[0]->snp;
+    foreach ( $allCoord->models as $coordinate ) {
+        if ($coordinate->workplace_id == $model->workplace_id) {continue;}
+        $workplace = Workplaces::findOne($coordinate->workplace_id);
+        $title = '';
+        if ($workplace->owner) {
+            if ($workplace->owner[0]){
+                $title = $workplace->owner[0]->snp . '<br>' . $workplace->owner[0]->job_title;
+                $owners[$workplace->owner[0]->snp] = $workplace->owner[0]->snp;
+            }
         }
-    }
-    if (Yii::$app->user->can('it')) {
-        $balloon = Html::a('<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title, ['/admin/workplaces/view', 'id' => $workplace->id]) . '<br>' . $title;
-    } else {
-        $balloon = '<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title . '<br>' . $title;
-    }
+        if (Yii::$app->user->can('it')) {
+            $balloon = Html::a('<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title, ['/admin/workplaces/view', 'id' => $workplace->id]) . '<br>' . $title;
+        } else {
+            $balloon = '<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title . '<br>' . $title;
+        }
     ?>
     points.push({y: <?= $coordinate->y ?>, x: <?= $coordinate->x ?>, balloonContent: '<?= $balloon ?>', preset: 'islands#grayDotIcon'});
-<?php } ?>
+    <?php } ?>
 
 </script>

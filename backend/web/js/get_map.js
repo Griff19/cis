@@ -1,7 +1,7 @@
-var map;
+let map;
 ymaps.ready(function () {
 
-    var LAYER_NAME = 'user#layer',
+    let LAYER_NAME = 'user#layer',
         MAP_TYPE_NAME = 'user#customMap',
         
         TILES_PATH = '/admin/map/'+ branch+ '_' + floor,
@@ -11,8 +11,8 @@ ymaps.ready(function () {
         PIC_HEIGHT = pic_height;
 
     //Создаем свой слой.
-    var Layer = function () {
-        var layer = new ymaps.Layer(TILES_PATH + '/%z/tile-%x-%y.png', {
+    let Layer = function () {
+        let layer = new ymaps.Layer(TILES_PATH + '/%z/tile-%x-%y.png', {
             // Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
             // раскомментируйте эту строчку и укажите ссылку на изображение.
             // notFoundTile: 'url'
@@ -30,20 +30,20 @@ ymaps.ready(function () {
     // Добавляем в хранилище слоев свой конструктор.
     ymaps.layer.storage.add(LAYER_NAME, Layer);
 
-    var mapType = new ymaps.MapType(MAP_TYPE_NAME, [LAYER_NAME]);
+    let mapType = new ymaps.MapType(MAP_TYPE_NAME, [LAYER_NAME]);
     // Сохраняем тип в хранилище типов.
     ymaps.mapType.storage.add(MAP_TYPE_NAME, mapType);
 
-    var centerY = 0;
-    var centerX = 0;
+    let centerY = 0;
+    let centerX = 0;
 
     if (typeof (points) != "undefined" && points.length > 0) {
         centerY = points[0].y;
         centerX = points[0].x;
-    };
+    }
 
     // Вычисляем размер всех тайлов на максимальном зуме.
-    var worldSize = Math.pow(2, MAX_ZOOM) * 256,
+    let worldSize = Math.pow(2, MAX_ZOOM) * 256,
         //Создаем карту, указав свой новый тип карты.
         map = new ymaps.Map('map', {
             center: [centerY, centerX],
@@ -70,7 +70,7 @@ ymaps.ready(function () {
     if (typeof (points) != "undefined") {
         for (let value of points) {
 
-            var point = new ymaps.Placemark([value.y, value.x], {
+            let point = new ymaps.Placemark([value.y, value.x], {
                 balloonContent: value.balloonContent,
                 iconContent: value.content,
                 iconCaption: value.content
@@ -83,10 +83,10 @@ ymaps.ready(function () {
     }
 
     if (typeof (edit) != "undefined") {
-        var myPlacemark;
+        let myPlacemark;
         map.events.add('click', function (e) {
             // Получение координат щелчка
-            var coords = e.get('coords');
+            let coords = e.get('coords');
             $('#coordinate-y').val(coords[0]);
             $('#coordinate-x').val(coords[1]);
 
