@@ -19,7 +19,7 @@ ymaps.ready(function () {
         var layer = new ymaps.Layer(TILES_PATH + '/%z/tile-%x-%y.png', {
             // Если есть необходимость показать собственное изображение в местах неподгрузившихся тайлов,
             // раскомментируйте эту строчку и укажите ссылку на изображение.
-            // notFoundTile: 'url'
+            notFoundTile: '/../map/noTile.png'
         });
         // Указываем доступный диапазон масштабов для данного слоя.
         layer.getZoomRange = function () {

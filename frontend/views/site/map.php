@@ -2,19 +2,22 @@
 /**
  * Страница глобальной карты
  */
+
 use backend\models\Workplaces;
 use backend\models\Coordinate;
-use backend\models\Branches;
 use frontend\assets\MapAsset;
+use yii\data\ActiveDataProvider;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\web\View;
 use yii\widgets\ActiveForm;
 
 /**
- * @var $this \yii\web\View
+ * @var $this View
  * @var $floor integer - номер этажа
+ * @var $search - модель фильтра координат
  * @var $branch integer - идентификатор филиала
- * @var $dataProvider \yii\data\ActiveDataProvider
+ * @var $dataProvider ActiveDataProvider
  */
 MapAsset::register($this);
 
@@ -51,7 +54,7 @@ $this->title = 'Карта сайта';
 <?= $form->field($search, 'snp')->dropDownList(
 	ArrayHelper::map(
 		Coordinate::getOwners($floor, $branch), 'snp', 'snp'
-	), ['prompt' => 'Пустой фильтр...'])
+	), ['prompt' => 'Выберите сотрудника...'])
 ?>
 <?= $form->field($search, 'branch_id')->dropDownList(
 	ArrayHelper::map(
@@ -59,7 +62,7 @@ $this->title = 'Карта сайта';
 	        //Branches::arrayBranches(), 'id', 'value'
 	)
 )?>
-<?= Html::submitButton('Фильтровать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>
+<?= Html::submitButton('Показать', ['class' => 'btn btn-primary', 'style' => 'margin:-5px 4px 4px 3px;']) ?>
 <?php ActiveForm::end(); ?>
 
 <div id = "map" class="map"></div>
@@ -71,6 +74,7 @@ $this->title = 'Карта сайта';
     var max_zoom = <?= Coordinate::getMapParams($branch)['max_zoom'] ?>;
     var pic_width = <?= Coordinate::getMapParams($branch)['pic_width'] ?>;
     var pic_height = <?= Coordinate::getMapParams($branch)['pic_height']?>;
+    
     <?php
     $owners = [];
     foreach ( $dataProvider->models as $coordinate ) {
@@ -82,16 +86,17 @@ $this->title = 'Карта сайта';
                 $owners[$workplace->owner[0]->snp] = $workplace->owner[0]->snp;
             }
         }
-        if (Yii::$app->user->can('it')) {
+        if (Yii::$app->user->can('it'))
             $balloon = Html::a('<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title, ['/admin/workplaces/view', 'id' => $workplace->id]) . '<br>' . $title;
-        } else {
+        else
             $balloon = '<b>№' . $workplace->id . '</b> ' . $workplace->workplaces_title . '<br>' . $title;
-        }
+        
         if ( ctype_space($coordinate->preset) || empty($coordinate->preset) )
             $preset = 'islands#blueDotIcon';
         else
             $preset = trim($coordinate->preset);
-        if (ctype_space($coordinate->content) || empty($coordinate->content))
+        
+        if ( ctype_space($coordinate->content) || empty($coordinate->content) )
             $content = '';
         else
             $content = trim($coordinate->content);
