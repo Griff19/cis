@@ -219,6 +219,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['attribute' => 'ip',
                     'header' => 'IP адрес',
                     'value' => 'ip'
+                ],
+                // #190824-1 добавлено поле
+                ['attribute' => 'mac',
+                    'header' => 'MAC',
+                    'value' => 'mac'
                 ]
             ]
         ])

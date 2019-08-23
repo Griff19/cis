@@ -102,18 +102,30 @@ class Workplaces extends \yii\db\ActiveRecord
      * @return ActiveDataProvider
      */
     public static function getNetintsProvider($id){
-        $queryNet = (new Query())
-            ->select("title, devices.id AS dev_id, device_note, parent_device_id, type_id, netints.id AS net_id,
-                netints.ipaddr AS ip, domain_name")
-            ->from("devices, netints, device_type")
-            ->where("parent_device_id > 0 AND netints.device_id = devices.id AND devices.type_id = device_type.id");
-
+        // #190824-1 Исправление запроса >>>
+        $queryDev = (new Query())->select("id, type_id")->from("devices")->where(['workplace_id' => $id]);
+        $queryPar = (new Query())->select("parent_device_id")->from("devices")->where(['workplace_id' => $id])->andWhere("parent_device_id > 0");
+        $queryDev2 = (new Query())->select("id, type_id")->from("devices")->where(['IN', 'parent_device_id', $queryPar]);
+        
+        $queryNet = $queryDev->union($queryDev2);
+        
         $query = (new Query())
-            ->select("devices.workplace_id AS wp_id, title, s.dev_id AS dev_id, s.device_note, s.ip AS ip, domain_name")
-            ->from(['s' => $queryNet, 'devices'])
-            ->where("devices.id = s.parent_device_id")
-            ->andWhere(['workplace_id' => $id]);
-
+            ->select("device_type.title AS title, device_id AS dev_id, domain_name, ipaddr AS ip, netints.mac AS mac")
+            ->from(['t_devices' => $queryNet, 'netints', 'device_type'])
+            ->where("netints.device_id = t_devices.id")->andWhere("device_type.id = t_devices.type_id");
+        
+//        $queryNet = (new Query())
+//            ->select("title, devices.id AS dev_id, device_note, parent_device_id, type_id, netints.id AS net_id,
+//                netints.ipaddr AS ip, domain_name")
+//            ->from("devices, netints, device_type")
+//            ->where("netints.device_id = devices.id AND devices.type_id = device_type.id");
+//
+//        $query = (new Query())
+//            ->select("devices.workplace_id AS wp_id, title, s.dev_id AS dev_id, s.device_note, s.ip AS ip, domain_name")
+//            ->from(['s' => $queryNet, 'devices'])
+//            ->where("devices.id = s.parent_device_id")
+//            ->andWhere(['workplace_id' => $id]);
+        // #190824-1 Исправление запроса <<<
         $provider = new ActiveDataProvider(['query' => $query]);
         return $provider;
     }
