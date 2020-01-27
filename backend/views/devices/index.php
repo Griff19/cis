@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Branches;
 use backend\models\DeviceType;
 use backend\models\Devices;
 use yii\helpers\Html;
@@ -10,6 +11,7 @@ use yii\grid\Column;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\DevicesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $mode string режим отображения страницы */
 
 $this->title = 'Устройства';
 $this->params['breadcrumbs'][] = $this->title;
@@ -50,7 +52,30 @@ if($target && $param) {
         <?= Html::a('Отобразить РМ', ['devices/index', 'mode' => Devices::SHOW_FWP],
             ['class' => 'btn btn-primary', 'title' => 'Показать полную информацию о рабочих местах']) ?>
     </p>
-
+    <?php // #200127-3 Добавление фильтра по подразделениям >>> ?>
+    <div class="row">
+        <?php
+        $form = \yii\widgets\ActiveForm::begin([
+            'action' => ['devices/index'],
+            'method' => 'get',
+            
+            'class' => 'form-horizontal',
+            'fieldConfig' => [
+                'template' => "<div class=\"col-md-2\">{label}</div><div class=\"col-md-3\">{input}</div>",
+                'labelOptions' => ['style' => 'padding-top:6px'],
+                ]
+        ]);
+     
+        echo $form->field($searchModel, 'branch_id')->dropDownList(
+            ArrayHelper::map( Branches::arrayBranches(), 'id', 'value' )
+        );
+        echo Html::submitButton('Фильтровать', ['class' => 'btn btn-primary col-md-3']);
+     
+        \yii\widgets\ActiveForm::end();
+        ?>
+    </div>
+    <br>
+    <?php // #200127-3 Добавление фильтра по подразделениям <<< ?>
     <?php
 
     $cols = [

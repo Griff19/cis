@@ -55,7 +55,7 @@ if($target && $param) $query = Yii::$app->request->queryString; else $query = nu
             'format' => 'raw'
         ],
         'device_note',
-        ['class' => Column::className(), //11
+        ['class' => Column::class, //11
             'content' => function ($model) use ($target) {
                 /** Кнопка выбора устройства в строке
                  * идентификатор устройства передается в таргет-контроллер

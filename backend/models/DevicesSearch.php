@@ -27,7 +27,8 @@ class DevicesSearch extends Devices
             [['imei1'], 'match', 'pattern' => '/[0-9]/', 'message' => 'это числовое значение'],
             [['imei1'], 'string', 'max' => 15],
             [['device_note'], 'safe'],
-            [['dev_comp'], 'boolean']
+            [['dev_comp'], 'boolean'],
+            [['branch_id'], 'safe'] // <<< #200127-3
         ];
     }
 
@@ -97,16 +98,14 @@ class DevicesSearch extends Devices
                 ->leftJoin('device_type', 'device_type.id = type_id')
                 ->leftJoin('wp_owners', 'wp_owners.workplace_id = d.workplace_id')
                 ->leftJoin('employees', 'employees.id = wp_owners.employee_id')
-                ->groupBy('d.id, device_type.title, device_type.comp,	d.brand,'
-                    . 'd.model,	d.sn,	d.specification,	d.imei1,'
-                    . 'd.parent_device_id,	d.workplace_id,	workplaces.workplaces_title');
+                ->groupBy('d.id, device_type.title, device_type.comp, d.brand,'
+                    . 'd.model,	d.sn, d.specification, d.imei1,'
+                    . 'd.parent_device_id, d.workplace_id, workplaces.workplaces_title');
 
             if (Yii::$app->user->can('auditor')){
 		        $query->where(['>', 'workplaces.branch_id', 1]);
 	        }
         }
-
-
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -144,7 +143,8 @@ class DevicesSearch extends Devices
             'd.id' => $this->id,
             'd.workplace_id' => $this->workplace_id,
             'device_type.comp' => $this->dev_comp,
-            'parent_device_id' => $this->parent_device_id
+            'parent_device_id' => $this->parent_device_id,
+            'workplaces.branch_id' => $this->branch_id // <<< #200127-3
         ]);
 
         $query->andFilterWhere(['like', 'LOWER(device_note)', mb_strtolower($this->device_note)])
