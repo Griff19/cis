@@ -127,6 +127,8 @@ class Workplaces extends \yii\db\ActiveRecord
 //            ->andWhere(['workplace_id' => $id]);
         // #190824-1 Исправление запроса <<<
         $provider = new ActiveDataProvider(['query' => $query]);
+        // #200127-2 отключение пагинации:
+        $provider->pagination = false;
         return $provider;
     }
     
