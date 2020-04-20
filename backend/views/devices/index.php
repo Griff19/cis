@@ -30,7 +30,11 @@ if($target && $param) {
 //var_dump($query);
 ?>
 <div class="devices-index">
-
+    <style>
+        table {font-size: 12px}
+        thead .form-control {height: 23px !important}
+        th, td {padding: 1px !important}
+    </style>
     <h1><?= Html::encode($this->title) ?></h1>
     <?= '<p>'. $mess .'</p>' ?>
 
