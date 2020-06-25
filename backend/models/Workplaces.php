@@ -182,10 +182,10 @@ class Workplaces extends \yii\db\ActiveRecord
         $workplace = Workplaces::find()->select('workplaces_title')->where(['id' => $id])->asArray()->one();
         return $workplace['workplaces_title'];
     }
-
+    
     /**
      * Возвращает полное наименование рабочего места
-     * $mode = 0 - для вывода в строку, 1 - для вывода в "столбец"
+     * @param int $mode 0 - для вывода в строку, 1 - для вывода в "столбец
      * @return string
      */
     public function getSummary($mode = 0)

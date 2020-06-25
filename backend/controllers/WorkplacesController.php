@@ -64,7 +64,7 @@ class WorkplacesController extends Controller
     }
 
     /**
-     * Lists all Workplaces models.
+     * Список рабочих мест.
      * @param null $mode режим отражения таблицы рабочих мест 'sel' - выбор РМ
      * @param null $id_dev идентификатор устройства для которого выбираем РМ
      * @param null $target страница с которой был вызов метода (при выборе рабочего места)

@@ -54,7 +54,7 @@ class DevicesSearch extends Devices
             'pagination' => ['defaultPageSize' => 50]
         ]);
 
-        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_ASC]]);
 
         return $dataProvider;
     }
@@ -279,11 +279,14 @@ class DevicesSearch extends Devices
 
         $dataProvider->setSort([
             'attributes' => [
-                'id',
-                'type_id' => [
+                'id' => [
+                    'asc' => ['devices.id' => SORT_ASC],
+                    'desc' => ['devices.id' => SORT_DESC]
+                ],
+                'type_id' /*=> [
                     'asc' => ['device_type.title' => SORT_ASC],
                     'desc' => ['device_type.title' => SORT_DESC]
-                ],
+                ]*/,
                 'device_note',
                 'workplace_id',
                 'brand',
@@ -292,7 +295,7 @@ class DevicesSearch extends Devices
                 'specification',
                 'parent_device_id'
             ],
-            'defaultOrder' => ['type_id' => SORT_ASC]
+            'defaultOrder' => ['id' => SORT_ASC]
         ]);
 
         $this->load($params);

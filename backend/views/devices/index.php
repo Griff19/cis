@@ -83,8 +83,14 @@ if($target && $param) {
     <?php
 
     $cols = [
-        'id',
-        ['attribute' => 'dt_title',
+        ['attribute' => 'id', //0
+            'headerOptions' => ['style' => 'width:35px'],
+        ],
+        ['class' => Column::class, //1
+            'content' => function ($model) {
+                return $model->workplace->branch->branch_title;
+            }],
+        ['attribute' => 'dt_title', //2
             'filter' => ArrayHelper::map(DeviceType::arrDevType(), 'title', 'title'),
             'value' => function($model) {
                 return Html::a(DeviceType::getTitle($model->type_id), ['view', 'id' => $model->id]);
@@ -92,21 +98,21 @@ if($target && $param) {
             },
             'format' => 'raw'
         ],
-        ['attribute' => 'dev_comp',
+        ['attribute' => 'dev_comp', //3
             'value' => function ($model) {
                 return $model->dev_comp ? 'Да' : 'Нет';
             },
             'filter' => ['Нет', 'Да']
         ],
         'brand', 'model', 'sn', 'specification', 'imei1',
-        ['attribute' => 'parent_device_id',
+        ['attribute' => 'parent_device_id', //9
             'value' => function ($model) {
                 return Html::a($model->parent_device_id, ['devices/view', 'id' => $model->parent_device_id]);
             },
             'format' => 'raw'
         ],
-        'device_note', //9
-        ['class' => Column::class, //10
+        'device_note', //10
+        ['class' => Column::class, //11
             'content' => function ($model) use ($mode) {
                 if ($model->workplace_id == 1 || $model->workplace_id == null) return '';
                 if ($mode == Devices::SHOW_FWP) {
@@ -122,7 +128,7 @@ if($target && $param) {
             }
         ],
         // активно при выборе устройства как комплектующее
-        ['class' => Column::class, //11
+        ['class' => Column::class, //12
             'content' => function ($model) use ($target) {
                 return Html::a(Html::img('/admin/img/ok.png', ['style' => 'height:24px;']),
                     //['devices/addcomp', 'id_dev' => $id_dev, 'id_comp' => $model->id, 'id_wp' => $id_wp]
@@ -130,7 +136,7 @@ if($target && $param) {
                 );
             }
         ],
-        ['class' => Column::class, //12
+        ['class' => Column::class, //13
             'content' => function ($model) {
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>',
                     ['devices/view', 'id' => $model->id], ['title' => 'Просмотр и редактирование...']);
@@ -140,18 +146,18 @@ if($target && $param) {
 
     if ($mode == Devices::SHOW_DEF) {
         //unset($cols[11]);
-        unset($cols[11]);
+        unset($cols[12]);
     }
     if ($mode == Devices::SHOW_WPS) {
         //unset($cols[11]);
-        unset($cols[12]);
+        unset($cols[13]);
     }
     if ($mode == Devices::SHOW_DVS) {
         //unset($cols[11]);
-        unset($cols[12]);
+        unset($cols[13]);
     }
     if ($mode == Devices::SHOW_FWP) {
-        unset($cols[9], $cols[11]);
+        unset($cols[10], $cols[12]);
     }
     ?>
     <?= GridView::widget([

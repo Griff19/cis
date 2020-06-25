@@ -1,5 +1,5 @@
 <?php
-
+/** Представление списка рабочих мест пользователей */
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\jui\DatePicker;
@@ -107,7 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ];
 
-    if ($mode == 'sel') unset($columns[7], $columns[8]); //удаляем лишние колонки
+    if ($mode == 'sel') unset($columns[7], $columns[8]); //удаляем лишние, при данных условиях, колонки
     else unset($columns[6]);
 
     echo GridView::widget([
