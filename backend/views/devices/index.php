@@ -88,7 +88,7 @@ if($target && $param) {
         ],
         ['class' => Column::class, //1
             'content' => function ($model) {
-                return $model->workplace->branch->branch_title;
+                return $model->workplace ? $model->workplace->branch->branch_title : "<p class='bg-danger'>Не заполнено!</p>";
             }],
         ['attribute' => 'dt_title', //2
             'filter' => ArrayHelper::map(DeviceType::arrDevType(), 'title', 'title'),
