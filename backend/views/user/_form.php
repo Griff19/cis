@@ -6,9 +6,11 @@ use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 use yii\jui\AutoComplete;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\User */
-/* @var $form yii\widgets\ActiveForm */
+/* @var $this yii\web\View
+ * @var $model backend\models\User
+ * @var $form yii\widgets\ActiveForm
+ * @var $admin boolean
+ */
 ?>
 
 <div class="user-form">
@@ -16,7 +18,7 @@ use yii\jui\AutoComplete;
     <?php $form = ActiveForm::begin();
         echo $form->field($model, 'username')->textInput(['maxlength' => 255]);
         echo $form->field($model, 'employee_name')->widget(
-                AutoComplete::className(),[
+                AutoComplete::class,[
                 'clientOptions' => [
                     'source' => Employees::arraySnpIdMail(),
                     'minLength'=>'3',
@@ -31,12 +33,12 @@ use yii\jui\AutoComplete;
         echo $form->field($model, 'employee_id')->textInput(['readonly' => true]);
         echo $form->field($model, 'email')->textInput(['maxlength' => 255]);
 
-        if ($admin){
-            //echo $form->field($model, '_1c_id')->textInput(['maxlength' => 36]);
-            //echo $form->field($model, 'fullname')->textInput(['maxlength' => 255]);
-            echo $form->field($model, 'newpass')->passwordInput();
-            echo $form->field($model, 'confnewpass')->passwordInput();
-        }
+//        if ($admin){
+//            //echo $form->field($model, '_1c_id')->textInput(['maxlength' => 36]);
+//            //echo $form->field($model, 'fullname')->textInput(['maxlength' => 255]);
+//            echo $form->field($model, 'newpass')->passwordInput();
+//            echo $form->field($model, 'confnewpass')->passwordInput();
+//        }
     ?>
 
     <div class="form-group">
@@ -44,4 +46,5 @@ use yii\jui\AutoComplete;
     </div>
     <?php ActiveForm::end(); ?>
 
+    <p><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Изменить пароль можно по кнопке "Изменить пароль" на странице пользователя</p>
 </div>

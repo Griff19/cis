@@ -135,12 +135,11 @@ class UserController extends Controller
             ]);
         }
     }
-
+    
     /**
      * Устанавливаем новый пароль, админу не нужно вводить старый пароль - остальным нужно
      * @param $id
      * @return string
-     * @throws ForbiddenHttpException
      * @throws NotFoundHttpException
      * @throws \yii\base\Exception
      */

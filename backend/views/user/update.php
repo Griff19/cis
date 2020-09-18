@@ -2,8 +2,10 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model backend\models\User */
+/* @var $this yii\web\View
+ * @var $model backend\models\User
+ * @var $admin boolean
+ */
 
 $this->title = 'Редактировать пользователя: ' . ' ' . $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Пользователи', 'url' => ['index']];

@@ -15,7 +15,6 @@ use yii\widgets\ActiveForm;
         echo $form->field($model, 'password')->passwordInput();
         echo $form->field($model, 'newpass')->passwordInput();
         echo $form->field($model, 'confnewpass')->passwordInput();
- 
     
     ?>
     <div class="form-group">
@@ -23,5 +22,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <?php ActiveForm::end(); ?>
+
+    <p><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span> Пользователь с правами администратора не должен заполнять "старый пароль"</p>
 
 </div>
