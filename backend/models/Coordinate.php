@@ -86,6 +86,11 @@ class Coordinate extends \yii\db\ActiveRecord
                 'pic_width' => 2000,
                 'pic_height' => 1153
             ],
+            5 => [ //Новосибирск
+                'max_zoom' => 6,
+                'pic_width' => 2437,
+                'pic_height' => 1815
+            ],
             6 => [ //Новокузнецк
                 'max_zoom' => 6,
                 'pic_width' => 2300,
@@ -96,16 +101,16 @@ class Coordinate extends \yii\db\ActiveRecord
 			    'pic_width' => 2160,
 			    'pic_height' => 1200
 		    ],
-            5 => [ //Новосибирск
-                'max_zoom' => 6,
-                'pic_width' => 2437,
-                'pic_height' => 1815
-            ],
             14 => [ //Урожай
                 'max_zoom' => 6,
                 'pic_width' => 2500,
                 'pic_height' => 1901
             ],
+            16 => [ //АКГУП Первомайское
+                'max_zoom' => 6,
+                'pic_width' => 5000,
+                'pic_height' => 2813
+            ]
 	    ];
     }
 
