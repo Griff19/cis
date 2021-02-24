@@ -130,7 +130,7 @@ class CoordinateController extends Controller
         $model = $this->findModel($id);
         if ($floor > 0)
         	$model->floor = $floor;
-        $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor);
+        $allCoord = (new CoordinateSearch())->search(Yii::$app->request->queryParams, $floor, $model->branch_id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save())
